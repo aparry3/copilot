@@ -54,11 +54,9 @@ class ExerciseListItem extends React.Component {
     }
     render() {
         return (
-            <li>
-                <button onClick={this.handleSelect}>
-                    <h4>{this.state.exercise.name}</h4>
-                    <h6>{this.state.exercise.primary_muscles}</h6>
-                </button>
+            <li onClick={this.handleSelect}>
+                <h4>{this.state.exercise.name}</h4>
+                <h6>{this.state.exercise.primary_muscles}</h6>
             </li>
         )
     }
