@@ -16,13 +16,19 @@ export class MainPage extends React.Component {
     render() {
         return (
             <Router>
-                <Sidebar>
-                    <Link to="/">Home</Link>
-                    <Link to="/exercises">Exercises</Link>
-                </Sidebar>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/home" component={Home} />
-                <Route path="/exercises" component={ExercisesPage} />
+                <div className="conatiner-fluid main-page">
+                    <div className="row">
+                        <Sidebar>
+                            <Link to="/">Home</Link>
+                            <Link to="/exercises">Exercises</Link>
+                        </Sidebar>
+                        <Main>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/home" component={Home} />
+                            <Route path="/exercises" component={ExercisesPage} />
+                        </Main>
+                    </div>
+                </div>
             </Router>
 
         )
@@ -35,10 +41,22 @@ function Home() {
     </div>
   );
 }
+function Main(props) {
+  return (
+    <div className="container content col-sm-10">
+        {props.children}
+    </div>
+  );
+}
 
 
 function Sidebar(props) {
-    return <ul> {props.children.map(child => {
-        return <li>{child}</li>;
-    })}  </ul>;
+    return (
+        <div className="container sidebar col-sm-2">
+            <ul> {props.children.map(child => {
+                return <li>{child}</li>;
+            })}
+            </ul>
+        </div>
+    );
 }

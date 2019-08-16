@@ -1,4 +1,5 @@
 import React from "react";
+import { InputLabel } from '../util';
 
 export class ExercisesPage extends React.Component {
     constructor(props) {
@@ -24,17 +25,19 @@ export class ExercisesPage extends React.Component {
     render() {
         console.log(`updating ui: ${this.state.selected_exercise}`)
         return (
-            <div>
-                <div>
-                    <h1>Exercises</h1>
-                    <ul>
-                        {this.state.exercises.map(exercise=>{
-                            return <ExerciseListItem handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                        })}
-                    </ul>
-                </div>
-                <div>
-                    <Exercise exercise={this.state.selected_exercise}/>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-4">
+                        <h1>Exercises</h1>
+                        <ul className="exercise-list">
+                            {this.state.exercises.map(exercise=>{
+                                return <ExerciseListItem handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                            })}
+                        </ul>
+                    </div>
+                    <div className="col-md-8">
+                        <Exercise exercise={this.state.selected_exercise}/>
+                    </div>
                 </div>
             </div>
         );
@@ -68,23 +71,62 @@ class Exercise extends React.Component {
         this.state = {
             exercise: props.exercise ? props.exercise : null
         }
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({exercise: nextProps.exercise})
     }
-
+    handleChange(name, value) {
+        console.log("handling change in parent")
+        console.log(value)
+        let exercise = this.state.exercise;
+        exercise[name] = value;
+        this.setState({
+            exercise: exercise
+        })
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        console.log(this.state.exercise);
+        fetch(`http://localhost:3000/exercises/${this.state.exercise._id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.state.exercise)
+        }).then(res => {
+            if (res.status > 300) {
+                alert(`ERROR: ${res.status}: ${res.statusText}`);
+                return;
+            }
+            console.log(res)
+            alert(`Successfully update exercise: ${this.state.exercise.name}`);
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+        });
+    }
     render() {
-        console.log(`props: ${this.props.exercise}`)
-        console.log(`state: ${this.state.exercise}`);
         return (
             <div>
-                {this.state.exercise != null ? (
-                    Object.keys(this.state.exercise).map(key => {
-                        return <p>{key}: {this.state.exercise[key]}</p>
-                    })
-                ) : (
-                    <p>No exercsie selected</p>
-                )}
+                    {this.state.exercise != null ? (
+                    <form onSubmit={this.handleSubmit}>
+
+                        {Object.keys(this.state.exercise).map(key => {
+                            return (<div>
+                                <span>{key}</span>: <InputLabel value={this.state.exercise[key]} name={key} input_type="text" onChange={this.handleChange} />
+                            </div>)
+                        })}
+                        <div>
+                            <input className="btn btn-primary" type="submit" value="submit" />
+                        </div>
+                    </form>
+
+                    ) : (
+                        <p>No exercsie selected</p>
+                    )}
             </div>
         )
     }
