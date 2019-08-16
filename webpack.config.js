@@ -22,7 +22,16 @@ module.exports = {
                         babelrc: true
                     }
                 }
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            },
+            {
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }
+
         ]
     }
 
