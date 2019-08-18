@@ -19,8 +19,8 @@ export class MainPage extends React.Component {
                 <div className="conatiner-fluid main-page">
                     <div className="row">
                         <Sidebar>
-                            <Link to="/">Home</Link>
-                            <Link to="/exercises">Exercises</Link>
+                            <Link list_key="home" to="/">Home</Link>
+                            <Link list_key="exercises" to="/exercises">Exercises</Link>
                         </Sidebar>
                         <Main>
                             <Route exact path="/" component={Home} />
@@ -54,7 +54,7 @@ function Sidebar(props) {
     return (
         <div className="container sidebar col-sm-2">
             <ul> {props.children.map(child => {
-                return <li>{child}</li>;
+                return <li key={child.props.list_key}>{child}</li>;
             })}
             </ul>
         </div>

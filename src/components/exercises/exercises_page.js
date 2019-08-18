@@ -7,10 +7,15 @@ export class ExercisesPage extends React.Component {
         this.state = {
             exercises: [],
             loading: true,
-            selected_exercise: null
+            selected_exercise: null,
+            search_text: ''
         };
         this.props = props
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+
+
     }
     componentDidMount() {
         fetch("http://localhost:3000/exercises")
@@ -19,13 +24,34 @@ export class ExercisesPage extends React.Component {
             .catch(err => console.error(err));
     }
     handleSelect(exercise) {
-        this.setState({selected_exercise: exercise})
+        this.setState({selected_exercise: exercise});
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+    }
+    handleSearch(e) {
+        this.setState({
+            search_text: e.target.value
+        });
     }
 
     render() {
         console.log(`updating ui: ${this.state.selected_exercise}`)
         return (
             <div className="container-fluid">
+                <div className="container-fluid search-bar">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="search_text">Search: </label>
+                            <input type="text"
+                                className="form-control"
+                                value={this.state.search_text}
+                                name="search_text"
+                                id="search_text"
+                                onChange={this.handleSearch}/>
+                        </div>
+                    </form>
+                </div>
                 <div className="row">
                     <div className="col-md-4">
                         <h1>Exercises</h1>
@@ -113,9 +139,8 @@ class Exercise extends React.Component {
             <div>
                     {this.state.exercise != null ? (
                     <form onSubmit={this.handleSubmit}>
-
                         {Object.keys(this.state.exercise).map(key => {
-                            return (<div>
+                            return (<div key={key}>
                                 <span>{key}</span>: <InputLabel value={this.state.exercise[key]} name={key} input_type="text" onChange={this.handleChange} />
                             </div>)
                         })}
@@ -123,7 +148,6 @@ class Exercise extends React.Component {
                             <input className="btn btn-primary" type="submit" value="submit" />
                         </div>
                     </form>
-
                     ) : (
                         <p>No exercsie selected</p>
                     )}
