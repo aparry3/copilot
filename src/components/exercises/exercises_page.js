@@ -28,6 +28,13 @@ export class ExercisesPage extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+        fetch(`http://localhost:3000/exercises?search_text=${this.state.search_text}`)
+            .then(response => response.json())
+            .then(json => {
+                this.setState({exercises: json})
+                console.log(json)
+            })
+            .catch(err => console.error(err));
     }
     handleSearch(e) {
         this.setState({
