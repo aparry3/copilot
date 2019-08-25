@@ -1,95 +1,200 @@
 import React from "react";
 import { InputLabel, normalize, titleCase } from '../util';
+import { EXERCISE, MUSCLE_GROUPS, CATEGORIES } from '../../constants/exercises';
 
 export class ExercisesPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            exercises: [],
             loading: true,
-            selected_exercise: null,
-            search_text: '',
-            new_exercise: false
+            is_adding: false,
+            filter_text: ''
         };
         this.props = props
-        this.handleSelect = this.handleSelect.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
+        this.setFilter = this.setFilter.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
         this.addExercise = this.addExercise.bind(this);
+        this.handleSave = this.handleSave.bind(this)
+        this.handleCancel = this.handleCancel.bind(this)
 
 
 
     }
-    componentDidMount() {
-        fetch("http://localhost:3000/exercises")
-            .then(response => response.json())
-            .then(json => this.setState({exercises: json}))
-            .catch(err => console.error(err));
-    }
-    handleSelect(exercise) {
-        this.setState({selected_exercise: exercise});
-    }
-    handleSubmit(e) {
+    setFilter(e) {
         e.preventDefault();
-        fetch(`http://localhost:3000/exercises?search_text=${this.state.search_text}`)
-            .then(response => response.json())
-            .then(json => {
-                this.setState({exercises: json})
-                console.log(json)
-            })
-            .catch(err => console.error(err));
+        console.log(`Set Filter text: ${this.state}`)
+        this.props.setFilter(this.state.filter_text)
     }
-    handleSearch(e) {
+    handleFilterChange(e) {
         this.setState({
-            search_text: e.target.value
+            filter_text: e.target.value
         });
+        if (e.target.value.length > 2) {
+            this.props.setFilter(e.target.value)
+        }
+    }
+    handleCancel() {
+        this.setState({
+            is_adding: false,
+        })
+    }
+    handleSave(exercise) {
+        this.setState({
+            is_adding: false
+        });
+        this.props.saveExercise(exercise);
     }
     addExercise(e) {
+        e.preventDefault()
         this.setState({
-            new_exercise: true
+            is_adding: true
         })
     }
 
     render() {
-        console.log(`updating ui: ${this.state.selected_exercise}`)
+        console.log(`updating ui: ${this.state.filter_text}`)
         return (
             <div id="exercises_page">
                 <div id="exercise_search" className="container-fluid">
-                    <form onSubmit={this.handleSubmit} className="form-inline">
+                    <form onSubmit={this.setFilter} className="form-inline">
                         <div className="form-group">
                             <input type="text"
                                 className="form-control mx-3"
-                                value={this.state.search_text}
+                                value={this.state.filter_text}
                                 name="search_text"
                                 id="search_text"
-                                onChange={this.handleSearch}
+                                onChange={this.handleFilterChange}
                                 placeholder="Search: "/>
                         </div>
-                        <button className="btn btn-success" onClick={this.addExercise}>Add Exercise</button>
                     </form>
+                    <button className="btn btn-success" onClick={this.addExercise}>Add Exercise</button>
                 </div>
                 <div id="exercises_container" className="container">
-                    <div className="row">
-                        <h2>New Exercise</h2>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-4">
-                            <div id="exercise_list_header">
-                                <h1>Exercises:</h1>
-                            </div>
-                            <ul className="exercise-list">
-                                {this.state.exercises.map(exercise=>{
-                                    return <ExerciseListItem handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                                })}
-                            </ul>
-                        </div>
-                        <div className="col-md-8">
-                            <Exercise exercise={this.state.selected_exercise}/>
-                        </div>
-                    </div>
+                    {this.state.is_adding ? (
+                        <NewExercise onSave={this.handleSave} onCancel={this.handleCancel}/> ) : (
+                        <DisplayExercises exercises={this.props.exercises} onCancel={this.handleCancel}/> )
+                    }
                 </div>
             </div>
         );
+    }
+}
+
+class DisplayExercises extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            exercises: props.exercises,
+            selected_exercise: null
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({exercises: nextProps.exercises})
+    }
+    handleSelect(exercise) {
+        this.setState({selected_exercise: exercise});
+    }
+    handleCancel(){
+        this.setState({
+            selected_exercise: null
+        })
+        this.props.onCancel()
+    }
+    handleSubmit(exercise) {
+        console.log(exercise);
+        fetch(`http://localhost:3000/exercises/${exercise._id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(exercise)
+        }).then(res => {
+            if (res.status > 300) {
+                alert(`ERROR: ${res.status}: ${res.statusText}`);
+                return;
+            }
+            console.log(res)
+            alert(`Successfully update exercise: ${exercise.name}`);
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+        });
+    }
+    render() {
+        return (
+            <div className="row">
+                <div className="col-md-4">
+                    <div id="exercise_list_header">
+                        <h1>Exercises:</h1>
+                    </div>
+                    <ul className="exercise-list">
+                        {this.state.exercises.map(exercise=>{
+                            return <ExerciseListItem handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                        })}
+                    </ul>
+                </div>
+                <div className="col-md-8">
+                    <ExerciseForm onSubmit={this.handleSubmit} exercise={this.state.selected_exercise} onCancel={this.handleCancel}/>
+                </div>
+            </div>
+        )
+    }
+}
+
+class NewExercise extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            new_exercise: {...EXERCISE}
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleSubmit(exercise) {
+        console.log(exercise);
+        fetch(`http://localhost:3000/exercises`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(exercise)
+        }).then(res => {
+            if (res.status > 300) {
+                alert(`ERROR: ${res.status}: ${res.statusText}`);
+                return;
+            }
+            console.log(res)
+            alert(`Successfully created exercise: ${exercise.name}`);
+            this.setState({
+                new_exercise: {
+                    name: '',
+                    muscle_groups: [],
+                    primary_muslces: [],
+                    secondary_muscles: [],
+                    images: [],
+                    videos: [],
+                    description: '',
+                    categories: [],
+                    tags: []
+                }
+            })
+        }).catch(err => {
+            console.log(err);
+            alert(err);
+        });
+    }
+    render() {
+        return (
+            <div className="container">
+                <h2>New Exercise</h2>
+                <ExerciseForm onSubmit={this.handleSubmit} exercise={this.state.new_exercise} onCancel={this.props.onCancel}/>
+            </div>
+        )
     }
 }
 
@@ -116,7 +221,7 @@ class ExerciseListItem extends React.Component {
     }
 }
 
-class Exercise extends React.Component {
+class ExerciseForm extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -124,6 +229,8 @@ class Exercise extends React.Component {
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+
     }
     componentWillReceiveProps(nextProps) {
         this.setState({exercise: nextProps.exercise})
@@ -139,25 +246,11 @@ class Exercise extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.exercise);
-        fetch(`http://localhost:3000/exercises/${this.state.exercise._id}`, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.state.exercise)
-        }).then(res => {
-            if (res.status > 300) {
-                alert(`ERROR: ${res.status}: ${res.statusText}`);
-                return;
-            }
-            console.log(res)
-            alert(`Successfully update exercise: ${this.state.exercise.name}`);
-        }).catch(err => {
-            console.log(err);
-            alert(err);
-        });
+        this.props.onSubmit(this.state.exercise)
+    }
+    handleCancel(e) {
+        e.preventDefault()
+        this.props.onCancel()
     }
     render() {
         return (
@@ -172,6 +265,10 @@ class Exercise extends React.Component {
                     <div>
                         <input className="btn btn-primary" type="submit" value="submit" />
                     </div>
+                    <div>
+                        <button className="btn btn-light" onClick={this.handleCancel}>Cancel</button>
+                    </div>
+
                 </form>
                 ) : (
                     <p>No exercsie selected</p>
