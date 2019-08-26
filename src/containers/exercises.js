@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {ExercisesPage} from '../components/exercises'
-import {addExercise, setFilter} from '../actions'
+import {addExercise, editExercise, setFilter} from '../actions'
 
 function applyExercisesFilter(exercises) {
     console.log(exercises)
@@ -19,7 +19,8 @@ export const ExercisesPageContainer = connect(
         },
         (dispatch) => {
             return {
-                saveExercise: (exercise) => dispatch(addExercise(exercise)),
+                addExercise: (exercise) => dispatch(addExercise(exercise)),
+                editExercise: (exercise) => dispatch(editExercise(exercise)),
                 setFilter: (filter_text) => dispatch(setFilter(filter_text))
             }
         }

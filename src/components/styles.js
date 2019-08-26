@@ -20,6 +20,11 @@ const styles = theme => ({
       flexGrow: 1,
       height: '100vh',
       overflow: 'auto',
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        maxWidth: 300,
     }
 })
 

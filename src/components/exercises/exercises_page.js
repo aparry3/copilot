@@ -1,6 +1,7 @@
 import React from "react";
 import { InputLabel, normalize, titleCase } from '../util';
-import { EXERCISE, MUSCLE_GROUPS, CATEGORIES } from '../../constants/exercises';
+import ExerciseForm from './exercise_form';
+import { EXERCISE, MUSCLE_GROUPS, CATEGORIES, allExercises } from '../../constants/exercises';
 
 export class ExercisesPage extends React.Component {
     constructor(props) {
@@ -42,7 +43,7 @@ export class ExercisesPage extends React.Component {
         this.setState({
             is_adding: false
         });
-        this.props.saveExercise(exercise);
+        this.props.addExercise(exercise);
     }
     addExercise(e) {
         e.preventDefault()
@@ -72,7 +73,7 @@ export class ExercisesPage extends React.Component {
                 <div id="exercises_container" className="container">
                     {this.state.is_adding ? (
                         <NewExercise onSave={this.handleSave} onCancel={this.handleCancel}/> ) : (
-                        <DisplayExercises exercises={this.props.exercises} onCancel={this.handleCancel}/> )
+                        <DisplayExercises onSave={this.props.editExercise} exercises={this.props.exercises} onCancel={this.handleCancel}/> )
                     }
                 </div>
             </div>
@@ -87,7 +88,6 @@ class DisplayExercises extends React.Component {
             exercises: props.exercises,
             selected_exercise: null
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
 
@@ -101,30 +101,10 @@ class DisplayExercises extends React.Component {
     handleCancel(){
         this.setState({
             selected_exercise: null
-        })
-        this.props.onCancel()
-    }
-    handleSubmit(exercise) {
-        console.log(exercise);
-        fetch(`http://localhost:3000/exercises/${exercise._id}`, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(exercise)
-        }).then(res => {
-            if (res.status > 300) {
-                alert(`ERROR: ${res.status}: ${res.statusText}`);
-                return;
-            }
-            console.log(res)
-            alert(`Successfully update exercise: ${exercise.name}`);
-        }).catch(err => {
-            console.log(err);
-            alert(err);
         });
+        this.props.onCancel();
     }
+
     render() {
         return (
             <div className="row">
@@ -139,7 +119,7 @@ class DisplayExercises extends React.Component {
                     </ul>
                 </div>
                 <div className="col-md-8">
-                    <ExerciseForm onSubmit={this.handleSubmit} exercise={this.state.selected_exercise} onCancel={this.handleCancel}/>
+                    <ExerciseForm onSubmit={this.props.onSave} exercise={this.state.selected_exercise} onCancel={this.handleCancel}/>
                 </div>
             </div>
         )
@@ -153,42 +133,23 @@ class NewExercise extends React.Component {
             new_exercise: {...EXERCISE}
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+
     }
     handleSubmit(exercise) {
-        console.log(exercise);
-        fetch(`http://localhost:3000/exercises`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(exercise)
-        }).then(res => {
-            if (res.status > 300) {
-                alert(`ERROR: ${res.status}: ${res.statusText}`);
-                return;
-            }
-            console.log(res)
-            alert(`Successfully created exercise: ${exercise.name}`);
-            this.setState({
-                new_exercise: {
-                    name: '',
-                    muscle_groups: [],
-                    primary_muslces: [],
-                    secondary_muscles: [],
-                    images: [],
-                    videos: [],
-                    description: '',
-                    categories: [],
-                    tags: []
-                }
-            })
-        }).catch(err => {
-            console.log(err);
-            alert(err);
+        this.props.onSave(exercise);
+        this.setState({
+            new_exercise: {...EXERCISE}
         });
     }
+    handleCancel(){
+        this.setState({
+            new_exercise: {...EXERCISE}
+        })
+        this.props.onCancel()
+    }
     render() {
+        console.log(this.state.new_exercise)
         return (
             <div className="container">
                 <h2>New Exercise</h2>
@@ -217,63 +178,6 @@ class ExerciseListItem extends React.Component {
                     return titleCase(muscle)
                 }).join(', ')}</h6>
             </li>
-        )
-    }
-}
-
-class ExerciseForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            exercise: props.exercise ? props.exercise : null
-        }
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-
-    }
-    componentWillReceiveProps(nextProps) {
-        this.setState({exercise: nextProps.exercise})
-    }
-    handleChange(name, value) {
-        console.log("handling change in parent")
-        console.log(value)
-        let exercise = this.state.exercise;
-        exercise[name] = value;
-        this.setState({
-            exercise: exercise
-        })
-    }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.onSubmit(this.state.exercise)
-    }
-    handleCancel(e) {
-        e.preventDefault()
-        this.props.onCancel()
-    }
-    render() {
-        return (
-            <div>
-                {this.state.exercise != null ? (
-                <form onSubmit={this.handleSubmit}>
-                    {Object.keys(this.state.exercise).map(key => {
-                        return (<div key={key}>
-                            <span>{titleCase(normalize(key))}</span>: <InputLabel value={this.state.exercise[key]} name={key} input_type="text" onChange={this.handleChange} />
-                        </div>)
-                    })}
-                    <div>
-                        <input className="btn btn-primary" type="submit" value="submit" />
-                    </div>
-                    <div>
-                        <button className="btn btn-light" onClick={this.handleCancel}>Cancel</button>
-                    </div>
-
-                </form>
-                ) : (
-                    <p>No exercsie selected</p>
-                )}
-            </div>
         )
     }
 }

@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { fetchExerises } from './actions'
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 
 
@@ -17,10 +19,13 @@ import {MainPage} from './components'
 import rootReducer from './reducers'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
+const theme = createMuiTheme();
 
 store.dispatch(fetchExerises())
 ReactDOM.render(
-    <Provider store={store} >
-        <MainPage />
-    </Provider>,
+    <ThemeProvider theme={theme}>
+        <Provider store={store} >
+            <MainPage />
+        </Provider>
+    </ThemeProvider>,
      document.getElementById("root"))

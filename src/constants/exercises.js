@@ -3,7 +3,7 @@ export const EXERCISE = {
     description: '',
     tags: [],
     muscle_groups: [],
-    primary_muslces: [],
+    primary_muscles: [],
     secondary_muscles: [],
     id: '',
     images: [],
@@ -43,5 +43,11 @@ export const MUSCLE_GROUPS = {
         'biceps',
         'triceps'
     ]
-
+}
+export const allMuscles = () => {
+    let muscles = [];
+    Object.keys(MUSCLE_GROUPS).forEach(key => {
+        muscles = [...muscles, ...MUSCLE_GROUPS[key]]
+    });
+    return muscles
 }
