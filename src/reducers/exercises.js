@@ -2,7 +2,8 @@ import {SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER, PUSH_EX
 
 const initialState = {
     items: [],
-    filter: ''
+    filter: '',
+    statuses: []
 }
 
 function saveExercise(items, exercise, is_new) {
@@ -16,6 +17,11 @@ function saveExercise(items, exercise, is_new) {
          }
          return item;
     })
+}
+function buildStatus({type, success, name, action}) {
+    return {
+        success, name, action
+    }
 }
 const exercises = (state = initialState, action) => {
     switch (action.type) {
@@ -37,7 +43,10 @@ const exercises = (state = initialState, action) => {
                 items: items
             }
         case PUSH_EXERCISE_STATUS: {
-
+            return {
+                ...state,
+                statuses: [...state.statuses, buildStatus(action)]
+            }
         }
         default:
             return state;

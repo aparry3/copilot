@@ -22,7 +22,7 @@ class ViewExercisesView extends React.Component {
     }
     handleCancel(){
         this.setState({
-            selected_exercise: null
+            selected_exercise_index: null
         });
     }
 

@@ -47,7 +47,6 @@ class ExercisesPageView extends React.Component {
     }
 
     render() {
-        console.log(`updating ui: ${this.state.filter_text}`)
         return (
             <div id="exercises_page">
                 <div id="exercise_search" className="container-fluid">
@@ -64,6 +63,9 @@ class ExercisesPageView extends React.Component {
                     </form>
                     <button className="btn btn-success" onClick={this.handleNewExercise}>Add Exercise</button>
                 </div>
+                {this.props.statuses.map(status => {
+                    return <p>{status.status} {status.name} {status.action}</p>
+                })}
                 <div id="exercises_container" className="container">
                     {this.state.is_adding ? (
                         <NewExercise onEditOver={this.handleEditOver}/> ) : (
@@ -76,7 +78,11 @@ class ExercisesPageView extends React.Component {
 }
 
 export const ExercisesPage = connect(
-        null,
+        (state) => {
+            return {
+                statuses: state.exercises.statuses
+            }
+        },
         (dispatch) => {
             return {
                 setFilter: (filter_text) => dispatch(setFilter(filter_text))
