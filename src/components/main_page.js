@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {ExercisesPageContainer} from '../containers';
+import {ExercisesPage} from './exercises';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { styled, useStyles } from './styles';
 import {Sidebar, SidebarList} from './sidebar';
@@ -21,7 +21,7 @@ class MainPage extends React.Component {
                     <Main>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/home" component={Home} />
-                        <Route path="/exercises" component={ExercisesPageContainer} />
+                        <Route path="/exercises" component={ExercisesPage} />
                     </Main>
                 </div>
             </Router>

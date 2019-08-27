@@ -3,12 +3,12 @@ import {
     RECIEVE_EXERCISES,
     REQUEST_EXERCISES,
     SET_FILTER,
-    addExercise,
+    PUSH_EXERCISE_STATUS,
     saveExercise,
-    editExercise,
     selectExercise,
     fetchExerises,
-    setFilter
+    setFilter,
+    persistExercise
 } from './exercises';
 
 export {
@@ -16,10 +16,10 @@ export {
     RECIEVE_EXERCISES,
     REQUEST_EXERCISES,
     SET_FILTER,
-    addExercise,
+    PUSH_EXERCISE_STATUS,
     saveExercise,
-    editExercise,
     selectExercise,
     fetchExerises,
-    setFilter
+    setFilter,
+    persistExercise
 };

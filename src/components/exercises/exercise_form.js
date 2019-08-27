@@ -8,11 +8,11 @@ import { allMuscles, CATEGORIES } from '../../constants/exercises';
 import MenuItem from '@material-ui/core/MenuItem';
 import {styled} from '../styles'
 
-class ExerciseForm extends React.Component {
+class ExerciseFormView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            exercise: props.exercise ? props.exercise : null
+            exercise: props.exercise ? {...props.exercise} : null
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -24,20 +24,21 @@ class ExerciseForm extends React.Component {
         this.setState({exercise: nextProps.exercise})
     }
     handleChange(e) {
-        console.log("handling change in parent")
         let name = e.target.name;
         let value = e.target.value;
-        console.log(value)
 
-        let exercise = this.state.exercise;
-        exercise[name] = value;
         this.setState({
-            exercise: exercise
+            exercise: {
+                ...this.state.exercise,
+                [name]: value
+            }
         })
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.props.onSubmit(this.state.exercise)
+        console.log(`submit inside for ${this.state.exercise.name}`)
+        console.log(this.props.onSave)
+        this.props.onSave(this.state.exercise)
     }
     handleCancel(e) {
         e.preventDefault()
@@ -45,10 +46,8 @@ class ExerciseForm extends React.Component {
     }
     render() {
         const classes = this.props.classes;
-        if (this.state.exercise) console.log(this.state.exercise.primary_muscles)
         return (
             <div>
-                {this.state.exercise != null ? (
                 <form onSubmit={this.handleSubmit}>
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="name">Name</InputLabel>
@@ -88,13 +87,9 @@ class ExerciseForm extends React.Component {
                     <div>
                         <button className="btn btn-light" onClick={this.handleCancel}>Cancel</button>
                     </div>
-
                 </form>
-                ) : (
-                    <p>No exercsie selected</p>
-                )}
             </div>
         )
     }
 }
-export default styled(ExerciseForm);
+export const ExerciseForm =  styled(ExerciseFormView);

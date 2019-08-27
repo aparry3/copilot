@@ -1,4 +1,4 @@
-import {SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER} from '../actions'
+import {SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER, PUSH_EXERCISE_STATUS} from '../actions'
 
 const initialState = {
     items: [],
@@ -7,11 +7,14 @@ const initialState = {
 
 function saveExercise(items, exercise, is_new) {
     if (is_new) {
-        console.log(exercise)
         return [...items, exercise]
     }
     return items.map(item => {
-        return exercise._id == item._id ? exercise : item;
+         if (exercise._id == item._id ) {
+             console.log(`new ex ${exercise.name}`);
+             return exercise;
+         }
+         return item;
     })
 }
 const exercises = (state = initialState, action) => {
@@ -28,10 +31,14 @@ const exercises = (state = initialState, action) => {
             }
         }
         case SAVE_EXERCISE:
+            let items = saveExercise([...state.items], action.exercise, action.is_new);
             return {
                 ...state,
-                items: saveExercise(state.items, action.exercise, action.is_new)
+                items: items
             }
+        case PUSH_EXERCISE_STATUS: {
+
+        }
         default:
             return state;
 

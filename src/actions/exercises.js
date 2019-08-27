@@ -3,36 +3,20 @@ export const REQUEST_EXERCISES = 'REQUEST_EXERCISES';
 export const RECIEVE_EXERCISES = 'RECIEVE_EXERCISES';
 export const SELECT_EXERCISE = 'SELECT_EXERCISE';
 export const SET_FILTER = 'SET_FILTER';
+export const PUSH_EXERCISE_STATUS = 'PUSH_EXERCISE_STATUS';
 
-export function addExercise(exercise) {
-    console.log(`New EX: ${JSON.stringify(exercise)}`)
-    return (dispatch) => {
-        return fetch(`http://localhost:3000/exercises`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(exercise)
-        }).then(res => {
-            if (res.status > 300) {
-                alert(`ERROR: ${res.status}: ${res.statusText}`);
-                return;
-            }
-
-            alert(`Successfully created exercise: ${exercise.name}`);
-            return res.json()
-        }, err => {throw err})
-        .then(json => {
-            alert(`Successfully update exercise: ${json.name}`);
-            dispatch(saveExercise(json, true))
-        });;
-    }
+function HttpExceptioon(status, body) {
+    this.status = status;
+    this.body = body;
 }
-export function editExercise(exercise) {
+
+
+export function persistExercise(exercise) {
+    let action = exercise._id ? 'EDIT' : 'ADD';
+    console.log(action)
     return (dispatch) => {
-        return fetch(`http://localhost:3000/exercises/${exercise._id}`, {
-            method: 'PUT',
+        return fetch(`http://localhost:3000/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
+            method: action == 'EDIT' ? 'PUT' : 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -40,16 +24,18 @@ export function editExercise(exercise) {
             body: JSON.stringify(exercise)
         }).then(res => {
             if (res.status > 300) {
-                alert(`ERROR: ${res.status}: ${res.statusText}`);
-                return;
+                throw new HttpException(res.status, res.json());
             }
             return res.json();
-        }, err => {
-            console.log(err);
-            throw err ;
-        }).then(json => {
-            alert(`Successfully update exercise: ${json.name}`);
-            dispatch(saveExercise(json))
+        }).then(exercise => {
+            console.log(exercise)
+            console.log(exercise.name)
+            dispatch(saveExercise(exercise, action == 'ADD'))
+            dispatch(pushExerciseStatus(true, exercise.name, action));
+            console.log('SUCCESS!');
+        }).catch(err => {
+            dispatch(pushExerciseStatus(false, exercise.name, action));
+            console.error(err)
         });
 
     }
@@ -77,6 +63,14 @@ export function recieveExercises(exercises) {
     return {
         type: RECIEVE_EXERCISES,
         exercises: exercises
+    }
+}
+export function pushExerciseStatus(success, name, action) {
+    return {
+        type: PUSH_EXERCISE_STATUS,
+        success: success,
+        name: name,
+        action: action
     }
 }
 
