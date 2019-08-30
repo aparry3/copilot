@@ -6,7 +6,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { normalize, titleCase } from '../util';
 import { allMuscles, CATEGORIES } from '../../constants/exercises';
 import MenuItem from '@material-ui/core/MenuItem';
-import {styled} from '../styles'
+import {withStyles} from '@material-ui/core/styles';
+
+const styled = withStyles(theme => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        maxWidth: 300,
+    }
+}));
 
 class ExerciseFormView extends React.Component {
     constructor(props) {

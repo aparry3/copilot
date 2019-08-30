@@ -1,8 +1,14 @@
 import React from "react";
 import { connect } from 'react-redux';
+import {fade, withStyles} from '@material-ui/core/styles';
 import {ViewExercises} from './view_exercises';
 import {NewExercise} from './new_exercise';
 import {setFilter} from '../../actions'
+import {SearchBar} from './search_bar';
+import {SIDEBAR_WIDTH} from '../styles'
+const styled = withStyles(theme => ({
+
+}));
 
 
 class ExercisesPageView extends React.Component {
@@ -47,31 +53,14 @@ class ExercisesPageView extends React.Component {
     }
 
     render() {
+        let classes = this.props.classes;
         return (
-            <div id="exercises_page">
-                <div id="exercise_search" className="container-fluid">
-                    <form onSubmit={this.setFilter} className="form-inline">
-                        <div className="form-group">
-                            <input type="text"
-                                className="form-control mx-3"
-                                value={this.state.filter_text}
-                                name="search_text"
-                                id="search_text"
-                                onChange={this.handleFilterChange}
-                                placeholder="Search: "/>
-                        </div>
-                    </form>
-                    <button className="btn btn-success" onClick={this.handleNewExercise}>Add Exercise</button>
-                </div>
-                {this.props.statuses.map(status => {
-                    return <p>{status.status} {status.name} {status.action}</p>
-                })}
-                <div id="exercises_container" className="container">
+            <div >
+                <SearchBar onNewExercise={this.handleNewExercise}/>
                     {this.state.is_adding ? (
                         <NewExercise onEditOver={this.handleEditOver}/> ) : (
                         <ViewExercises /> )
                     }
-                </div>
             </div>
         );
     }
@@ -83,9 +72,5 @@ export const ExercisesPage = connect(
                 statuses: state.exercises.statuses
             }
         },
-        (dispatch) => {
-            return {
-                setFilter: (filter_text) => dispatch(setFilter(filter_text))
-            }
-        }
-)(ExercisesPageView)
+        null
+)(styled(ExercisesPageView))

@@ -1,14 +1,27 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {ExercisesPage} from './exercises';
+import {WorkoutsPage} from './workouts';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { styled, useStyles } from './styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {Sidebar, SidebarList} from './sidebar';
 import {Logo} from './util';
 
 // TODO
 // Change Links to dynamically generated path and text using a map
 
+const styles = (theme) => ({
+    root: {
+      display: 'flex',
+    },
+    content: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.default,
+        padding: theme.spacing(0),
+    }
+});
+const useStyles = makeStyles(styles);
+const styled = withStyles(styles);
 class MainPage extends React.Component {
 
     render() {
@@ -16,13 +29,13 @@ class MainPage extends React.Component {
         return (
             <Router>
                 <div className={classes.root}>
-                    <CssBaseline />
-                    <Sidebar />
-                    <Main>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/home" component={Home} />
-                        <Route path="/exercises" component={ExercisesPage} />
-                    </Main>
+                        <Sidebar />
+                        <Main>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/home" component={Home} />
+                            <Route path="/exercises" component={ExercisesPage} />
+                            <Route path="/workouts" component={WorkoutsPage} />
+                        </Main>
                 </div>
             </Router>
 
@@ -39,11 +52,9 @@ function Home() {
 function Main(props) {
     let classes = useStyles();
     return (
-        <div>
-            <main className={classes.content}>
+        <main className={classes.content}>
             {props.children}
-            </main>
-        </div>
+        </main>
     );
 }
 

@@ -1,0 +1,95 @@
+import React from 'react';
+import {Modal, Paper, MenuItem, FormControl, InputLabel, Select} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {setFilter} from '../../actions'
+let top, left = [50, 50]
+
+let styled = withStyles(theme => ({
+    paper: {
+        top: `50px`,
+        left: `50px`,
+        position: 'absolute',
+        width: 300
+
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+        maxWidth: 300,
+    }
+}));
+function find_index(item, list) {
+    let key = Object.keys(item)[0];
+    let vals = list.map(i => i[key])
+    return vals.indexOf(item[key])
+}
+class ExerciseModalView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            exercise_index: props.exercise_definition ? find_index(props.exercise_definition, props.exercises) : -1
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
+
+    }
+    handleChange(e) {
+        console.log(e.target.value)
+        this.setState({
+            exercise_index: e.target.value
+        })
+        console.log(this.state.exercise_index)
+
+    }
+    handleClose() {
+        this.setState({
+            exercise_index: -1
+        })
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        let exercise = this.props.exercises[this.state.exercise_index]
+        this.props.onSubmit({name: exercise.name, id: exercise._id})
+    }
+    render() {
+        let classes = this.props.classes
+        return (
+            <Modal  open={this.props.open} onClose={this.handleClose}>
+                <Paper className={classes.paper}>
+                <form onSubmit={this.handleSubmit}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="exercise">Exercise</InputLabel>
+                    <Select id="exercise"name='exercise' onChange={this.handleChange} value={this.state.exercise_index}>
+                        {this.props.exercises.map((exercise, index)=> {
+                            return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
+                        })}
+                    </Select>
+                </FormControl>
+                <div>
+                    <input className="btn btn-primary" type="submit" value="submit" />
+                </div>
+
+                </form>
+                </Paper>
+            </Modal>
+        )
+    }
+}
+
+export const ExerciseModal = connect(
+    (state) => {
+        return {
+            exercises: state.exercises.items.filter(item => {
+                return item.name.includes(state.exercises.filter)
+            })
+        }
+    },
+    (dispatch) => {
+        return {
+            setFilter: (text) => dispatch(setFilter(text))
+        }
+    }
+)(styled(ExerciseModalView));

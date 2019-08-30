@@ -1,9 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import {withStyles} from '@material-ui/core/styles';
 import {persistExercise} from '../../actions'
 import {ExerciseForm} from './exercise_form';
 import { normalize, titleCase } from '../util';
+import {Grid, Paper, List, ListItem, ListItemText, Typography} from '@material-ui/core';
+
+const EXERCISE_LIST_WIDTH = 250;
+
+const styled = withStyles(theme => ({
+    toolbar: theme.mixins.toolbar,
+    container: {
+        flexGrow:1,
+    },
+    drawer: {
+      width: EXERCISE_LIST_WIDTH,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: EXERCISE_LIST_WIDTH,
+    },
+}))
 
 class ViewExercisesView extends React.Component {
     constructor(props) {
@@ -27,24 +44,35 @@ class ViewExercisesView extends React.Component {
     }
 
     render() {
+        let classes = this.props.classes;
         return (
-            <div className="row">
-                <div className="col-md-4">
-                    <div id="exercise_list_header">
-                        <h1>Exercises:</h1>
-                    </div>
-                    <ul className="exercise-list">
-                        {this.props.exercises.map((exercise, index)=>{
-                            console.log(exercise)
-                            return <ExerciseListItem index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                        })}
-                    </ul>
-                </div>
-                { this.state.selected_exercise_index != null && (
-                    <div className="col-md-8">
-                        <ExerciseForm onSave={this.props.onSave} exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
-                    </div>
-                )}
+            <div >
+                <Grid container className={classes.container} >
+                    <Grid item xs={3} >
+                        <Paper>
+                            <List style={{maxHeight: '100vh', overflow: 'auto'}}>
+                                <ListItem><div className={classes.toolbar} /></ListItem>
+                                {this.props.exercises.map((exercise, index)=>{
+                                    console.log(exercise)
+                                    return <ExerciseListItem index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                                })}
+                            </List>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={9} >
+                        <Grid container justify="center" >
+                            <Grid item>
+                                <Paper>
+                                    <div className={classes.toolbar} />
+
+                                    { this.state.selected_exercise_index != null && (
+                                        <ExerciseForm onSave={this.props.onSave} exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
+                                    )}
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
@@ -61,12 +89,16 @@ class ExerciseListItem extends React.Component {
     }
     render() {
         return (
-            <li onClick={this.handleSelect}>
-                <h4>{this.props.exercise.name}</h4>
-                <h6>{this.props.exercise.primary_muscles.map(muscle => {
-                    return titleCase(muscle)
-                }).join(', ')}</h6>
-            </li>
+            <ListItem onClick={this.handleSelect}>
+                <ListItemText primary={<Typography variant='h6'>{this.props.exercise.name}</Typography>}
+                secondary={(
+                    <Typography variant='body2'>
+                        {this.props.exercise.primary_muscles.map(muscle => {
+                            return titleCase(muscle)
+                        }).join(', ')}
+                    </Typography>)}
+                />
+            </ListItem>
         )
     }
 }
@@ -92,4 +124,4 @@ export const ViewExercises = connect(
             onSave: (exercise) => dispatch(persistExercise(exercise)),
         }
     }
-)(ViewExercisesView)
+)(styled(ViewExercisesView))
