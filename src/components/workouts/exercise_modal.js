@@ -1,8 +1,9 @@
 import React from 'react';
-import {Modal, Paper, MenuItem, FormControl, InputLabel, Select} from '@material-ui/core';
+import {Modal, Paper, MenuItem, FormControl, InputLabel, Input, Select} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {setFilter} from '../../actions'
+import {WORKOUT_SCHEMES} from '../../constants/programs'
 let top, left = [50, 50]
 
 let styled = withStyles(theme => ({
@@ -28,7 +29,10 @@ class ExerciseModalView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            exercise_index: props.exercise_definition ? find_index(props.exercise_definition, props.exercises) : -1
+            exercise_index: props.exercise_definition ? find_index(props.exercise_definition, props.exercises) : -1,
+            details: {
+                scheme: 'AMRAP'
+            }
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,11 +51,15 @@ class ExerciseModalView extends React.Component {
     handleClose() {
         this.setState({
             exercise_index: -1
-        })
+        });
+        this.props.onClose();
     }
     handleSubmit(e) {
         e.preventDefault();
-        let exercise = this.props.exercises[this.state.exercise_index]
+        let exercise = this.props.exercises[this.state.exercise_index];
+        this.setState({
+            exercise_index: -1
+        });
         this.props.onSubmit({name: exercise.name, id: exercise._id})
     }
     render() {
@@ -67,6 +75,26 @@ class ExerciseModalView extends React.Component {
                             return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
                         })}
                     </Select>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="details-scheme">Scheme</InputLabel>
+                    <Select id="details-scheme"name='details-scheme' onChange={this.handleChange} value={this.state.details.scheme}>
+                        {WORKOUT_SCHEMES.map((scheme, index)=> {
+                            return <MenuItem key={scheme} value={scheme}>{scheme}</MenuItem>
+                        })}
+                    </Select>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="details-sets">Sets</InputLabel>
+                    <Input id="details-sets"name='details-sets' onChange={this.handleChange} value={this.state.details.sets} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="details-repetitions">Repetitions</InputLabel>
+                    <Input id="details-repetitions"name='details-repetitions' onChange={this.handleChange} value={this.state.details.repetitions} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="details-duration">Duration</InputLabel>
+                    <Input id="details-duration"name='details-duration' onChange={this.handleChange} value={this.state.details.duration} />
                 </FormControl>
                 <div>
                     <input className="btn btn-primary" type="submit" value="submit" />
