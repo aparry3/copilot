@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
 import {Grid, List, ListItem, Typography, Card} from '@material-ui/core'
 import {SIDEBAR_WIDTH} from '../styles'
-import {addExerciseToWorkout} from '../../actions';
+import {addExerciseAndPersist, addWeekAndPersist, addProgramAndPersist} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
 
 const styled = withStyles(theme => ({
@@ -29,7 +29,6 @@ const styled = withStyles(theme => ({
     }
 
 }));
-const CLIENT='client';
 
 const Week = (props) => {
     let {windex, week, classes} = props;
@@ -76,14 +75,12 @@ const Day = (props) => {
         </ListItem>
     )
 }
-class WorkoutsPageView extends React.Component {
+class ProgramPageView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            exercise: {
-                id: '123',
-                name: 'added exeercise'
-            },
+            client: {id: props.match.params.id},
+
             modalIsOpen: false
         }
         this.handleModalClose = this.handleModalClose.bind(this);
@@ -107,44 +104,52 @@ class WorkoutsPageView extends React.Component {
 
     }
     handleSubmit(exercise) {
-        this.props.addExercise('client', this.state.week, this.state.day, exercise)
+        this.props.addExercise(this.state.client, this.state.week, this.state.day, exercise)
         this.handleModalClose();
 
     }
     render() {
-        console.log(`Workouts: ${this.props.clients}`);
 
         let classes = this.props.classes;
-        console.log(this.props.clients[CLIENT])
+        console.log("programs")
+        console.log(!!this.props.programs[this.state.client.id])
         return (
-            <div className={classes.root}>
-                <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
-                <Grid container>
-                    {this.props.clients[CLIENT].program.map((week, windex) => {
-                        return (
-                            <Week windex={windex} week={week} classes={classes} >
-                                {week.map((day, dindex) => {
-                                    return (<Day windex={windex} dindex={dindex} day={day} classes={classes} onAddExercise={this.handleAddExercise}/>)
-                                })}
-                            </Week>
-                        )
-                    })}
-                </Grid>
-            </div>
+            <div>
+            {!!this.props.programs[this.state.client.id] ? (
+                <div className={classes.root}>
+                    <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
+                    <Grid container>
+                        {this.props.programs[this.state.client.id][0].weeks.map((week, windex) => {
+                            return (
+                                <Week windex={windex} week={week} classes={classes} >
+                                    {week.map((day, dindex) => {
+                                        return (<Day windex={windex} dindex={dindex} day={day} classes={classes} onAddExercise={this.handleAddExercise}/>)
+                                    })}
+                                </Week>
+                            )
+                        })}
+                        <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client)}>Add Week</button>
+                    </Grid>
+                </div>) : (<button className='btn btn-success' onClick={() => this.props.newProgram(this.state.client)}>NewProgram</button>
+) }         </div>
         );
     }
 }
 
 
-export const WorkoutsPage = connect(
-        (state) => {
+export const ProgramPage = connect(
+        (state, ownProps) => {
+            console.log(state.programs)
             return {
-                clients: state.clients
+                programs: state.programs
             }
         },
         (dispatch) => {
             return {
-                addExercise: (client, windex, dindex, exercise) => dispatch(addExerciseToWorkout(client, windex, dindex, exercise))
+                addExercise: (client, windex, dindex, exercise) => dispatch(addExerciseAndPersist(client, windex, dindex, exercise)),
+                addWeek: (client) => dispatch(addWeekAndPersist(client)),
+                newProgram: (client) => dispatch(addProgramAndPersist(client))
+
             }
         }
-)(styled(WorkoutsPageView))
+)(styled(ProgramPageView))

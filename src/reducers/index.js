@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import exercises from './exercises';
-import workouts from './workouts';
+import programs from './programs';
 
 export default combineReducers({
     exercises: exercises,
-    clients: workouts
+    programs: programs
 })

@@ -42,9 +42,9 @@ export const Sidebar = (props) => {
                         <ListItemText primary="Exercises" />
                     </MenuItem>
                 </Link>
-                <Link style={{ textDecoration: 'none' }}  list_key="workouts" to="/workouts">
+                <Link style={{ textDecoration: 'none' }}  list_key="programs" to="/programs/client">
                     <MenuItem button>
-                        <ListItemText primary="Workouts" />
+                        <ListItemText primary="Programs" />
                     </MenuItem>
                 </Link>
 

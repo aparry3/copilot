@@ -5,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { fetchExerises } from './actions'
+import { fetchExerises, getAllPrograms } from './actions'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
@@ -21,6 +21,7 @@ const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 const theme = createMuiTheme();
 
 store.dispatch(fetchExerises())
+store.dispatch(getAllPrograms())
 ReactDOM.render(
         <Provider store={store} >
             <MainPage />

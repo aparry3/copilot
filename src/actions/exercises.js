@@ -82,7 +82,6 @@ function fetchAllExercises(query=null) {
         )
 }
 
-
 export function fetchExerises(query=null) {
     return (dispatch) => {
         dispatch(requestExercises())

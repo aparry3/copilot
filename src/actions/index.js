@@ -21,15 +21,26 @@ import {
 } from './user';
 
 import {
+    ADD_WEEK,
+    ADD_PROGRAM,
     CREATE_WORKOUT,
     EDIT_WORKOUT,
+    RECIEVE_PROGRAMS,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
-    addExerciseToWorkout
-} from './workouts';
+    getAllPrograms,
+    addExerciseToDay,
+    addExerciseAndPersist,
+    addWeekAndPersist,
+    addWeekToProgram,
+    addProgramAndPersist
+} from './programs';
 
 export {
+    ADD_WEEK,
+    ADD_PROGRAM,
     SAVE_EXERCISE,
+    RECIEVE_PROGRAMS,
     RECIEVE_EXERCISES,
     REQUEST_EXERCISES,
     SET_FILTER,
@@ -44,10 +55,15 @@ export {
     signIn,
     signOut,
     signUp,
-    addExerciseToWorkout,
+    addExerciseToDay,
     saveExercise,
     selectExercise,
     fetchExerises,
     setFilter,
-    persistExercise
+    persistExercise,
+    addWeekToProgram,
+    addExerciseAndPersist,
+    addWeekAndPersist,
+    addProgramAndPersist,
+    getAllPrograms
 };

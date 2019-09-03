@@ -42,10 +42,20 @@ class ExerciseModalView extends React.Component {
     }
     handleChange(e) {
         console.log(e.target.value)
-        this.setState({
-            exercise_index: e.target.value
-        })
-        console.log(this.state.exercise_index)
+        let subobject = e.target.name.split('-')
+        if (subobject.length == 1) {
+            this.setState({
+                [subobject[0]]: e.target.value
+            })
+        }
+        else {
+            this.setState({
+                [subobject[0]]: {
+                    ...this.state[subobject[0]],
+                    [subobject[1]]: e.target.value
+                }
+            })
+        }
 
     }
     handleClose() {
@@ -60,17 +70,18 @@ class ExerciseModalView extends React.Component {
         this.setState({
             exercise_index: -1
         });
-        this.props.onSubmit({name: exercise.name, id: exercise._id})
+        this.props.onSubmit({name: exercise.name, id: exercise._id, details: this.state.details})
     }
     render() {
         let classes = this.props.classes
+        console.log(this.state)
         return (
             <Modal  open={this.props.open} onClose={this.handleClose}>
                 <Paper className={classes.paper}>
                 <form onSubmit={this.handleSubmit}>
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="exercise">Exercise</InputLabel>
-                    <Select id="exercise"name='exercise' onChange={this.handleChange} value={this.state.exercise_index}>
+                    <InputLabel htmlFor="exercise_index">Exercise</InputLabel>
+                    <Select id="exercise_index"name='exercise_index' onChange={this.handleChange} value={this.state.exercise_index}>
                         {this.props.exercises.map((exercise, index)=> {
                             return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
                         })}

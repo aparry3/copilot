@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {ExercisesPage} from './exercises';
-import {WorkoutsPage} from './workouts';
+import {ProgramPage} from './programs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {Sidebar, SidebarList} from './sidebar';
@@ -34,7 +34,7 @@ class MainPage extends React.Component {
                             <Route exact path="/" component={Home} />
                             <Route exact path="/home" component={Home} />
                             <Route path="/exercises" component={ExercisesPage} />
-                            <Route path="/workouts" component={WorkoutsPage} />
+                            <Route path="/programs/:id" component={ProgramPage} />
                         </Main>
                 </div>
             </Router>
