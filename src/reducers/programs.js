@@ -31,30 +31,39 @@ const programs = (state = initialState, action) => {
                 new_state[client.client_id] = client.programs;
             })
             return new_state;
-
         }
         case ADD_WEEK: {
-            let {client} = action;
+            let {client, program_id} = action;
             let new_state = {...state};
-            new_state[client.id].program.push([...WEEK_SKELETON]);
+            new_state[client.id] = new_state[client.id].map(program => {
+                if (program._id == program_id) {
+                    return {
+                        ...program,
+                        weeks: [
+                            ...program.weeks,
+                            [...WEEK_SKELETON]
+                        ]
+                    }
+                }
+                return program
+            });
+            console.log(new_state)
             return new_state;
         }
         case EDIT_WORKOUT: {
-            console.log(action)
-            let {type, client, variation, exercise, week, day } = action;
+            let {type, client, program_id, variation, exercise, week, day } = action;
             let new_state = {...state};
-            console.log(new_state)
             if (variation == 'add') {
-                let workout = new_state[client.id]['program'][week][day]
-                if (!workout.exercises) workout.exercises = []
-                workout.exercises.push(
-                        {
+                new_state[client.id] = new_state[client.id].map(program => {
+                    if (program._id == program_id) {
+                        program.weeks[week][day].exercises.push({
                             exercise_name: exercise.name,
                             exercise_id: exercise.id,
                             details: exercise.details
                         });
-                        console.log(exercise)
-                        console.log(new_state)
+                    }
+                    return program;
+                })
                 return new_state;
             }
             return state;

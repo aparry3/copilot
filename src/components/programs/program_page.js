@@ -79,8 +79,7 @@ class ProgramPageView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            client: {id: props.match.params.id},
-
+            client: {id: props.client_id},
             modalIsOpen: false
         }
         this.handleModalClose = this.handleModalClose.bind(this);
@@ -89,7 +88,6 @@ class ProgramPageView extends React.Component {
     }
 
     handleAddExercise(week_index, day_index) {
-        console.log(this.state)
         this.setState({
             modalIsOpen: true,
             week: week_index,
@@ -104,22 +102,21 @@ class ProgramPageView extends React.Component {
 
     }
     handleSubmit(exercise) {
-        this.props.addExercise(this.state.client, this.state.week, this.state.day, exercise)
+        this.props.addExercise(this.state.client, this.props.program._id, this.state.week, this.state.day, exercise)
         this.handleModalClose();
 
     }
     render() {
 
         let classes = this.props.classes;
-        console.log("programs")
-        console.log(!!this.props.programs[this.state.client.id])
+        console.log(this.props.program)
         return (
             <div>
-            {!!this.props.programs[this.state.client.id] ? (
+            {!!this.props.program ? (
                 <div className={classes.root}>
                     <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
                     <Grid container>
-                        {this.props.programs[this.state.client.id][0].weeks.map((week, windex) => {
+                        {this.props.program.weeks.map((week, windex) => {
                             return (
                                 <Week windex={windex} week={week} classes={classes} >
                                     {week.map((day, dindex) => {
@@ -128,7 +125,7 @@ class ProgramPageView extends React.Component {
                                 </Week>
                             )
                         })}
-                        <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client)}>Add Week</button>
+                        <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client, this.props.program._id)}>Add Week</button>
                     </Grid>
                 </div>) : (<button className='btn btn-success' onClick={() => this.props.newProgram(this.state.client)}>NewProgram</button>
 ) }         </div>
@@ -140,14 +137,16 @@ class ProgramPageView extends React.Component {
 export const ProgramPage = connect(
         (state, ownProps) => {
             console.log(state.programs)
+            let id = ownProps.match.params.id;
             return {
-                programs: state.programs
+                program: !!state.programs[id] && state.programs[id].length ? state.programs[id][0] : null,
+                client_id: id
             }
         },
         (dispatch) => {
             return {
-                addExercise: (client, windex, dindex, exercise) => dispatch(addExerciseAndPersist(client, windex, dindex, exercise)),
-                addWeek: (client) => dispatch(addWeekAndPersist(client)),
+                addExercise: (client, program_id, windex, dindex, exercise) => dispatch(addExerciseAndPersist(client, program_id, windex, dindex, exercise)),
+                addWeek: (client, program_id) => dispatch(addWeekAndPersist(client, program_id)),
                 newProgram: (client) => dispatch(addProgramAndPersist(client))
 
             }

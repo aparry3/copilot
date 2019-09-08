@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import {Logo} from './util';
 import {makeStyles} from '@material-ui/core/styles'
 import {SIDEBAR_WIDTH} from './styles'
+import {logout} from '../actions'
 
 const useStyles = makeStyles(theme => ({
 
@@ -32,22 +33,22 @@ export const Sidebar = (props) => {
         >
             <Logo />
             <MenuList>
-                <Link style={{ textDecoration: 'none' }}  list_key="home" to="/">
+                <Link style={{ textDecoration: 'none' }}  list_key="home" to={`${props.path}/`}>
                     <MenuItem button>
                         <ListItemText primary="Home" />
                     </MenuItem>
                 </Link>
-                <Link style={{ textDecoration: 'none' }}  list_key="exercises" to="/exercises">
+                <Link style={{ textDecoration: 'none' }}  list_key="exercises" to={`${props.path}/exercises`}>
                     <MenuItem button>
                         <ListItemText primary="Exercises" />
                     </MenuItem>
                 </Link>
-                <Link style={{ textDecoration: 'none' }}  list_key="programs" to="/programs/client">
+                <Link style={{ textDecoration: 'none' }}  list_key="programs" to={`${props.path}/programs/client`}>
                     <MenuItem button>
                         <ListItemText primary="Programs" />
                     </MenuItem>
                 </Link>
-
+                <MenuItem button onClick={() => logout()}>Logout</MenuItem>
             </MenuList>
 
         </Drawer>

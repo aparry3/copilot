@@ -12,13 +12,15 @@ import {
 } from './exercises';
 
 import {
-    SIGN_IN,
-    SIGN_UP,
-    SIGN_OUT,
-    signIn,
-    signOut,
-    signUp,
-} from './user';
+    LOGGING_IN,
+    LOGGED_IN,
+    LOGGING_OUT,
+    CLIENT_DID_LOAD,
+    login,
+    logout,
+    loggingIn,
+    fetchUser,
+} from './auth';
 
 import {
     ADD_WEEK,
@@ -49,12 +51,14 @@ export {
     EDIT_WORKOUT,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
-    SIGN_IN,
-    SIGN_OUT,
-    SIGN_UP,
-    signIn,
-    signOut,
-    signUp,
+    LOGGING_IN,
+    LOGGED_IN,
+    LOGGING_OUT,
+    CLIENT_DID_LOAD,
+    login,
+    logout,
+    loggingIn,
+    fetchUser,
     addExerciseToDay,
     saveExercise,
     selectExercise,

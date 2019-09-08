@@ -5,11 +5,13 @@ export const REARRANGE_EXERCISE = 'REARRANGE_EXERCISE';
 export const ADD_WEEK = 'ADD_WEEK';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
-export function addExerciseToDay(client, week_index, day_index, exercise) {
+
+export function addExerciseToDay(client, program_id, week_index, day_index, exercise) {
     console.log(exercise)
     return {
         type: EDIT_WORKOUT,
         client,
+        program_id,
         variation: 'add',
         exercise,
         week: week_index,
@@ -17,10 +19,10 @@ export function addExerciseToDay(client, week_index, day_index, exercise) {
     }
 }
 
-export function addExerciseAndPersist(client, week_index, day_index, exercise) {
+export function addExerciseAndPersist(client, program_id, week_index, day_index, exercise) {
     return (dispatch) => {
-        dispatch(addExerciseToDay(client, week_index, day_index, exercise))
-        return fetch(`http://localhost:3000/programs/${client.id}`, {
+        dispatch(addExerciseToDay(client, program_id, week_index, day_index, exercise))
+        return fetch(`http://localhost:3000/programs/${program_id}`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -42,16 +44,17 @@ export function addProgramToClient(client, program) {
         program
     }
 }
-export function addWeekToProgram(client) {
+export function addWeekToProgram(client, program_id) {
     return {
         type: ADD_WEEK,
-        client
+        client,
+        program_id
     }
 }
-export function addWeekAndPersist(client) {
+export function addWeekAndPersist(client, program_id) {
     return (dispatch) => {
-        dispatch(addWeekToProgram(client))
-        return fetch(`http://localhost:3000/programs/${client.id}/week`, {
+        dispatch(addWeekToProgram(client, program_id))
+        return fetch(`http://localhost:3000/programs/${program_id}/week`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
