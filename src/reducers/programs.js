@@ -9,28 +9,16 @@ import {
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
-const initialState = {
-}
+const initialState = []
 
 const programs = (state = initialState, action) => {
     switch (action.type) {
         case ADD_PROGRAM: {
-            let {client, program} = action;
-            let new_state = {...state};
-            if (!!new_state[client.id] && !!new_state[client.id].programs) {
-                new_state[client.id].programs.push(program);
-            } else {
-                new_state[client.id].programs = [program];
-            }
+            let new_state = [action.program, ...state];
             return new_state;
         }
         case RECIEVE_PROGRAMS: {
-            let new_state = {};
-            let {programs} = action;
-            programs.forEach(client => {
-                new_state[client.client_id] = client.programs;
-            })
-            return new_state;
+            return action.programs;
         }
         case ADD_WEEK: {
             let {client, program_id} = action;

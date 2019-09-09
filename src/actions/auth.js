@@ -1,9 +1,11 @@
 import {auth0_client} from '../auth'
+import {getAllPrograms} from './programs'
 
 export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOGGING_OUT = 'LOGGING_OUT';
-export const CLIENT_DID_LOAD = 'LOGGING_OUT';
+export const AUTH_CLIENT_DID_LOAD = 'LOGGING_OUT';
+export const ADD_CLIENT = 'ADD_CLIENT';
 
 export function login(...p) {
     auth0_client.login(...p)
@@ -18,26 +20,55 @@ export function fetchUser() {
         dispatch(loggingIn())
         await auth0_client.initialize()
         if (await auth0_client.isAuthenticated()) {
-            dispatch(clientDidLoad(true));
-            const token = await auth0_client.getToken()
-            const user = await auth0_client.getUser()
-            // fetch('https://localhost:3000', {
-            //     method: 'POST',
-            //     headers: {
-            //         accept: 'application/json',
-            //         'Content-Type': 'application/json',
-            //         Authorization: `Bearer ${token}`
-            //     },
-            //     body: {
-            //         user: JSON.stringify(user)
-            //     }
-            // }).then(res => {
-            //     return res.json()
-            // }).then(user => {
-                dispatch(loggedIn(user))
-            // })
+            dispatch(authClientDidLoad(true));
+            const token = await auth0_client.getToken();
+            console.log(token)
+            const auth_user = await auth0_client.getUser();
+            fetch(`http://localhost:3000/users/${btoa(auth_user.sub)}`, {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => {
+                let data = res.json();
+                return data;
+            }).then(data => {
+                console.log(data.user)
+                let user = data.user;
+                if (!user) {
+                    fetch(`http://localhost:3000/users`, {
+                        method: 'POST',
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        },
+                        body:JSON.stringify({
+                            user:{
+                                email: auth_user.email,
+                                id: btoa(auth_user.sub),
+                                name: {
+                                    first: auth_user.given_name,
+                                    last: auth_user.given_name
+                                }
+                            }
+                        })
+                    }).then(res => {
+                        let data = res.json();
+                        return data;
+                    }).then(data => {
+                        console.log(`after POST: ${data.user}`)
+                        dispatch(loggedIn(data.user))
+                    })
+                } else {
+                    console.log(`afterGET: ${data.user}`)
+                    dispatch(loggedIn(data.user))
+                }
+            })
         } else {
-            dispatch(clientDidLoad(false));
+            dispatch(authClientDidLoad(false));
 
         }
 
@@ -49,15 +80,58 @@ export function logout(...p) {
 
 
 export function loggedIn(user) {
+    return dispatch => {
+        console.log(`loggedIn: ${user}`)
+        dispatch({
+            type: LOGGED_IN,
+            user: user
+        })
+        dispatch(getAllPrograms(user._id))
+
+    }
+
+}
+
+function authClientDidLoad(loading=true) {
     return {
-        type: LOGGED_IN,
-        user
+        type: AUTH_CLIENT_DID_LOAD,
+        loading: loading
     }
 }
 
-function clientDidLoad(loading=true) {
+
+function addClient(name, email) {
     return {
-        type: CLIENT_DID_LOAD,
-        loading: loading
+        type: ADD_CLIENT,
+        client: {
+            name,
+            email
+        }
+    }
+}
+
+export function addClientAndPersist(id, name, email) {
+    return async dispatch => {
+        dispatch(addClient(name, email));
+        const token = await auth0_client.getToken();
+        fetch(`http://localhost:3000/users/${btoa(id)}/clients`, {
+            method: 'PUT',
+            headers: {
+                accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                client: {
+                    name,
+                    email
+                }
+            })
+        }).then(res => {
+            let data = res.json();
+            return data;
+        }).then(user => {
+            console.log(user)
+        })
     }
 }

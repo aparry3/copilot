@@ -33,9 +33,9 @@ export const Sidebar = (props) => {
         >
             <Logo />
             <MenuList>
-                <Link style={{ textDecoration: 'none' }}  list_key="home" to={`${props.path}/`}>
+                <Link style={{ textDecoration: 'none' }}  list_key="dashboard" to={`${props.path}/`}>
                     <MenuItem button>
-                        <ListItemText primary="Home" />
+                        <ListItemText primary="Dashboard" />
                     </MenuItem>
                 </Link>
                 <Link style={{ textDecoration: 'none' }}  list_key="exercises" to={`${props.path}/exercises`}>
@@ -43,7 +43,7 @@ export const Sidebar = (props) => {
                         <ListItemText primary="Exercises" />
                     </MenuItem>
                 </Link>
-                <Link style={{ textDecoration: 'none' }}  list_key="programs" to={`${props.path}/programs/client`}>
+                <Link style={{ textDecoration: 'none' }}  list_key="programs" to={`${props.path}/programs`}>
                     <MenuItem button>
                         <ListItemText primary="Programs" />
                     </MenuItem>

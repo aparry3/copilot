@@ -9,6 +9,7 @@ import {Sidebar, SidebarList} from './sidebar';
 import {Logo} from './util';
 import {history} from '../util'
 import {login} from '../actions'
+import {Dashboard} from './dashboard'
 
 // TODO
 // Change Links to dynamically generated path and text using a map
@@ -29,21 +30,19 @@ const styled = withStyles(styles)
 class MainPage extends React.Component {
 
     render() {
+
         return (
-            <Router history={history}>
-                <Switch>
-                    <Route path='/trainer' component={Trainer} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/?code=" render={() => {
-                        return (
-                            <Redirect to={{
-                                pathname: "/trainer",
-                                state: { from: props.location }
-                            }} /> )
-                        }}/>
-                    <Route component={Home} />
-                </Switch>
-            </Router>
+            <div>
+            {this.props.client_loaded ?
+                (<Router history={history}>
+                    <Switch>
+                        <Route path='/trainer' component={Trainer} />
+                        <Route path="/login" component={Login} />
+                        <Redirect to='/login'/>
+                    </Switch>
+                </Router>) : <div>Loading...</div>
+            }
+            </div>
 
         )
     }
@@ -58,6 +57,7 @@ const Trainer = styled(connect(state => {
     }
 })((props) => {
     let {match, classes} = props;
+    console.log(`user: trainer page ${props.user}`)
     return(
         <div>
             {!props.client_loaded || props.loading ? ( <div>Loading...</div>) : (<div>
@@ -65,15 +65,18 @@ const Trainer = styled(connect(state => {
                 <div className={classes.root}>
                     <Sidebar path={match.path}/>
                     <Main>
-                        <Route exact path={`${match.path}`} render={() => <div>trainer page</div>} />
-                        <Route path={`${match.path}/exercises`} component={ExercisesPage} />
-                        <Route path={`${match.path}/programs`} component={ProgramPage} />
+                        <Switch>
+                            <Route path={`${match.path}/exercises`} component={ExercisesPage} />
+                            <Route path={`${match.path}/programs`} component={ProgramPage} />
+                            <Route path={`${match.path}/dashboard`} component={Dashboard} />
+                            <Redirect to={`${match.path}/dashboard`}/>
+                        </Switch>
                     </Main>
                 </div>
             ) : (
                 <Redirect to={{
                   pathname: "/login",
-                  state: { from: props.location }
+                  state: { targetUrl: props.location }
               }}/>
           )}</div>)}
         </div>
@@ -81,13 +84,7 @@ const Trainer = styled(connect(state => {
     )
 }))
 
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
+
 function Main(props) {
     let classes = useStyles();
     return (
@@ -97,12 +94,20 @@ function Main(props) {
     );
 }
 function Login(props) {
+    console.log(props.location.state)
+    function getAppState() {
+        return {appState: !!props.location.state ? props.location.state : {targetUrl: {pathname: '/trainer'}}}
+    }
     return (
         <div>
             <h2>Login</h2>
-            <button className="btn btn-success" onClick={() => login()} > Login </button>
+            <button className="btn btn-success" onClick={() => login(getAppState())} > Login </button>
         </div>
     )
 }
 
-export default styled(MainPage);
+export default connect(state => {
+    return {
+        client_loaded: state.auth.client_loaded
+    }
+})(styled(MainPage));

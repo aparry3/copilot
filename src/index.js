@@ -25,9 +25,9 @@ const theme = createMuiTheme();
 
 
 function App(props) {
+
     useEffect(() => {
         store.dispatch(fetchExerises())
-        store.dispatch(getAllPrograms())
         store.dispatch(fetchUser());
     })
     return (

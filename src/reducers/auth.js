@@ -2,13 +2,15 @@ import {
     LOGGING_IN,
     LOGGED_IN,
     LOGGING_OUT,
-    CLIENT_DID_LOAD
+    AUTH_CLIENT_DID_LOAD,
+    ADD_CLIENT
 } from '../actions'
 
 const initialState = {
     user: null,
     loading: false,
-    client_loaded: false
+    client_loaded: false,
+    is_authenticated: false
 }
 
 const auth = (state = initialState, action) => {
@@ -27,11 +29,20 @@ const auth = (state = initialState, action) => {
                 loading: false
             }
         }
-        case CLIENT_DID_LOAD: {
+        case AUTH_CLIENT_DID_LOAD: {
             return {
                 ...state,
                 client_loaded: true,
                 loading: action.loading
+            }
+        }
+        case ADD_CLIENT: {
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    clients: [...state.user.clients, action.client]
+                }
             }
         }
         default:

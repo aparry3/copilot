@@ -15,11 +15,13 @@ import {
     LOGGING_IN,
     LOGGED_IN,
     LOGGING_OUT,
-    CLIENT_DID_LOAD,
+    AUTH_CLIENT_DID_LOAD,
+    ADD_CLIENT,
     login,
     logout,
     loggingIn,
     fetchUser,
+    addClientAndPersist
 } from './auth';
 
 import {
@@ -54,7 +56,8 @@ export {
     LOGGING_IN,
     LOGGED_IN,
     LOGGING_OUT,
-    CLIENT_DID_LOAD,
+    AUTH_CLIENT_DID_LOAD,
+    ADD_CLIENT,
     login,
     logout,
     loggingIn,
@@ -69,5 +72,7 @@ export {
     addExerciseAndPersist,
     addWeekAndPersist,
     addProgramAndPersist,
-    getAllPrograms
+    getAllPrograms,
+    addClientAndPersist
+
 };

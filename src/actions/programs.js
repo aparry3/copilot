@@ -1,3 +1,5 @@
+import {auth0_client} from '../auth'
+
 export const CREATE_WORKOUT = 'CREATE_WORKOUT';
 export const EDIT_WORKOUT = 'EDIT_WORKOUT';
 export const REARRANGE_WORKOUT = 'REARRANGE_WORKOUT';
@@ -37,17 +39,15 @@ export function addExerciseAndPersist(client, program_id, week_index, day_index,
         })
     }
 }
-export function addProgramToClient(client, program) {
+export function addProgram(program) {
     return {
         type: ADD_PROGRAM,
-        client,
         program
     }
 }
 export function addWeekToProgram(client, program_id) {
     return {
         type: ADD_WEEK,
-        client,
         program_id
     }
 }
@@ -66,20 +66,27 @@ export function addWeekAndPersist(client, program_id) {
         })
     }
 }
-export function addProgramAndPersist(client) {
-    return (dispatch) => {
-        return fetch(`http://localhost:3000/programs/${client.id}`, {
+export function addProgramAndPersist(user_id, name, client) {
+    return async (dispatch) => {
+        let token = await auth0_client.getToken()
+        return fetch(`http://localhost:3000/programs/${user_id}`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                author_id: '1'
+                author_id: user_id,
+                name: name,
+                client: client
             })
         }).then(res => {
-            let program = res.json();
-            dispatch(addProgramToClient(client, program))
+            console.log()
+            let data = res.json()
+            return data;
+        }).then(program => {
+            dispatch(addProgram(program))
         }, err => {
             console.error(err);
         })
@@ -91,14 +98,15 @@ export function recievePrograms(programs) {
         programs: programs
     }
 }
-export function getAllPrograms() {
-    return (dispatch) => {
-        return fetch(`http://localhost:3000/programs`, {
+export function getAllPrograms(user_id) {
+    return async (dispatch) => {
+        let token = await auth0_client.getToken()
+        return fetch(`http://localhost:3000/programs/${user_id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                author_id: '1'
+                Authorization: `Bearer ${token}`
             }
         }).then(res => {
             let programs = res.json();

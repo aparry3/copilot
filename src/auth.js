@@ -18,13 +18,15 @@ export class Auth0Client {
         this.domain = process.env.AUTH0_DOMAIN;
         this.client_id = process.env.AUTH0_CLIENT_ID;
         this.redirect_uri = redirect_uri;
+        this.audience = process.env.AUTH0_IDENTIFIER;
     }
 
     async initialize() {
         if (!!this.client) {return true;}
         let client = await this._ensureClient()
         if (window.location.search.includes("code=")) {
-            const { appState } = await client.handleRedirectCallback();
+            const {appState} = await client.handleRedirectCallback();
+            console.log(appState)
             this.onRedirectCallback(appState);
         }
         return true;
@@ -40,7 +42,7 @@ export class Auth0Client {
                 redirect_uri: this.redirect_uri,
                 client_id: this.client_id,
                 domain: this.domain,
-                onRedirectCallback: this.onRedirectCallback
+                audience: this.audience
                 })
                 return this.client
             } catch (e) {
@@ -63,6 +65,7 @@ export class Auth0Client {
     }
     async login(...p) {
         let client = await this._ensureClient()
+        console.log(...p)
         return await client.loginWithRedirect(...p)
     }
     async logout(...p) {
