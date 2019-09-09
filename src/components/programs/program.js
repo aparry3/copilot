@@ -107,25 +107,26 @@ class ProgramView extends React.Component {
     }
     render() {
 
-        let classes = this.props.classes;
-        console.log(this.props.program)
-        return (
-            <div className={classes.root}>
-                <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
-                <Grid container>
-                    {this.props.program.weeks.map((week, windex) => {
-                        return (
-                            <Week windex={windex} week={week} classes={classes} >
-                                {week.map((day, dindex) => {
-                                    return (<Day windex={windex} dindex={dindex} day={day} classes={classes} onAddExercise={this.handleAddExercise}/>)
-                                })}
-                            </Week>
-                        )
-                    })}
-                    <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client, this.props.program._id)}>Add Week</button>
-                </Grid>
-            </div>
-        );
+        // let classes = this.props.classes;
+        // console.log(this.props.program)
+        // return (
+        //     <div className={classes.root}>
+        //         <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
+        //         <Grid container>
+        //             {this.props.program.weeks.map((week, windex) => {
+        //                 return (
+        //                     <Week windex={windex} week={week} classes={classes} >
+        //                         {week.map((day, dindex) => {
+        //                             return (<Day windex={windex} dindex={dindex} day={day} classes={classes} onAddExercise={this.handleAddExercise}/>)
+        //                         })}
+        //                     </Week>
+        //                 )
+        //             })}
+        //             <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client, this.props.program._id)}>Add Week</button>
+        //         </Grid>
+        //     </div>
+        // );
+        return <div> Program </div>
     }
 }
 

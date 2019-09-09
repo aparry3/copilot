@@ -19,7 +19,7 @@ export function ProgramsListView(props) {
     function handleSelect(program) {
         props.getProgram(props.user._id, program._id)
         console.log(props.match)
-        history.push(`${props.location.pathname}/${program._id}`)
+        props.history.push(`${props.location.pathname}/${program._id}`)
     }
     return (
         <Card>
