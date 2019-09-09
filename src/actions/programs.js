@@ -7,6 +7,8 @@ export const REARRANGE_EXERCISE = 'REARRANGE_EXERCISE';
 export const ADD_WEEK = 'ADD_WEEK';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
+export const RECIEVE_PROGRAM = 'RECIEVE_PROGRAM';
+
 
 export function addExerciseToDay(client, program_id, week_index, day_index, exercise) {
     console.log(exercise)
@@ -39,6 +41,35 @@ export function addExerciseAndPersist(client, program_id, week_index, day_index,
         })
     }
 }
+
+function recieveProgram(program) {
+    return {
+        type: RECIEVE_PROGRAM,
+        program
+    }
+}
+
+export function getProgram(user_id, program_id) {
+    return async dispatch => {
+        let token = await auth0_client.getToken()
+
+        return fetch(`http://localhost:3000/programs/${user_id}/${program_id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            let data = res.json();
+            return data;
+        }).then(program => {
+            dispatch(recieveProgram(program))
+        })
+
+    }
+}
+
 export function addProgram(program) {
     return {
         type: ADD_PROGRAM,

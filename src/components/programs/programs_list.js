@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {addProgramAndPersist} from '../../actions';
+import {addProgramAndPersist, getProgram} from '../../actions';
 import { Link } from "react-router-dom";
-
+import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
 
 
@@ -15,6 +15,11 @@ export function ProgramsListView(props) {
     function handleSubmit(e) {
         e.preventDefault();
         props.addProgram(props.user._id, name, props.clients[client_index]);
+    }
+    function handleSelect(program) {
+        props.getProgram(props.user._id, program._id)
+        console.log(props.match)
+        history.push(`${props.location.pathname}/${program._id}`)
     }
     return (
         <Card>
@@ -40,11 +45,9 @@ export function ProgramsListView(props) {
                 </ListItem>
                 {programs.length > 0 && programs.map(program => {
                     return (
-                        <Link to={`${props.match.path}/${program._id}`}>
-                            <ListItem button>
-                                <ListItemText primary={<Typography>{`${program.client_name} - ${program.name}`}</Typography>} secondary={`${program.client_email}`} />
-                            </ListItem>
-                        </Link>
+                        <ListItem button onClick={() => handleSelect(program)}>
+                            <ListItemText primary={<Typography>{`${program.client_name} - ${program.name}`}</Typography>} secondary={`${program.client_email}`} />
+                        </ListItem>
                     )
                 })}
             </List>
@@ -52,17 +55,18 @@ export function ProgramsListView(props) {
     )
 }
 export const ProgramsList = connect(
-    state => {
-        console.log(state)
+    (state, ownProps) => {
+        console.log(ownProps)
         return {
-            programs: state.programs,
+            programs: state.programs.all_programs,
             clients: state.auth.user.clients,
             user: state.auth.user
         }
     },
     dispatch => {
         return {
-            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client))
+            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client)),
+            getProgram: (user_id, program_id) => dispatch(getProgram(user_id, program_id))
         }
     }
 )(ProgramsListView)

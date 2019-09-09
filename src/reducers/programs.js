@@ -2,6 +2,7 @@ import {
     ADD_WEEK,
     CREATE_WORKOUT,
     EDIT_WORKOUT,
+    RECIEVE_PROGRAM,
     RECIEVE_PROGRAMS,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
@@ -9,17 +10,27 @@ import {
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
-const initialState = []
+const initialState = {all_programs: [], current_program:{}}
 
 const programs = (state = initialState, action) => {
     switch (action.type) {
         case ADD_PROGRAM: {
-            let new_state = [action.program, ...state];
+            let new_state = {...state, all_programs: [action.program, ...state.all_programs]};
             return new_state;
         }
         case RECIEVE_PROGRAMS: {
-            return action.programs;
+            return {
+                ...state,
+                all_programs: action.programs
+            }
         }
+        case RECIEVE_PROGRAM: {
+            return {
+                ...state,
+                current_program: action.program
+            }
+        }
+
         case ADD_WEEK: {
             let {client, program_id} = action;
             let new_state = {...state};

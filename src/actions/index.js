@@ -29,10 +29,12 @@ import {
     ADD_PROGRAM,
     CREATE_WORKOUT,
     EDIT_WORKOUT,
+    RECIEVE_PROGRAM,
     RECIEVE_PROGRAMS,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
     getAllPrograms,
+    getProgram,
     addExerciseToDay,
     addExerciseAndPersist,
     addWeekAndPersist,
@@ -44,6 +46,7 @@ export {
     ADD_WEEK,
     ADD_PROGRAM,
     SAVE_EXERCISE,
+    RECIEVE_PROGRAM,
     RECIEVE_PROGRAMS,
     RECIEVE_EXERCISES,
     REQUEST_EXERCISES,
@@ -73,6 +76,7 @@ export {
     addWeekAndPersist,
     addProgramAndPersist,
     getAllPrograms,
+    getProgram,
     addClientAndPersist
 
 };

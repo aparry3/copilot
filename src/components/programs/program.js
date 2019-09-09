@@ -79,7 +79,6 @@ class ProgramView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            client: {id: props.client_id},
             modalIsOpen: false
         }
         this.handleModalClose = this.handleModalClose.bind(this);
@@ -134,19 +133,15 @@ class ProgramView extends React.Component {
 
 export const Program = connect(
         (state, ownProps) => {
-            console.log(state.programs)
-            let id = ownProps.match.params.id;
-            console.log(ownProps)
+            console.log(ownProps.match)
             return {
-                program: !!state.programs[id] && state.programs[id].length ? state.programs[id][0] : null,
-                client_id: id
+                program: !state.programs.current_program,
             }
         },
         (dispatch) => {
             return {
                 addExercise: (client, program_id, windex, dindex, exercise) => dispatch(addExerciseAndPersist(client, program_id, windex, dindex, exercise)),
                 addWeek: (client, program_id) => dispatch(addWeekAndPersist(client, program_id)),
-                newProgram: (client) => dispatch(addProgramAndPersist(client))
 
             }
         }
