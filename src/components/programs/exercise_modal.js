@@ -70,7 +70,7 @@ class ExerciseModalView extends React.Component {
         this.setState({
             exercise_index: -1
         });
-        this.props.onSubmit({name: exercise.name, id: exercise._id, details: this.state.details})
+        this.props.onSubmit({exercise_name: exercise.name, exercise_id: exercise._id, details: this.state.details})
     }
     render() {
         let classes = this.props.classes

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {addProgramAndPersist, getProgram} from '../../actions';
+import {addProgramAndPersist} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
@@ -17,8 +17,6 @@ export function ProgramsListView(props) {
         props.addProgram(props.user._id, name, props.clients[client_index]);
     }
     function handleSelect(program) {
-        props.getProgram(props.user._id, program._id)
-        console.log(props.match)
         props.history.push(`${props.location.pathname}/${program._id}`)
     }
     return (
@@ -65,8 +63,7 @@ export const ProgramsList = connect(
     },
     dispatch => {
         return {
-            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client)),
-            getProgram: (user_id, program_id) => dispatch(getProgram(user_id, program_id))
+            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client))
         }
     }
 )(ProgramsListView)

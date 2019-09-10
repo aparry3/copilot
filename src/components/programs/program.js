@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
 import {Grid, List, ListItem, Typography, Card} from '@material-ui/core'
 import {SIDEBAR_WIDTH} from '../styles'
-import {addExerciseAndPersist, addWeekAndPersist, addProgramAndPersist} from '../../actions';
+import {getProgram, editWeek, addWeekAndPersist, addProgramAndPersist} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
 
 const styled = withStyles(theme => ({
@@ -31,11 +31,13 @@ const styled = withStyles(theme => ({
 }));
 
 const Week = (props) => {
-    let {windex, week, classes} = props;
+    let {week_id, week, classes} = props;
     return (
-        <Grid key={`w${windex}`} item xs={12} className={classes.week}>
+        <Grid key={week_id} item xs={12} className={classes.week}>
             <List className={classes.list} >
-                {props.children}
+            {Object.keys(week.days).map((day, dindex) => {
+                return (<Day week_id={week_id} workout={week.days[day]} day={day} classes={classes} onAddExercise={props.onAddExercise}/>)
+            })}
             </List>
         </Grid>
 
@@ -43,106 +45,119 @@ const Week = (props) => {
 }
 
 const Day = (props) => {
-    function renderExercise(exercise_group) {
-        console.log(exercise_group.exercise_name)
-        return exercise_group.exercise_id ? (
-            <Card>{exercise_group.exercise_name}</Card>
+    let {day, week_id, workout, classes} = props;
+    function renderExercise(workout_element) {
+        return workout_element.exercise_id ? (
+            <Card>{workout_element.exercise_name}</Card>
         ) : (
             <Card>
                 <List>
-                    {exercise_group.exercises.map((ex, index)=> {
+                    {workout_element.exercises.map((ex, index)=> {
                         return (<ListItem>{renderExercise(ex)}</ListItem>)
                     })}
                 </List>
             </Card>
         )
     }
-
-    let {windex, dindex, day, classes} = props;
-    console.log(`${dindex}: day`)
-
     return (
-        <ListItem className={classes.day} key={`w${windex}d${dindex}`}>
-            <Typography variant="h6">Day {dindex + 1}</Typography>
+        <ListItem className={classes.day} key={`${week_id}-${day}`}>
+            <Typography variant="h6">{day}</Typography>
             <List>
-                {day.exercises && day.exercises.map((exercise_group, eindex) => {
+                {workout.workout_elements && workout.workout_elements.map((workout_element) => {
                     return (
-                        renderExercise(exercise_group)
+                        renderExercise(workout_element)
                     )
                 })}
-                <ListItem><button className='btn btn-success' onClick={() => props.onAddExercise(windex, dindex)}>Add Exercise</button></ListItem>
+                <ListItem><button className='btn btn-success' onClick={() => props.onAddExercise(week_id, day)}>Add Exercise</button></ListItem>
             </List>
         </ListItem>
     )
 }
-class ProgramView extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            modalIsOpen: false
+function ProgramView(props) {
+    let [update, setUpdate] = useState(true)
+    let [modalIsOpen, setModelIsOpen] = useState(false);
+    let [week_id, setWeek] = useState(-1);
+    let [day, setDay] = useState(-1)
+    let [program, setProgram] = useState(null)
+
+    useEffect(() => {
+        const init = async () => {
+            let full_program = await getProgram(props.user._id, props.match.params.program_id)
+            setProgram(full_program);
         }
-        this.handleModalClose = this.handleModalClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleAddExercise = this.handleAddExercise.bind(this)
+        if (update) {
+            init()
+            setUpdate(false)
+        }
+    }, [])
+    async function handleAddWeek() {
+        setProgram(await props.addWeek(props.user._id, program._id));
+    }
+    function handleAddExercise(week_id, day) {
+        setModelIsOpen(true);
+        setWeek(week_id);
+        setDay(day)
     }
 
-    handleAddExercise(week_index, day_index) {
-        this.setState({
-            modalIsOpen: true,
-            week: week_index,
-            day: day_index
-        })
-        // this.props.addExercise('client', week_index, day_index, this.state.exercise)
+    function handleModalClose() {
+        setModelIsOpen(false);
+        setWeek('');
+        setDay('')
     }
-    handleModalClose() {
-        this.setState({
-            modalIsOpen: false
-        })
 
+    function handleSubmit(exercise, index=-1) {
+        let new_week = {...program.weeks[program.weeks.map(week => week._id).indexOf(week_id)]};
+        new_week.days[day].workout_elements.push(exercise)
+        let new_program = {
+            ...program,
+            weeks: program.weeks.map(week => {
+                return week._id == new_week._id ? new_week : week;
+            })
+        }
+        editWeek(props.user._id, program._id, week_id, new_week)
+        setProgram(new_program);
+        handleModalClose();
     }
-    handleSubmit(exercise) {
-        this.props.addExercise(this.state.client, this.props.program._id, this.state.week, this.state.day, exercise)
-        this.handleModalClose();
 
-    }
-    render() {
+    let classes = props.classes;
 
-        // let classes = this.props.classes;
-        // console.log(this.props.program)
-        // return (
-        //     <div className={classes.root}>
-        //         <ExerciseModal onSubmit={this.handleSubmit} open={this.state.modalIsOpen} onClose={this.handleModalClose}/>
-        //         <Grid container>
-        //             {this.props.program.weeks.map((week, windex) => {
-        //                 return (
-        //                     <Week windex={windex} week={week} classes={classes} >
-        //                         {week.map((day, dindex) => {
-        //                             return (<Day windex={windex} dindex={dindex} day={day} classes={classes} onAddExercise={this.handleAddExercise}/>)
-        //                         })}
-        //                     </Week>
-        //                 )
-        //             })}
-        //             <button className='btn btn-success' onClick={() => this.props.addWeek(this.state.client, this.props.program._id)}>Add Week</button>
-        //         </Grid>
-        //     </div>
-        // );
-        return <div> Program </div>
-    }
+
+
+    return (
+        <div>
+        {!!program ? (
+        <div className={classes.root}>
+            <ExerciseModal onSubmit={handleSubmit} open={modalIsOpen} onClose={handleModalClose}/>
+            <Grid container>
+                {program.weeks.map((week, windex) => {
+                    return (
+                        <Week week_id={week._id} week={week} classes={classes} onAddExercise={handleAddExercise}/>
+                    )
+                })}
+                <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
+            </Grid>
+        </div> ) : <div>Loading...</div>}
+        </div>
+    );
+
 }
 
 
 
 export const Program = connect(
         (state, ownProps) => {
-            console.log(ownProps.match)
+
+            function getProgramById(id) {
+                let prog = state.programs.all_programs[state.programs.all_programs.map(p => p._id).indexOf(id)];
+                return prog
+            }
             return {
-                program: !state.programs.current_program,
+                user: state.auth.user
             }
         },
         (dispatch) => {
             return {
-                addExercise: (client, program_id, windex, dindex, exercise) => dispatch(addExerciseAndPersist(client, program_id, windex, dindex, exercise)),
-                addWeek: (client, program_id) => dispatch(addWeekAndPersist(client, program_id)),
+                addWeek: (user_id, program_id) => dispatch(addWeekAndPersist(user_id, program_id)),
 
             }
         }

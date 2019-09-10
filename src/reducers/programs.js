@@ -10,7 +10,7 @@ import {
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
-const initialState = {all_programs: [], current_program:{}}
+const initialState = {all_programs: [], programs_loaded:false}
 
 const programs = (state = initialState, action) => {
     switch (action.type) {
@@ -21,6 +21,7 @@ const programs = (state = initialState, action) => {
         case RECIEVE_PROGRAMS: {
             return {
                 ...state,
+                programs_loaded: true,
                 all_programs: action.programs
             }
         }
@@ -32,21 +33,17 @@ const programs = (state = initialState, action) => {
         }
 
         case ADD_WEEK: {
-            let {client, program_id} = action;
-            let new_state = {...state};
-            new_state[client.id] = new_state[client.id].map(program => {
-                if (program._id == program_id) {
-                    return {
-                        ...program,
-                        weeks: [
-                            ...program.weeks,
-                            [...WEEK_SKELETON]
-                        ]
+            let {week_id, program_id} = action;
+            let new_state = {
+                ...state,
+                all_programs: state.all_programs.map(program => {
+                    if (program._id == program_id) {
+                        program.weeks.push(week_id)
                     }
-                }
-                return program
-            });
-            console.log(new_state)
+                    return program
+                })
+            };
+
             return new_state;
         }
         case EDIT_WORKOUT: {
