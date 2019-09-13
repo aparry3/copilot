@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
-import {Grid, List, ListItem, Typography, Card} from '@material-ui/core'
+import {Grid, Button, List, ListItem, Typography, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {SIDEBAR_WIDTH} from '../styles'
 import {getProgram, editWeek, addWeekAndPersist, addProgramAndPersist} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
@@ -36,7 +36,7 @@ const Week = (props) => {
         <Grid key={week_id} item xs={12} className={classes.week}>
             <List className={classes.list} >
             {Object.keys(week.days).map((day, dindex) => {
-                return (<Day week_id={week_id} workout={week.days[day]} day={day} classes={classes} onAddExercise={props.onAddExercise}/>)
+                return (<Day key={`${week_id}-${dindex}`} week_id={week_id} workout={week.days[day]} day={day} classes={classes} onAddExercise={props.onAddExercise}/>)
             })}
             </List>
         </Grid>
@@ -46,26 +46,46 @@ const Week = (props) => {
 
 const Day = (props) => {
     let {day, week_id, workout, classes} = props;
-    function renderExercise(workout_element) {
-        return workout_element.exercise_id ? (
-            <Card>{workout_element.exercise_name}</Card>
-        ) : (
-            <Card>
+    function renderExercise(workout_element, index=null) {
+        return (
+            <div>
+            {workout_element.exercise_id ? (
+            <Card className={classes.card}>
+                <CardActionArea>
+                    <CardContent>
+                        <Typography gutterBottom variant="body2" >
+                            {workout_element.exercise_name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {workout_element.notes}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions>
+                    <Button size="small" color="primary">
+                    Share
+                    </Button>
+                    <Button size="small" color="primary">
+                    Learn More
+                    </Button>
+                </CardActions>
+            </Card> ) : (
                 <List>
                     {workout_element.exercises.map((ex, index)=> {
-                        return (<ListItem>{renderExercise(ex)}</ListItem>)
+                        return (<ListItem>{renderExercise(ex, index)}</ListItem>)
                     })}
                 </List>
-            </Card>
+            )}
+            </div>
         )
     }
     return (
-        <ListItem className={classes.day} key={`${week_id}-${day}`}>
+        <ListItem className={classes.day} >
             <Typography variant="h6">{day}</Typography>
             <List>
-                {workout.workout_elements && workout.workout_elements.map((workout_element) => {
+                {workout.workout_elements && workout.workout_elements.map((workout_element, index) => {
                     return (
-                        renderExercise(workout_element)
+                        renderExercise(workout_element, index)
                     )
                 })}
                 <ListItem><button className='btn btn-success' onClick={() => props.onAddExercise(week_id, day)}>Add Exercise</button></ListItem>
@@ -131,7 +151,7 @@ function ProgramView(props) {
             <Grid container>
                 {program.weeks.map((week, windex) => {
                     return (
-                        <Week week_id={week._id} week={week} classes={classes} onAddExercise={handleAddExercise}/>
+                        <Week key={`${week._id}`} week_id={week._id} week={week} classes={classes} onAddExercise={handleAddExercise}/>
                     )
                 })}
                 <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>

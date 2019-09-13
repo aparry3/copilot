@@ -1,2 +1,2 @@
 
-export const SIDEBAR_WIDTH = 150
+export const SIDEBAR_WIDTH = 165
