@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
-import {Grid, Button, List, ListItem, Typography, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
+import {Grid, Button, List, ListItem, Typography, Card, Divider, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {SIDEBAR_WIDTH} from '../styles'
 import {getProgram, editWeek, addWeekAndPersist, addProgramAndPersist} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
@@ -102,7 +102,10 @@ function ProgramView(props) {
             <Grid container>
                 {program.weeks.map((week, windex) => {
                     return (
-                        <Week key={`${week._id}`} week_id={week._id} week={week} classes={classes} onAddExercise={handleAddExercise}/>
+                        <div>
+                            <Week key={`${week._id}`} week_id={week._id} week={week} classes={classes} onAddExercise={handleAddExercise}/>
+                            <Divider variant="middle"/>
+                        </div>
                     )
                 })}
                 <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>

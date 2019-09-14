@@ -1,7 +1,9 @@
 import React from 'react';
-import {Grid, Button, List, ListItem, Typography, Divider, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
+import {Grid, MenuItem, Button, List, ListItem, Typography, Divider, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import AutorenewIcon from '@material-ui/icons/Autorenew'
+import AddIcon from '@material-ui/icons/Add'
+
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '10px',
         background: 'white',
         boxShadow: '1px 1px 5px #dadada',
-        padding: '5px 0 5px 5px',
+        padding: '7px 0 7px 10px',
         borderLeft: '5px lightblue'
     },
     cardContent: {
@@ -41,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
         height: '40%',
         alignSelf: 'flex-end',
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'flex-end'
 
     },
     detailIcon: {
@@ -102,7 +105,8 @@ export const Day = (props) => {
                         renderExercise(workout_element, index)
                     )
                 })}
-                <ListItem><button className='btn btn-success' onClick={() => props.onAddExercise(week_id, day)}>Add Exercise</button></ListItem>
+                <MenuItem onClick={() => props.onAddExercise(week_id, day)}>
+                    <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
             </List>
         </ListItem>
     )
