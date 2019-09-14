@@ -17,11 +17,12 @@ import {Dashboard} from './dashboard'
 const styles = (theme) => ({
     root: {
       display: 'flex',
+      background: '#f6f8f9',
     },
     content: {
         flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
         padding: theme.spacing(0),
+        height: '100vh'
     }
 });
 const useStyles = makeStyles(styles);

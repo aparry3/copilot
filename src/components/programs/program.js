@@ -5,14 +5,13 @@ import {Grid, Button, List, ListItem, Typography, Card, CardActions, CardActionA
 import {SIDEBAR_WIDTH} from '../styles'
 import {getProgram, editWeek, addWeekAndPersist, addProgramAndPersist} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
-
+import {Day} from './day'
 const styled = withStyles(theme => ({
-    root: {
+    programContainer: {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-even',
         overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
     },
     list: {
         display: 'flex',
@@ -20,12 +19,13 @@ const styled = withStyles(theme => ({
         height: '100%'
     },
     week: {
-        height: '80vh'
+        width: '140%',
+        height: '80vh',
+        overflow: 'auto'
     },
-    day: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignContent: 'flex-start'
+    programPage: {
+        background: '#f6f8f9',
+
     }
 
 }));
@@ -44,55 +44,6 @@ const Week = (props) => {
     )
 }
 
-const Day = (props) => {
-    let {day, week_id, workout, classes} = props;
-    function renderExercise(workout_element, index=null) {
-        return (
-            <div>
-            {workout_element.exercise_id ? (
-            <Card className={classes.card}>
-                <CardActionArea>
-                    <CardContent>
-                        <Typography gutterBottom variant="body2" >
-                            {workout_element.exercise_name}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {workout_element.notes}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-                <CardActions>
-                    <Button size="small" color="primary">
-                    Share
-                    </Button>
-                    <Button size="small" color="primary">
-                    Learn More
-                    </Button>
-                </CardActions>
-            </Card> ) : (
-                <List>
-                    {workout_element.exercises.map((ex, index)=> {
-                        return (<ListItem>{renderExercise(ex, index)}</ListItem>)
-                    })}
-                </List>
-            )}
-            </div>
-        )
-    }
-    return (
-        <ListItem className={classes.day} >
-            <Typography variant="h6">{day}</Typography>
-            <List>
-                {workout.workout_elements && workout.workout_elements.map((workout_element, index) => {
-                    return (
-                        renderExercise(workout_element, index)
-                    )
-                })}
-                <ListItem><button className='btn btn-success' onClick={() => props.onAddExercise(week_id, day)}>Add Exercise</button></ListItem>
-            </List>
-        </ListItem>
-    )
-}
 function ProgramView(props) {
     let [update, setUpdate] = useState(true)
     let [modalIsOpen, setModelIsOpen] = useState(false);
@@ -144,9 +95,9 @@ function ProgramView(props) {
 
 
     return (
-        <div>
+        <div className={classes.programPage}>
         {!!program ? (
-        <div className={classes.root}>
+        <div className={classes.programContainer}>
             <ExerciseModal onSubmit={handleSubmit} open={modalIsOpen} onClose={handleModalClose}/>
             <Grid container>
                 {program.weeks.map((week, windex) => {

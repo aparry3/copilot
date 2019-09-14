@@ -12,14 +12,7 @@ const styled = withStyles(theme => ({
     toolbar: theme.mixins.toolbar,
     container: {
         flexGrow:1,
-    },
-    drawer: {
-      width: EXERCISE_LIST_WIDTH,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: EXERCISE_LIST_WIDTH,
-    },
+    }
 }))
 
 class ViewExercisesView extends React.Component {
