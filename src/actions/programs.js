@@ -9,6 +9,7 @@ export const EDIT_WEEK = 'EDIT_WEEK';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
 export const RECIEVE_PROGRAM = 'RECIEVE_PROGRAM';
+export const SET_DRAG_ELEMENT = 'SET_DRAG_ELEMENT';
 
 export function combineExercises(item, drop_location) {
     console.log(item)
@@ -20,6 +21,13 @@ export function moveWorkoutElement(old_location, new_location, exercise) {
         type: REARRANGE_EXERCISE,
         old_location,
         new_location
+    }
+}
+
+export function setDragElement(element) {
+    return {
+        type: SET_DRAG_ELEMENT,
+        element
     }
 }
 

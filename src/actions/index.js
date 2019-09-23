@@ -34,6 +34,7 @@ import {
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
     EDIT_WEEK,
+    SET_DRAG_ELEMENT,
     getAllPrograms,
     getProgram,
     editWeek,
@@ -44,7 +45,8 @@ import {
     addProgramAndPersist,
     combineExercises,
     moveWorkoutElement,
-    editWeekAndPersist
+    editWeekAndPersist,
+    setDragElement
 } from './programs';
 
 export {
@@ -67,6 +69,7 @@ export {
     LOGGING_OUT,
     AUTH_CLIENT_DID_LOAD,
     ADD_CLIENT,
+    SET_DRAG_ELEMENT,
     login,
     logout,
     loggingIn,
@@ -86,6 +89,6 @@ export {
     addClientAndPersist,
     combineExercises,
     moveWorkoutElement,
-    editWeekAndPersist
-
+    editWeekAndPersist,
+    setDragElement
 };

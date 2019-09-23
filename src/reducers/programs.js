@@ -7,11 +7,12 @@ import {
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
     ADD_PROGRAM,
-    EDIT_WEEK
+    EDIT_WEEK,
+    SET_DRAG_ELEMENT
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
-const initialState = {all_programs: [], programs_loaded:false, active_program: null }
+const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null }
 
 function _newProgram(active_program, week) {
     let new_program = {...active_program};
@@ -66,6 +67,12 @@ function _insert(program, location, item) {
 
 const programs = (state = initialState, action) => {
     switch (action.type) {
+        case SET_DRAG_ELEMENT: {
+            return {
+                ...state,
+                drag_element: action.element
+            }
+        }
         case ADD_PROGRAM: {
             let new_state = {...state, all_programs: [...state.all_programs], active_program: {...action.program}};
             new_state.all_programs.unshift({...action.program})

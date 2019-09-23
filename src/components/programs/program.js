@@ -9,7 +9,8 @@ import {SIDEBAR_WIDTH} from '../styles'
 import {dnd_types} from '../../constants/programs';
 import {getProgram, editWeekAndPersist, addWeekAndPersist, addProgramAndPersist, combineExercises, moveWorkoutElement} from '../../actions';
 import {ExerciseModal} from './exercise_modal';
-import {Day} from './day'
+import {Week} from './week'
+
 const styled = withStyles(theme => ({
     programContainer: {
         display: 'flex',
@@ -34,20 +35,6 @@ const styled = withStyles(theme => ({
 
 }));
 
-const Week = (props) => {
-
-    let {week_id, week, classes} = props;
-    return (
-        <Grid item xs={12} className={classes.week}>
-            <List className={classes.list} >
-            {Object.keys(week).map((day) => {
-                return (<Day key={`${week_id}-${day}`} moveItem={props.moveItem} week_id={week_id} day={day} workout={week[day]} classes={classes} onAddExercise={props.onAddExercise}/>)
-            })}
-            </List>
-        </Grid>
-
-    )
-}
 
 function ProgramView(props) {
     let [program, setProgram] = useState(null);
