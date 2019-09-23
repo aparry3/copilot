@@ -4,7 +4,6 @@ import createAuth0Client from "@auth0/auth0-spa-js";
 import {history} from './util'
 
 const onRedirectCallback = appState => {
-  console.log(appState)
   history.push(
       appState && appState.targetUrl
           ? appState.targetUrl
@@ -26,7 +25,6 @@ export class Auth0Client {
         let client = await this._ensureClient()
         if (window.location.search.includes("code=")) {
             const {appState} = await client.handleRedirectCallback();
-            console.log(appState)
             this.onRedirectCallback(appState);
         }
         return true;
@@ -65,7 +63,6 @@ export class Auth0Client {
     }
     async login(...p) {
         let client = await this._ensureClient()
-        console.log(...p)
         return await client.loginWithRedirect(...p)
     }
     async logout(...p) {

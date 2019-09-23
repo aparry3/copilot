@@ -17,7 +17,6 @@ function DashboardView(props) {
 export const Dashboard = connect(
 
     state => {
-        console.log(state)
         return {user: state.auth.user}
     },
     dispatch => {
@@ -29,7 +28,6 @@ export const Dashboard = connect(
 
 
 function Clients(props) {
-    console.log(props)
     let clients = !!props.user.clients ? props.user.clients : []
     let [name, setName] = useState('');
     let [email, setEmail] = useState('');

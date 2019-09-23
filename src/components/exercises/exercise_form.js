@@ -28,7 +28,6 @@ class ExerciseFormView extends React.Component {
 
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.exercise)
         this.setState({exercise: nextProps.exercise})
     }
     handleChange(e) {
@@ -44,8 +43,6 @@ class ExerciseFormView extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(`submit inside for ${this.state.exercise.name}`)
-        console.log(this.props.onSave)
         this.props.onSave(this.state.exercise)
     }
     handleCancel(e) {

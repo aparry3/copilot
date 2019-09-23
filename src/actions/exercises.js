@@ -13,7 +13,6 @@ function HttpExceptioon(status, body) {
 
 export function persistExercise(exercise) {
     let action = exercise._id ? 'EDIT' : 'ADD';
-    console.log(action)
     return (dispatch) => {
         return fetch(`http://localhost:3000/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
             method: action == 'EDIT' ? 'PUT' : 'POST',
@@ -28,14 +27,10 @@ export function persistExercise(exercise) {
             }
             return res.json();
         }).then(exercise => {
-            console.log(exercise)
-            console.log(exercise.name)
             dispatch(saveExercise(exercise, action == 'ADD'))
             dispatch(pushExerciseStatus(true, exercise.name, action));
-            console.log('SUCCESS!');
         }).catch(err => {
             dispatch(pushExerciseStatus(false, exercise.name, action));
-            console.error(err)
         });
 
     }
@@ -86,7 +81,6 @@ export function fetchExerises(query=null) {
     return (dispatch) => {
         dispatch(requestExercises())
         return fetchAllExercises(query).then(json => {
-            console.log(json)
             dispatch(recieveExercises(json))
         })
     }

@@ -28,7 +28,6 @@ class ExercisesPageView extends React.Component {
 
     setFilter(e) {
         e.preventDefault();
-        console.log(`Set Filter text: ${this.state}`)
         this.props.setFilter(this.state.filter_text)
     }
     handleFilterChange(e) {

@@ -33,6 +33,7 @@ import {
     RECIEVE_PROGRAMS,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
+    EDIT_WEEK,
     getAllPrograms,
     getProgram,
     editWeek,
@@ -40,11 +41,15 @@ import {
     addExerciseAndPersist,
     addWeekAndPersist,
     addWeekToProgram,
-    addProgramAndPersist
+    addProgramAndPersist,
+    combineExercises,
+    moveWorkoutElement,
+    editWeekAndPersist
 } from './programs';
 
 export {
     ADD_WEEK,
+    EDIT_WEEK,
     ADD_PROGRAM,
     SAVE_EXERCISE,
     RECIEVE_PROGRAM,
@@ -78,6 +83,9 @@ export {
     addProgramAndPersist,
     getAllPrograms,
     getProgram,
-    addClientAndPersist
+    addClientAndPersist,
+    combineExercises,
+    moveWorkoutElement,
+    editWeekAndPersist
 
 };

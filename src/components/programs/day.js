@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useRef} from 'react';
+import {useDrop, useDrag} from 'react-dnd';
 import {Grid, MenuItem, Button, List, ListItem, Typography, Divider, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import AutorenewIcon from '@material-ui/icons/Autorenew'
 import AddIcon from '@material-ui/icons/Add'
-
+import {combineExercises, moveWorkoutElement} from '../../actions';
+import {dnd_types} from '../../constants/programs';
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -18,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     dayList: {
         overflow: 'auto'
     },
+    dayDropArea: {
+        height:'100%'
+    },
     card: {
         display: 'flex',
         flexDirection: 'row',
@@ -25,8 +30,10 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '10px',
         background: 'white',
         boxShadow: '1px 1px 5px #dadada',
-        padding: '7px 0 7px 10px',
-        borderLeft: '5px lightblue'
+        padding: '5px 0 5px 10px',
+        borderLeft: '5px lightblue',
+        cursor: 'move'
+
     },
     cardContent: {
         display: 'flex',
@@ -56,21 +63,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export const Day = (props) => {
-    let {day, week_id, workout} = props;
-    let classes = useStyles();
-    function renderExercise(workout_element, index=null) {
-        return (
-            <div>
-            {workout_element.exercise_id ? (
+
+const Exercise = (props) => {
+    let {workout_element, classes} = props;
+    let exercise = workout_element[0]
+    return (
+        <div >
             <Card className={classes.card}>
                 <div className={classes.cardContent}>
                     <div className={classes.cardText}>
                         <Typography gutterBottom variant="body2">
-                            {workout_element.exercise_name}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {workout_element.notes}
+                            {exercise.exercise_name}
                         </Typography>
                     </div>
                     <Divider variant="middle" />
@@ -86,28 +89,101 @@ export const Day = (props) => {
                 <div className={classes.drag}>
                     <MoreVertIcon fontSize="small"/>
                 </div>
-            </Card> ) : (
-                <List>
-                    {workout_element.exercises.map((ex, index)=> {
-                        return (<ListItem>{renderExercise(ex, index)}</ListItem>)
-                    })}
-                </List>
+            </Card>
+        </div>
+    )
+}
+
+const Superset = (props) => {
+    let {workout_element} = props
+    return (
+        <div>
+            <List>
+                {workout_element.exercises.map((ex, ex_index)=> {
+                    return (<ListItem key={`${ex.name}`}><Exercise  sub_index={ex_index} {...props}/></ListItem>)
+                })}
+            </List>
+        </div>
+    )
+}
+
+const WorkoutElement = (props) => {
+    let {workout_element} = props
+    return (
+        <div>
+            {workout_element.length > 1 ? (
+                <Superset {...props} />
+                 ) : (
+                <Exercise {...props}/>
             )}
+        </div>
+    )
+}
+
+function draggable(WrappedComponent) {
+    return (props) => {
+        let {location, id, moveItem, ...pass_through_props} = props
+        const ref = useRef(null)
+        const [, drop] = useDrop({
+            accept: dnd_types.WORKOUT_ELEMENT,
+            hover(item, monitor) {
+                if (!ref.current) {
+                  return
+                }
+                const drag_location = item.location
+                const hover_location = location
+                // Don't replace items with themselves
+                if (item.id != id) {
+                  moveItem(drag_location, hover_location)
+                }
+                item.location = hover_location
+            },
+        })
+        const [{ isDragging }, drag] = useDrag({
+            item: { type: dnd_types.WORKOUT_ELEMENT, id, location},
+            isDragging: (monitor) => {
+                return monitor.getItem().id == id
+            },
+            collect: monitor => ({
+                isDragging: monitor.isDragging(),
+            }),
+        })
+        drag(drop(ref))
+        return (
+            <div ref={ref} >
+                <WrappedComponent {...pass_through_props} />
             </div>
         )
     }
+}
+
+const DraggableWorkoutElement = draggable(WorkoutElement);
+
+
+export const Day = (props) => {
+    let {day, workout, week_id} = props;
+    let classes = useStyles();
+
     return (
         <ListItem className={classes.day} >
-            <Typography variant="h6">{day}</Typography>
-            <List className={classes.dayList}>
-                {workout.workout_elements && workout.workout_elements.map((workout_element, index) => {
-                    return (
-                        renderExercise(workout_element, index)
-                    )
-                })}
-                <MenuItem onClick={() => props.onAddExercise(week_id, day)}>
-                    <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
-            </List>
+            <div className={classes.dayDropArea}>
+
+                <Typography variant="h6">{day}</Typography>
+                <List className={classes.dayList}>
+                    {workout.map((workout_element, workout_element_index) => {
+                        let location = {
+                            week_id,
+                            day,
+                            workout_element_index
+                        }
+                        return (
+                            <DraggableWorkoutElement id={workout_element[0].id} moveItem={props.moveItem} location={location} workout_element={workout_element} classes={classes}/>
+                        )
+                    })}
+                    <MenuItem onClick={() => props.onAddExercise(week_id, day)}>
+                        <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
+                </List>
+            </div>
         </ListItem>
     )
 }

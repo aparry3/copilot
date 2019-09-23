@@ -22,7 +22,6 @@ const auth = (state = initialState, action) => {
             }
         }
         case LOGGED_IN: {
-            console.log(`user: ${action.user}`)
             return {
                 ...state,
                 user: action.user,

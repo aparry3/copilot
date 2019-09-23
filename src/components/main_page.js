@@ -50,7 +50,6 @@ class MainPage extends React.Component {
 }
 
 const Trainer = styled(connect(state => {
-    console.log(state.auth)
     return {
         user: state.auth.user,
         loading: state.auth.loading,
@@ -58,7 +57,6 @@ const Trainer = styled(connect(state => {
     }
 })((props) => {
     let {match, classes} = props;
-    console.log(`user: trainer page ${props.user}`)
     return(
         <div>
             {!props.client_loaded || props.loading ? ( <div>Loading...</div>) : (<div>
@@ -95,7 +93,6 @@ function Main(props) {
     );
 }
 function Login(props) {
-    console.log(props.location.state)
     function getAppState() {
         return {appState: !!props.location.state ? props.location.state : {targetUrl: {pathname: '/trainer'}}}
     }

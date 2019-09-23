@@ -41,7 +41,6 @@ class ExerciseModalView extends React.Component {
 
     }
     handleChange(e) {
-        console.log(e.target.value)
         let subobject = e.target.name.split('-')
         if (subobject.length == 1) {
             this.setState({
@@ -74,7 +73,6 @@ class ExerciseModalView extends React.Component {
     }
     render() {
         let classes = this.props.classes
-        console.log(this.state)
         return (
             <Modal  open={this.props.open} onClose={this.handleClose}>
                 <Paper className={classes.paper}>

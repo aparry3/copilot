@@ -27,7 +27,6 @@ class ViewExercisesView extends React.Component {
     }
 
     handleSelect(index) {
-        console.log(index)
         this.setState({selected_exercise_index: index});
     }
     handleCancel(){
@@ -46,7 +45,6 @@ class ViewExercisesView extends React.Component {
                             <List style={{maxHeight: '100vh', overflow: 'auto'}}>
                                 <ListItem><div className={classes.toolbar} /></ListItem>
                                 {this.props.exercises.map((exercise, index)=>{
-                                    console.log(exercise)
                                     return <ExerciseListItem index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
                                 })}
                             </List>
@@ -77,7 +75,6 @@ class ExerciseListItem extends React.Component {
 
     }
     handleSelect(e) {
-        console.log("here");
         this.props.handleExerciseSelect(this.props.index)
     }
     render() {
@@ -97,11 +94,9 @@ class ExerciseListItem extends React.Component {
 }
 
 function applyExercisesFilter(exercises) {
-    console.log(exercises)
     let filtered = exercises.items.filter(item => {
         return !exercises.filter || item.name.includes(exercises.filter)
     })
-    console.log(filtered);
     return filtered;
 }
 

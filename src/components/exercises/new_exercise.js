@@ -31,9 +31,7 @@ class NewExerciseView extends React.Component {
         })
         this.props.onEditOver()
     }
-    render() {
-        console.log(this.state.new_exercise)
-        return (
+    render() {        return (
             <div className="container">
                 <h2>New Exercise</h2>
                 <ExerciseForm onSave={this.handleSave} exercise={this.state.new_exercise} onCancel={this.handleCancel}/>

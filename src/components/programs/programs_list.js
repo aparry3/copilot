@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {addProgramAndPersist} from '../../actions';
+import {addProgramAndPersist, getProgram} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
@@ -8,7 +8,6 @@ import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Sele
 
 export function ProgramsListView(props) {
     let {programs} = props
-    console.log(props)
     let [client_index, setClientIndex] = useState(-1);
     let [name, setName] = useState('');
 
@@ -54,7 +53,6 @@ export function ProgramsListView(props) {
 }
 export const ProgramsList = connect(
     (state, ownProps) => {
-        console.log(ownProps)
         return {
             programs: state.programs.all_programs,
             clients: state.auth.user.clients,
@@ -63,7 +61,7 @@ export const ProgramsList = connect(
     },
     dispatch => {
         return {
-            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client))
+            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client)),
         }
     }
 )(ProgramsListView)

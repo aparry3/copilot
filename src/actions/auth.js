@@ -22,7 +22,6 @@ export function fetchUser() {
         if (await auth0_client.isAuthenticated()) {
             dispatch(authClientDidLoad(true));
             const token = await auth0_client.getToken();
-            console.log(token)
             const auth_user = await auth0_client.getUser();
             fetch(`http://localhost:3000/users/${btoa(auth_user.sub)}`, {
                 method: 'GET',
@@ -35,7 +34,6 @@ export function fetchUser() {
                 let data = res.json();
                 return data;
             }).then(data => {
-                console.log(data.user)
                 let user = data.user;
                 if (!user) {
                     fetch(`http://localhost:3000/users`, {
@@ -59,11 +57,9 @@ export function fetchUser() {
                         let data = res.json();
                         return data;
                     }).then(data => {
-                        console.log(`after POST: ${data.user}`)
                         dispatch(loggedIn(data.user))
                     })
                 } else {
-                    console.log(`afterGET: ${data.user}`)
                     dispatch(loggedIn(data.user))
                 }
             })
@@ -81,7 +77,6 @@ export function logout(...p) {
 
 export function loggedIn(user) {
     return dispatch => {
-        console.log(`loggedIn: ${user}`)
         dispatch({
             type: LOGGED_IN,
             user: user
@@ -130,8 +125,6 @@ export function addClientAndPersist(id, name, email) {
         }).then(res => {
             let data = res.json();
             return data;
-        }).then(user => {
-            console.log(user)
         })
     }
 }

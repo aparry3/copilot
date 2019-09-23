@@ -12,7 +12,6 @@ function saveExercise(items, exercise, is_new) {
     }
     return items.map(item => {
          if (exercise._id == item._id ) {
-             console.log(`new ex ${exercise.name}`);
              return exercise;
          }
          return item;
