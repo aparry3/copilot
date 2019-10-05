@@ -86,6 +86,7 @@ class DayView extends React.Component {
     moveItem(index, removeOldItem, merge = false) {
         let item = removeOldItem()
         let old_item = this.state.workout[index]
+        let insert_elements = merge ? [[old_item, item]] : [old_item, item]
         let new_workout = update(this.state.workout, {
             $splice: [[index, 1].concat(insert_elements)]
         })

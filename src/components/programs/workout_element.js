@@ -12,40 +12,39 @@ const Exercise = (props) => {
     let {workout_element, classes, merge} = props;
     console.log(merge)
     return (
-        <div >
-            <Card className={classes.card}>
-                {merge && (<div style={{height: '100%', width:'100%', background: 'black', zIndex: '100'}}/>)}
-                <div className={classes.cardContent}>
-                    <div className={classes.cardText}>
-                        <Typography gutterBottom variant="body2">
-                            {workout_element.name}
-                        </Typography>
+        <Card className={classes.card}>
+            {merge && (<div style={{height: '100%', width:'100%', background: 'black', zIndex: '100'}}/>)}
+            <div className={classes.cardContent}>
+                <div className={classes.cardText}>
+                    <Typography gutterBottom variant="body2">
+                        {workout_element.name}
+                    </Typography>
+                </div>
+                <Divider variant="middle" />
+                <div className={classes.cardIcons}>
+                    <div className={classes.detailIcon}>
+                        <AutorenewIcon fontSize="small"/><Typography >5</Typography>
                     </div>
-                    <Divider variant="middle" />
-                    <div className={classes.cardIcons}>
-                        <div className={classes.detailIcon}>
-                            <AutorenewIcon fontSize="small"/><Typography >5</Typography>
-                        </div>
-                        <div className={classes.detailIcon}>
-                            <SwapVertIcon fontSize="small"/><Typography >5</Typography>
-                        </div>
+                    <div className={classes.detailIcon}>
+                        <SwapVertIcon fontSize="small"/><Typography >5</Typography>
                     </div>
                 </div>
-                <div className={classes.drag}>
-                    <MoreVertIcon fontSize="small"/>
-                </div>
-            </Card>
-        </div>
+            </div>
+            <div className={classes.drag}>
+                <MoreVertIcon fontSize="small"/>
+            </div>
+        </Card>
     )
 }
 
 const Superset = (props) => {
-    let {workout_element} = props
+    let {workout_element, classes, ...pass_through_props} = props
+    console.log(props)
     return (
-        <div>
+        <div className={classes.superset}>
             <List>
-                {workout_element.exercises.map((ex, ex_index)=> {
-                    return (<ListItem key={`${ex.name}`}><Exercise  sub_index={ex_index} {...props}/></ListItem>)
+                {workout_element.map((ex, ex_index)=> {
+                    return (<ListItem key={`${ex.name}`}><DragAndDropWorkoutElement workout_element={ex} classes={classes} {...pass_through_props}/></ListItem>)
                 })}
             </List>
         </div>
@@ -55,13 +54,13 @@ const Superset = (props) => {
 const WorkoutElement = (props) => {
     let {workout_element, merge} = props
     return (
-        <div>
-            {Array.isArray(workout_element.length) ? (
+        <>
+            {Array.isArray(workout_element) ? (
                 <Superset {...props} />
                  ) : (
                 <Exercise {...props}/>
             )}
-        </div>
+        </>
     )
 }
 
@@ -116,9 +115,10 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                         return
                     }
                     if (merge) {
-                        moveItem(hover_location.workout_element_index, item.moveCallback, true)
+                        moveItem(location.workout_element_index, item.moveCallback, true)
+                        setMerge(false)
                     }
-                }
+                },
                 collect: monitor => ({
                     isOver: !!monitor.isOver()
                 })
