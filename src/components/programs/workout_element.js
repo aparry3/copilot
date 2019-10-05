@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {useDrop, useDrag} from 'react-dnd'
 import {connect} from 'react-redux'
 import {dnd_types} from '../../constants/programs'
@@ -9,15 +9,16 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import {setDragElement} from '../../actions'
 
 const Exercise = (props) => {
-    let {workout_element, classes} = props;
-    let exercise = workout_element[0]
+    let {workout_element, classes, merge} = props;
+    console.log(merge)
     return (
         <div >
             <Card className={classes.card}>
+                {merge && (<div style={{height: '100%', width:'100%', background: 'black', zIndex: '100'}}/>)}
                 <div className={classes.cardContent}>
                     <div className={classes.cardText}>
                         <Typography gutterBottom variant="body2">
-                            {exercise.exercise_name}
+                            {workout_element.name}
                         </Typography>
                     </div>
                     <Divider variant="middle" />
@@ -52,10 +53,10 @@ const Superset = (props) => {
 }
 
 const WorkoutElement = (props) => {
-    let {workout_element} = props
+    let {workout_element, merge} = props
     return (
         <div>
-            {workout_element.length > 1 ? (
+            {Array.isArray(workout_element.length) ? (
                 <Superset {...props} />
                  ) : (
                 <Exercise {...props}/>
@@ -64,51 +65,81 @@ const WorkoutElement = (props) => {
     )
 }
 
-function draggable(WrappedComponent) {
-    return (props) => {
-        let {location, id, moveItem, elem, setDragElement, ...pass_through_props} = props
-        const ref = useRef(null)
-        const [{isOver}, drop] = useDrop({
-            accept: dnd_types.WORKOUT_ELEMENT,
-            hover(item, monitor) {
-                if (!ref.current) {
-                  return
+function dragAndDrop(draggable = true, droppable = true, mergeable = true, options = null) {
+    return (WrappedComponent) => {
+        return (props) => {
+            let {location, id, moveItem, removeItem, elem, ...pass_through_props} = props
+            let [merge, setMerge] = useState(false)
+            const ref = useRef(null)
+            function sameLocation(old_l, new_l) {
+                return (
+                    old_l.workout_element_index == new_l.workout_element_index &&
+                    old_l.day_index == new_l.day_index && old_l.week_index == new_l.week_index
+                )
+            }
+            const [{isOver}, drop] = useDrop({
+                accept: dnd_types.WORKOUT_ELEMENT,
+                hover(item, monitor) {
+                    if (!ref.current) {
+                      return
+                    }
+                    const drag_location = item.location
+                    const hover_location = location
+                    // Don't replace items with themselves
+                    function shouldMerge() {
+                        if (!mergeable) {
+                            return false
+                        }
+                        let {x, y} = monitor.getClientOffset()
+                        let client_bounding_rect = ref.current.getBoundingClientRect()
+                        let middle_y = (client_bounding_rect.bottom - client_bounding_rect.top) / 2
+                        let client_y = y - client_bounding_rect.top
+                        return client_y > middle_y
+                    }
+                    if (!sameLocation(drag_location, hover_location)) {
+                        if (shouldMerge()) {
+                            setMerge(true)
+                        } else {
+                            setMerge(false)
+                            moveItem(
+                                hover_location.workout_element_index,
+                                item.moveCallback
+                            )
+                            item.location = hover_location
+                            item.moveCallback = props.removeItem
+
+                        }
+                    }
+                },
+                drop: (item, monitor) => {
+                    if (monitor.didDrop()) {
+                        return
+                    }
+                    if (merge) {
+                        moveItem(hover_location.workout_element_index, item.moveCallback, true)
+                    }
                 }
-                const drag_location = item.location
-                const hover_location = location
-                // Don't replace items with themselves
-                if (drag_location.workout_element_index != hover_location.workout_element_index) {
-                  moveItem(drag_location, hover_location)
-                }
-                item.location = hover_location
-            },
-            collect: monitor => ({
-                isOver: !!monitor.isOver()
+                collect: monitor => ({
+                    isOver: !!monitor.isOver()
+                })
             })
-        })
-        const [{ isDragging }, drag] = useDrag({
-            item: { type: dnd_types.WORKOUT_ELEMENT, id, location},
-            begin: (monitor) => {
-                    console.log(elem)
-                    setDragElement(elem)
-            },
-            collect: monitor => ({
-                isDragging: monitor.isDragging(),
-            }),
-        })
-        drag(drop(ref))
-        let opacity = isOver ? 0:1
-        return (
-            <div ref={ref} style={{opacity}}>
-                <WrappedComponent {...pass_through_props} />
-            </div>
-        )
+            const [{ isDragging }, drag] = useDrag({
+                item: { type: dnd_types.WORKOUT_ELEMENT, id, location, moveCallback:props.removeItem},
+                isDragging: monitor => {
+                    return sameLocation(monitor.getItem().location, location)
+                },
+                collect: monitor => ({
+                    isDragging: monitor.isDragging(),
+                }),
+            })
+            drag(drop(ref))
+            return (
+                <div ref={ref}>
+                    <WrappedComponent merge={merge} {...pass_through_props} />
+                </div>
+            )
+        }
     }
 }
 
-export const DraggableWorkoutElement = connect(
-    null,
-    dispatch => ({
-        setDragElement: (element) => dispatch(setDragElement(element))
-    })
-)(draggable(WorkoutElement));
+export const DragAndDropWorkoutElement = dragAndDrop()(WorkoutElement);

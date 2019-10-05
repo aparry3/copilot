@@ -67,23 +67,10 @@ function _insert(program, location, item) {
 
 const programs = (state = initialState, action) => {
     switch (action.type) {
-        case SET_DRAG_ELEMENT: {
-            return {
-                ...state,
-                drag_element: action.element
-            }
-        }
         case ADD_PROGRAM: {
             let new_state = {...state, all_programs: [...state.all_programs], active_program: {...action.program}};
             new_state.all_programs.unshift({...action.program})
             return new_state;
-        }
-        case REARRANGE_EXERCISE: {
-            let {old_location, new_location} = action
-            let new_program = {...state.active_program}
-            let item = _remove(new_program, old_location)
-            new_program = _insert(new_program, new_location, item)
-            return {...state, active_program: new_program}
         }
         case RECIEVE_PROGRAMS: {
             return {

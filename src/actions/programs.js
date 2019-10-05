@@ -15,12 +15,11 @@ export function combineExercises(item, drop_location) {
     console.log(item)
 
 }
-export function moveWorkoutElement(old_location, new_location, exercise) {
+export function moveWorkoutElement(old_week, old_day, old_index, new_week, new_day, new_index) {
     console.log("moveWorkoutElement")
     return {
         type: REARRANGE_EXERCISE,
-        old_location,
-        new_location
+        old_week, old_day, old_index, new_week, new_day, new_index
     }
 }
 

@@ -1,5 +1,4 @@
 import React, {useEffect, useState, useCallback} from "react";
-import update from 'immutability-helper';
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -37,7 +36,7 @@ const styled = withStyles(theme => ({
 
 
 function ProgramView(props) {
-    let [program, setProgram] = useState(null);
+    let {dnd_program_loaded} = props
     let [modalIsOpen, setModelIsOpen] = useState(false);
     let [week_id, setWeek] = useState(-1);
     let [day, setDay] = useState(-1)
@@ -45,12 +44,11 @@ function ProgramView(props) {
         const init = async () => {
             let fetched_program = await props.getProgram(props.user._id, props.match.params.program_id)
         }
-        if (!props.program) {
+        if (!dnd_program_loaded) {
             init()
-        } else if (!program) {
-            setProgram(props.program)
         }
     })
+
     async function handleAddWeek() {
         props.addWeek(props.user._id, program._id);
     }
@@ -76,14 +74,16 @@ function ProgramView(props) {
         props.editWeek(props.user._id, program._id, week_id, new_week)
         handleModalClose();
     }
+
     let classes = props.classes;
+
     return (
         <div className={classes.programPage}>
-        {!!program ? (
+        {!!dnd_program_loaded ? (
         <DndProvider backend={HTML5Backend} >
             <div className={classes.programContainer}>
                 <ExerciseModal onSubmit={handleSubmit} open={modalIsOpen} onClose={handleModalClose}/>
-                <InteractiveProgram classes={classes} handleAddExercise={handleAddExercise} handleAddWeek={handleAddWeek} program={program} />
+                <InteractiveProgram classes={classes} handleAddExercise={handleAddExercise} handleAddWeek={handleAddWeek} />
             </div>
         </DndProvider>) : <div>Loading...</div>}
         </div>
@@ -91,27 +91,19 @@ function ProgramView(props) {
 
 }
 
-export const InteractiveProgram = (props) => {
-    let [program, setProgram] = useState({...props.program});
-    const moveItem = useCallback(
-        (old_location, new_location) => {
-
-            let drag_item = program[old_location.week_id][old_location.day][old_location.workout_element_index];
-            let new_program = {...program}
-            new_program[old_location.week_id][old_location.day].splice(old_location.workout_element_index, 1);
-            new_program[new_location.week_id][new_location.day].splice(new_location.workout_element_index, 0, drag_item);
-
-            setProgram(new_program)
-
-        }
-    ,[program])
-    let {classes, handleAddExercise, handleAddWeek} = props;
+export const InteractiveProgram = connect(
+    state => ({program: state.dnd_program.program}),
+    dispatch => ({
+        moveItem: (old_week, old_day, old_index, new_week, new_day, new_index) => dispatch(moveWorkoutElement(old_week, old_day, old_index, new_week, new_day, new_index))
+    })
+)((props) => {
+    let {program, moveItem, classes, handleAddExercise, handleAddWeek} = props;
     return (
         <Grid container>
-            {Object.keys(program).map((week_id) => {
+            {program.map((week, index) => {
                 return (
-                    <div key={`${week_id}`}>
-                        <Week week={program[week_id]} week_id={week_id} moveItem={moveItem} classes={classes} onAddExercise={props.handleAddExercise}/>
+                    <div key={`${index}`}>
+                        <Week week={week} week_index={index} moveItem={moveItem} classes={classes} onAddExercise={props.handleAddExercise}/>
                         <Divider variant="middle"/>
                     </div>
                 )
@@ -119,45 +111,15 @@ export const InteractiveProgram = (props) => {
             <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
         </Grid>
     )
-}
+})
 
 
 
 export const Program = connect(
         (state, ownProps) => {
-            function _stripProgramForView(program) {
-                if (!program) {
-                    return null
-                }
-                function _getWorkoutElements(workout_elements) {
-                    return workout_elements.map(we => {
-                        if (!!we.exercises && we.exercises.length) {
-                            return we.exercises.map(e => {
-                                e['id'] = Math.floor(Math.random() * 10000);
-                                return e
-                            })
-                        }
-                        we['id'] = Math.floor(Math.random() * 10000);
-                        return [we]
-                    })
-                }
-                let weeks = {}
-                program.weeks.forEach(w => {
-                    weeks[w._id] = {
-                        'monday': _getWorkoutElements(w.days['monday'].workout_elements),
-                        'tuesday': _getWorkoutElements(w.days['tuesday'].workout_elements),
-                        'wednesday': _getWorkoutElements(w.days['wednesday'].workout_elements),
-                        'thursday': _getWorkoutElements(w.days['thursday'].workout_elements),
-                        'friday': _getWorkoutElements(w.days['friday'].workout_elements),
-                        'saturday': _getWorkoutElements(w.days['saturday'].workout_elements),
-                        'sunday': _getWorkoutElements(w.days['sunday'].workout_elements)
-                    }
-                })
-                return weeks
-            }
-            let program = _stripProgramForView(state.programs.active_program)
             return {
-                program: program,
+                dnd_program_loaded: state.dnd_program.loaded,
+                program: state.programs.active_program,
                 user: state.auth.user
             }
         },
