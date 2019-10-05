@@ -38,13 +38,15 @@ const Exercise = (props) => {
 }
 
 const Superset = (props) => {
-    let {workout_element, classes, ...pass_through_props} = props
+    let {workout_element, classes, location, ...pass_through_props} = props
     console.log(props)
     return (
         <div className={classes.superset}>
             <List>
                 {workout_element.map((ex, ex_index)=> {
-                    return (<ListItem key={`${ex.name}`}><DragAndDropWorkoutElement workout_element={ex} classes={classes} {...pass_through_props}/></ListItem>)
+                    let superset_location = {...location}
+                    superset_location.superset_index = ex_index
+                    return (<ListItem key={`${ex.name}`}><DragAndDropWorkoutElement workout_element={ex} location={location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
                 })}
             </List>
         </div>
@@ -52,10 +54,9 @@ const Superset = (props) => {
 }
 
 const WorkoutElement = (props) => {
-    let {workout_element, merge} = props
     return (
         <>
-            {Array.isArray(workout_element) ? (
+            {Array.isArray(props.workout_element) ? (
                 <Superset {...props} />
                  ) : (
                 <Exercise {...props}/>
@@ -67,13 +68,15 @@ const WorkoutElement = (props) => {
 function dragAndDrop(draggable = true, droppable = true, mergeable = true, options = null) {
     return (WrappedComponent) => {
         return (props) => {
-            let {location, id, moveItem, removeItem, elem, ...pass_through_props} = props
+            let {elem, ...pass_through_props} = props
             let [merge, setMerge] = useState(false)
             const ref = useRef(null)
             function sameLocation(old_l, new_l) {
                 return (
+                    old_l.superset_index == new_l.superset_index &&
                     old_l.workout_element_index == new_l.workout_element_index &&
-                    old_l.day_index == new_l.day_index && old_l.week_index == new_l.week_index
+                    old_l.day_index == new_l.day_index &&
+                    old_l.week_index == new_l.week_index
                 )
             }
             const [{isOver}, drop] = useDrop({
@@ -83,7 +86,7 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                       return
                     }
                     const drag_location = item.location
-                    const hover_location = location
+                    const hover_location = props.location
                     // Don't replace items with themselves
                     function shouldMerge() {
                         if (!mergeable) {
@@ -100,8 +103,8 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                             setMerge(true)
                         } else {
                             setMerge(false)
-                            moveItem(
-                                hover_location.workout_element_index,
+                            props.moveItem(
+                                hover_location,
                                 item.moveCallback
                             )
                             item.location = hover_location
@@ -115,7 +118,7 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                         return
                     }
                     if (merge) {
-                        moveItem(location.workout_element_index, item.moveCallback, true)
+                        props.moveItem(props.location, item.moveCallback, true)
                         setMerge(false)
                     }
                 },
