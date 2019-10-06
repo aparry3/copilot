@@ -8,9 +8,8 @@ import SwapVertIcon from '@material-ui/icons/SwapVert'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import {setDragElement} from '../../actions'
 
-const Exercise = (props) => {
+const ExerciseView = (props) => {
     let {workout_element, classes, merge} = props;
-    console.log(merge)
     return (
         <Card className={classes.card}>
             {merge && (<div style={{height: '100%', width:'100%', background: 'black', zIndex: '100'}}/>)}
@@ -37,29 +36,31 @@ const Exercise = (props) => {
     )
 }
 
-const Superset = (props) => {
+const SupersetView = (props) => {
     let {workout_element, classes, location, ...pass_through_props} = props
-    console.log(props)
+    const [, drop] = useDrop({
+        accept: dnd_types.WORKOUT_ELEMENT,
+    })
     return (
-        <div className={classes.superset}>
+        <div className={classes.superset} ref={drop}>
             <List>
                 {workout_element.map((ex, ex_index)=> {
                     let superset_location = {...location}
                     superset_location.superset_index = ex_index
-                    return (<ListItem key={`${ex.name}`}><DragAndDropWorkoutElement workout_element={ex} location={location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
+                    return (<ListItem key={`${ex.name}`}><NonMergeableExercise workout_element={ex} location={superset_location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
                 })}
             </List>
         </div>
     )
 }
 
-const WorkoutElement = (props) => {
+export const WorkoutElement = (props) => {
     return (
         <>
             {Array.isArray(props.workout_element) ? (
                 <Superset {...props} />
                  ) : (
-                <Exercise {...props}/>
+                <MergeableExercise {...props}/>
             )}
         </>
     )
@@ -85,31 +86,33 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                     if (!ref.current) {
                       return
                     }
-                    const drag_location = item.location
-                    const hover_location = props.location
-                    // Don't replace items with themselves
-                    function shouldMerge() {
-                        if (!mergeable) {
-                            return false
+                    if (monitor.isOver({shallow: true})) {
+                        const drag_location = item.location
+                        const hover_location = props.location
+                        // Don't replace items with themselves
+                        function shouldMerge() {
+                            if (!mergeable) {
+                                return false
+                            }
+                            let {x, y} = monitor.getClientOffset()
+                            let client_bounding_rect = ref.current.getBoundingClientRect()
+                            let middle_y = (client_bounding_rect.bottom - client_bounding_rect.top) / 2
+                            let client_y = y - client_bounding_rect.top
+                            return client_y > middle_y
                         }
-                        let {x, y} = monitor.getClientOffset()
-                        let client_bounding_rect = ref.current.getBoundingClientRect()
-                        let middle_y = (client_bounding_rect.bottom - client_bounding_rect.top) / 2
-                        let client_y = y - client_bounding_rect.top
-                        return client_y > middle_y
-                    }
-                    if (!sameLocation(drag_location, hover_location)) {
-                        if (shouldMerge()) {
-                            setMerge(true)
-                        } else {
-                            setMerge(false)
-                            props.moveItem(
-                                hover_location,
-                                item.moveCallback
-                            )
-                            item.location = hover_location
-                            item.moveCallback = props.removeItem
+                        if (!sameLocation(drag_location, hover_location)) {
+                            if (shouldMerge()) {
+                                setMerge(true)
+                            } else {
+                                setMerge(false)
+                                props.moveItem(
+                                    hover_location,
+                                    item.moveCallback
+                                )
+                                item.location = hover_location
+                                item.moveCallback = props.removeItem
 
+                            }
                         }
                     }
                 },
@@ -127,9 +130,12 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                 })
             })
             const [{ isDragging }, drag] = useDrag({
-                item: { type: dnd_types.WORKOUT_ELEMENT, id, location, moveCallback:props.removeItem},
+                item: { type: dnd_types.WORKOUT_ELEMENT, location: props.location, moveCallback:props.removeItem},
                 isDragging: monitor => {
-                    return sameLocation(monitor.getItem().location, location)
+                    return sameLocation(monitor.getItem().location, props.location)
+                },
+                begin: monitor => {
+                    console.log(props.location)
                 },
                 collect: monitor => ({
                     isDragging: monitor.isDragging(),
@@ -145,4 +151,6 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
     }
 }
 
-export const DragAndDropWorkoutElement = dragAndDrop()(WorkoutElement);
+export const Superset = dragAndDrop(true, true, false)(SupersetView);
+export const MergeableExercise = dragAndDrop(true, true, true)(ExerciseView)
+export const NonMergeableExercise = dragAndDrop(true, true, false)(ExerciseView)

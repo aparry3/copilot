@@ -7,7 +7,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add'
 import {combineExercises, moveWorkoutElement, setDragElement} from '../../actions';
 import {dnd_types} from '../../constants/programs';
-import {DragAndDropWorkoutElement} from './workout_element';
+import {WorkoutElement} from './workout_element';
 
 
 const styles = {
@@ -84,11 +84,17 @@ class DayView extends React.Component {
     }
 
     moveItem(location, removeOldItem, merge = false) {
+        let {workout_element_index, superset_index} = location
+        console.log("move")
+        console.log(location)
         let item = removeOldItem()
-        let old_item = this.state.workout[index]
-        let insert_elements = merge ? [[old_item, item]] : [old_item, item]
+        let old_item = this.state.workout[workout_element_index]
+        if (superset_index != undefined) {
+            old_item = update(old_item, {$splice: [[superset_index, 0, item]]})
+        }
+        let insert_elements = !!superset_index ? [old_item] : merge ? [[old_item, item]] : !!old_item ? [item, old_item] : [item]
         let new_workout = update(this.state.workout, {
-            $splice: [[index, 1].concat(insert_elements)]
+            $splice: [[workout_element_index, 1].concat(insert_elements)]
         })
         this.setState({
             workout: new_workout
@@ -96,14 +102,23 @@ class DayView extends React.Component {
     }
 
     removeItem(location) {
-        let item = this.state.workout[index]
+        const {superset_index, workout_element_index} = location
+        let item = this.state.workout[workout_element_index]
+        console.log("remove")
+        console.log(location)
+        let return_item = item
+        let superset = []
+        if (superset_index != undefined) {
+            return_item = item[superset_index]
+            superset = [update(item, {$splice: [[superset_index, 1]]} )]
+        }
         let new_workout = update(this.state.workout, {
-            $splice: [[index, 1]]
+            $splice: [[workout_element_index, 1].concat(superset)]
         })
         this.setState({
             workout: new_workout
         })
-        return item
+        return return_item
     }
 
     render() {
@@ -120,9 +135,8 @@ class DayView extends React.Component {
                                workout_element_index
                            }
                            return (
-                               <DragAndDropWorkoutElement
-                                    id={workout_element_index}
-                                    removeItem={() => this.removeItem(workout_element_index)}
+                               <WorkoutElement
+                                    removeItem={this.removeItem}
                                     moveItem={this.moveItem}
                                     elem={workout_element}
                                     location={location}
