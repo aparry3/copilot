@@ -37,7 +37,7 @@ const ExerciseView = (props) => {
 }
 
 const SupersetView = (props) => {
-    let {workout_element, classes, location, ...pass_through_props} = props
+    let {workout_element, classes, location, locationCallback, ...pass_through_props} = props
     const [, drop] = useDrop({
         accept: dnd_types.WORKOUT_ELEMENT,
     })
@@ -47,7 +47,7 @@ const SupersetView = (props) => {
                 {workout_element.map((ex, ex_index)=> {
                     let superset_location = {...location}
                     superset_location.superset_index = ex_index
-                    return (<ListItem key={`${ex.name}`}><NonMergeableExercise workout_element={ex} location={superset_location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
+                    return (<ListItem key={`${ex.name}`}><NonMergeableExercise workout_element={ex} removeItem={() => locationCallback(superset_location)} location={superset_location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
                 })}
             </List>
         </div>
@@ -55,12 +55,13 @@ const SupersetView = (props) => {
 }
 
 export const WorkoutElement = (props) => {
+    let {locationCallback, ...pass_through_props} = props
     return (
         <>
             {Array.isArray(props.workout_element) ? (
-                <Superset {...props} />
+                <Superset locationCallback={locationCallback} removeItem={() => locationCallback(props.location)} {...pass_through_props} />
                  ) : (
-                <MergeableExercise {...props}/>
+                <MergeableExercise removeItem={() => locationCallback(props.location)} {...pass_through_props}/>
             )}
         </>
     )
@@ -69,7 +70,7 @@ export const WorkoutElement = (props) => {
 function dragAndDrop(draggable = true, droppable = true, mergeable = true, options = null) {
     return (WrappedComponent) => {
         return (props) => {
-            let {elem, ...pass_through_props} = props
+            let {elem, removeItem, ...pass_through_props} = props
             let [merge, setMerge] = useState(false)
             const ref = useRef(null)
             function sameLocation(old_l, new_l) {
@@ -110,7 +111,7 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                                     item.moveCallback
                                 )
                                 item.location = hover_location
-                                item.moveCallback = props.removeItem
+                                item.moveCallback = removeItem
 
                             }
                         }
@@ -130,12 +131,9 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                 })
             })
             const [{ isDragging }, drag] = useDrag({
-                item: { type: dnd_types.WORKOUT_ELEMENT, location: props.location, moveCallback:props.removeItem},
+                item: { type: dnd_types.WORKOUT_ELEMENT, location: props.location, moveCallback:removeItem},
                 isDragging: monitor => {
                     return sameLocation(monitor.getItem().location, props.location)
-                },
-                begin: monitor => {
-                    console.log(props.location)
                 },
                 collect: monitor => ({
                     isDragging: monitor.isDragging(),

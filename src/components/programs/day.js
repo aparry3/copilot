@@ -88,11 +88,12 @@ class DayView extends React.Component {
         console.log("move")
         console.log(location)
         let item = removeOldItem()
+        console.log(item)
         let old_item = this.state.workout[workout_element_index]
         if (superset_index != undefined) {
             old_item = update(old_item, {$splice: [[superset_index, 0, item]]})
         }
-        let insert_elements = !!superset_index ? [old_item] : merge ? [[old_item, item]] : !!old_item ? [item, old_item] : [item]
+        let insert_elements = superset_index != undefined ? [old_item] : merge ? [[old_item, item]] : !!old_item ? [item, old_item] : [item]
         let new_workout = update(this.state.workout, {
             $splice: [[workout_element_index, 1].concat(insert_elements)]
         })
@@ -104,8 +105,6 @@ class DayView extends React.Component {
     removeItem(location) {
         const {superset_index, workout_element_index} = location
         let item = this.state.workout[workout_element_index]
-        console.log("remove")
-        console.log(location)
         let return_item = item
         let superset = []
         if (superset_index != undefined) {
@@ -118,6 +117,7 @@ class DayView extends React.Component {
         this.setState({
             workout: new_workout
         })
+        console.log(return_item)
         return return_item
     }
 
@@ -136,7 +136,7 @@ class DayView extends React.Component {
                            }
                            return (
                                <WorkoutElement
-                                    removeItem={this.removeItem}
+                                    locationCallback={this.removeItem}
                                     moveItem={this.moveItem}
                                     elem={workout_element}
                                     location={location}
