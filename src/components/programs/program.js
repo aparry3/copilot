@@ -36,17 +36,11 @@ const styled = withStyles(theme => ({
 
 
 function ProgramView(props) {
-    let {dnd_program_loaded} = props
     let [modalIsOpen, setModelIsOpen] = useState(false);
     let [week_id, setWeek] = useState(-1);
     let [day, setDay] = useState(-1)
     useEffect(() => {
-        const init = async () => {
-            let fetched_program = await props.getProgram(props.user._id, props.match.params.program_id)
-        }
-        if (!dnd_program_loaded) {
-            init()
-        }
+        console.log(props.program)
     })
 
     async function handleAddWeek() {
@@ -77,49 +71,48 @@ function ProgramView(props) {
 
     let classes = props.classes;
 
+
     return (
-        <div className={classes.programPage}>
-        {!!dnd_program_loaded ? (
-        <DndProvider backend={HTML5Backend} >
-            <div className={classes.programContainer}>
-                <ExerciseModal onSubmit={handleSubmit} open={modalIsOpen} onClose={handleModalClose}/>
-                <InteractiveProgram classes={classes} handleAddExercise={handleAddExercise} handleAddWeek={handleAddWeek} />
-            </div>
-        </DndProvider>) : <div>Loading...</div>}
-        </div>
+        <Grid container>
+            <DndProvider backend={HTML5Backend} >
+                {props.program.weeks.map((week_id, index) => {
+                    return (
+                        <div key={`${index}`}>
+                            <Week week_id={week_id} classes={classes} />
+                            <Divider variant="middle"/>
+                        </div>
+                    )
+                })}
+                <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
+            </DndProvider>
+
+        </Grid>
+
     );
 
 }
 
-export const InteractiveProgram = connect(
-    state => ({program: state.dnd_program.program}),
-    dispatch => ({
-        moveItem: (old_week, old_day, old_index, new_week, new_day, new_index) => dispatch(moveWorkoutElement(old_week, old_day, old_index, new_week, new_day, new_index))
-    })
-)((props) => {
+export const InteractiveProgram = (props) => {
     let {program, moveItem, classes, handleAddExercise, handleAddWeek} = props;
-    return (
-        <Grid container>
-            {program.map((week, index) => {
-                return (
-                    <div key={`${index}`}>
-                        <Week week={week} week_index={index} moveItem={moveItem} classes={classes} onAddExercise={props.handleAddExercise}/>
-                        <Divider variant="middle"/>
-                    </div>
-                )
-            })}
-            <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
-        </Grid>
-    )
-})
+}
 
 
 
 export const Program = connect(
         (state, ownProps) => {
+            function findProgram(programs, id) {
+                console.log(programs)
+                console.log(id)
+
+                for (var prog of programs) {
+                    if (prog._id == id) {
+                        return prog
+                    }
+                }
+                return null
+            }
             return {
-                dnd_program_loaded: state.dnd_program.loaded,
-                program: state.programs.active_program,
+                program: findProgram(state.programs.all_programs, ownProps.match.params.program_id),
                 user: state.auth.user
             }
         },

@@ -16,7 +16,7 @@ const ExerciseView = (props) => {
             <div className={classes.cardContent}>
                 <div className={classes.cardText}>
                     <Typography gutterBottom variant="body2">
-                        {workout_element.name}
+                        {workout_element.exercise_name}
                     </Typography>
                 </div>
                 <Divider variant="middle" />
@@ -47,7 +47,7 @@ const SupersetView = (props) => {
             <Card style={{padding:'10px'}}>
                 <div className={classes.superset} ref={drop}>
                     <List>
-                        {workout_element.map((ex, ex_index)=> {
+                        {workout_element.exercises.map((ex, ex_index)=> {
                             let superset_location = {...location}
                             superset_location.superset_index = ex_index
                             return (<ListItem key={`${ex.name}`}><NonMergeableExercise variant='mergeable' item_type={dnd_types.EXERCISE} accept={dnd_types.EXERCISE} workout_element={ex} removeItem={locationCallback} location={superset_location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
@@ -64,7 +64,7 @@ export const WorkoutElement = (props) => {
     let {locationCallback, ...pass_through_props} = props
     return (
         <>
-            {Array.isArray(props.workout_element) && props.workout_element.length ? (
+            {!props.workout_element.exercise_id ? (
                 <Superset item_type={dnd_types.SUPERSET} accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]} locationCallback={locationCallback} removeItem={locationCallback} {...pass_through_props} />
                  ) : (
                 <MergeableExercise variant='mergeable' item_type={dnd_types.EXERCISE} accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]} removeItem={locationCallback} {...pass_through_props}/>
@@ -84,8 +84,8 @@ function dragAndDrop(draggable = true, droppable = true, mergeable = true, optio
                 return (
                     old_l.superset_index == new_l.superset_index &&
                     old_l.workout_element_index == new_l.workout_element_index &&
-                    old_l.day_index == new_l.day_index &&
-                    old_l.week_index == new_l.week_index
+                    old_l.day == new_l.day &&
+                    old_l.week_id == new_l.week_id
                 )
             }
             const [{isOver}, drop] = useDrop({

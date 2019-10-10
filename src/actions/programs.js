@@ -23,6 +23,25 @@ export function moveWorkoutElement(old_week, old_day, old_index, new_week, new_d
     }
 }
 
+export async function fetchWeek(week_id) {
+    let token = await auth0_client.getToken()
+    return fetch(`http://localhost:3000/weeks/${week_id}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }).then(res => {
+        let data = res.json();
+        return data
+    }).then(week => {
+        return week
+    });
+
+
+}
+
 export function setDragElement(element) {
     return {
         type: SET_DRAG_ELEMENT,

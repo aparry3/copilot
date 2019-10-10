@@ -69,18 +69,18 @@ let useStyles = makeStyles(theme => styles)
 
 
 function Workout(props) {
-    let {classes, week_index, day_index} = props
+    let {classes, week_id, day} = props
     let [{isOver}, drop] = useDrop({
         accept: [dnd_types.SUPERSET, dnd_types.EXERCISE],
         hover(item, monitor) {
             function sameDay(location, old_location) {
-                return location.day_index == old_location.day_index && location.week_index == old_location.week_index
+                return location.day == old_location.day && location.week == old_location.week
             }
             if (monitor.isOver({shallow: true})) {
                 const drag_location = item.location
-                if (!sameDay({week_index, day_index}, drag_location)) {
+                if (!sameDay({week, day}, drag_location)) {
                     let new_location = props.moveItem(
-                        {week_index, day_index, workout_element_index:props.workout.length},
+                        {week, day, workout_element_index:props.workout.length},
                         drag_location,
                         item.moveCallback
                     )
@@ -96,12 +96,12 @@ function Workout(props) {
     return (
         <ListItem className={classes.day} >
            <div className={classes.dayDropArea} >
-               <Typography variant="h6">{day_index}</Typography>
+               <Typography variant="h6">{day}</Typography>
                <List className={classes.dayList}>
                    {props.workout.map((workout_element, workout_element_index) => {
                        let location = {
-                           week_index,
-                           day_index,
+                           week_id,
+                           day,
                            workout_element_index
                        }
                        return (
@@ -114,7 +114,7 @@ function Workout(props) {
                                 classes={classes} />
                        )
                    })}
-                   <MenuItem ref={drop} onClick={() => props.onAddExercise(week_index, day_index)}>
+                   <MenuItem ref={drop} onClick={() => props.onAddExercise(week_id, day)}>
                        <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
                </List>
            </div>
@@ -128,7 +128,7 @@ class DayView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            workout: props.workout
+            workout: !!props.workout && !!props.workout.workout_elements ? props.workout.workout_elements : []
         }
         this.moveItem = this.moveItem.bind(this)
         this.removeItem = this.removeItem.bind(this)
@@ -136,7 +136,7 @@ class DayView extends React.Component {
 
     componentWillReceiveProps(next_props) {
         this.setState({
-            workout: next_props.workout
+            workout: !!next_props.workout && !!next_props.workout.workout_elements ? next_props.workout.workout_elements : []
         })
     }
 
@@ -144,6 +144,7 @@ class DayView extends React.Component {
         let {workout_element_index, superset_index} = new_location
         let return_location = new_location
         let item = removeOldItem(old_location)
+        console.log(item)
         if (new_location.superset_index != undefined && !old_location.superset_index &&
             old_location.workout_element_index < new_location.workout_element_index) {
             workout_element_index = workout_element_index - 1
@@ -153,9 +154,14 @@ class DayView extends React.Component {
         console.log(item)
         console.log(old_item)
         if (superset_index != undefined) {
-            old_item = update(old_item, {$splice: [[superset_index, 0, item]]})
+            old_item = update(old_item, {
+                exercises: {$splice: [[superset_index, 0, item]]}
+            })
+            if (old_item.exercises.length == 1) {
+                old_item = old_item[0]
+            }
         }
-        let insert_elements = superset_index != undefined ? [old_item] : merge ? [[old_item, item]] : !!old_item ? [item, old_item] : [item]
+        let insert_elements = superset_index != undefined ? [old_item] : merge ? [{exercises:[old_item, item]}] : !!old_item ? [item, old_item] : [item]
         console.log(insert_elements)
         let new_workout = update(this.state.workout, {
             $splice: [[workout_element_index, 1].concat(insert_elements)]
@@ -170,11 +176,15 @@ class DayView extends React.Component {
     removeItem(from_location) {
         const {superset_index, workout_element_index} = from_location
         let item = this.state.workout[workout_element_index]
+        console.log(item)
+        console.log(this.state.workout)
         let return_item = item
         let superset = []
         if (superset_index != undefined) {
-            return_item = item[superset_index]
-            superset = update(item, {$splice: [[superset_index, 1]]} )
+            return_item = item.exercises[superset_index]
+            superset = update(item, {
+                exercises: {$splice: [[superset_index, 1]]}
+            })
             superset = !!superset.length ? [superset] : superset
         }
         let new_workout = update(this.state.workout, {
@@ -186,8 +196,9 @@ class DayView extends React.Component {
         return return_item
     }
     render() {
-        let {classes, week_index, day_index} = this.props
-        return <Workout workout={this.state.workout} moveItem={this.moveItem} removeItem={this.removeItem} classes={classes} week_index={week_index} day_index={day_index}/>
+        let {classes, week_id, day} = this.props
+        console.log(this.state.workout)
+        return <Workout workout={this.state.workout} moveItem={this.moveItem} removeItem={this.removeItem} classes={classes} week_id={week_id} day={day}/>
     }
 }
 
