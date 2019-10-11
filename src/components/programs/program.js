@@ -39,12 +39,13 @@ function ProgramView(props) {
     let [modalIsOpen, setModelIsOpen] = useState(false);
     let [week_id, setWeek] = useState(-1);
     let [day, setDay] = useState(-1)
+    let [program, setProgram] = useState(props.program)
     useEffect(() => {
-        console.log(props.program)
+        setProgram(props.program)
     })
 
     async function handleAddWeek() {
-        props.addWeek(props.user._id, program._id);
+        props.addWeek(props.program._id);
     }
     function handleAddExercise(week_id, day) {
         setModelIsOpen(true);
@@ -71,11 +72,10 @@ function ProgramView(props) {
 
     let classes = props.classes;
 
-
     return (
         <Grid container>
             <DndProvider backend={HTML5Backend} >
-                {props.program.weeks.map((week_id, index) => {
+                {program.weeks.map((week_id, index) => {
                     return (
                         <div key={`${index}`}>
                             <Week week_id={week_id} classes={classes} />
@@ -92,17 +92,11 @@ function ProgramView(props) {
 
 }
 
-export const InteractiveProgram = (props) => {
-    let {program, moveItem, classes, handleAddExercise, handleAddWeek} = props;
-}
-
 
 
 export const Program = connect(
         (state, ownProps) => {
             function findProgram(programs, id) {
-                console.log(programs)
-                console.log(id)
 
                 for (var prog of programs) {
                     if (prog._id == id) {
@@ -118,9 +112,9 @@ export const Program = connect(
         },
         (dispatch) => {
             return {
-                addWeek: (user_id, program_id) => dispatch(addWeekAndPersist(user_id, program_id)),
-                getProgram: (user_id, program_id) => dispatch(getProgram(user_id, program_id)),
-                editWeek: (user_id, program_id, week_id, week) => dispatch(editWeekAndPersist(user_id, program_id, week_id, week)),
+                addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
+                getProgram: (program_id) => dispatch(getProgram(program_id)),
+                editWeek: (program_id, week_id, week) => dispatch(editWeekAndPersist(program_id, week_id, week)),
                 moveWorkoutElement: (old_location, new_location) => dispatch(moveWorkoutElement(old_location, new_location))
 
             }

@@ -89,7 +89,6 @@ const programs = (state = initialState, action) => {
             let {week, program_id} = action;
             let new_state = {
                 ...state,
-                active_program: _newProgram({...state.active_program}, week),
                 all_programs: _addWeekToProgram(state.all_programs, program_id, week._id)
             }
 

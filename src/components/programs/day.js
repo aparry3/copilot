@@ -171,8 +171,6 @@ class DayView extends React.Component {
     removeItem(from_location) {
         const {superset_index, workout_element_index} = from_location
         let item = this.state.workout[workout_element_index]
-        console.log(item)
-        console.log(this.state.workout)
         let return_item = item
         let superset = []
         if (superset_index != undefined) {
@@ -192,7 +190,6 @@ class DayView extends React.Component {
     }
     render() {
         let {classes, week_id, day} = this.props
-        console.log(this.state.workout)
         return <Workout workout={this.state.workout} moveItem={this.moveItem} removeItem={this.removeItem} classes={classes} week_id={week_id} day={day}/>
     }
 }

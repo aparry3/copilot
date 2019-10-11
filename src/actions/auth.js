@@ -23,7 +23,7 @@ export function fetchUser() {
             dispatch(authClientDidLoad(true));
             const token = await auth0_client.getToken();
             const auth_user = await auth0_client.getUser();
-            fetch(`http://localhost:3000/users/${btoa(auth_user.sub)}`, {
+            fetch(`http://localhost:3000/users/identity`, {
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
@@ -46,7 +46,6 @@ export function fetchUser() {
                         body:JSON.stringify({
                             user:{
                                 email: auth_user.email,
-                                id: btoa(auth_user.sub),
                                 name: {
                                     first: auth_user.given_name,
                                     last: auth_user.given_name
@@ -109,7 +108,7 @@ export function addClientAndPersist(id, name, email) {
     return async dispatch => {
         dispatch(addClient(name, email));
         const token = await auth0_client.getToken();
-        fetch(`http://localhost:3000/users/${btoa(id)}/clients`, {
+        fetch(`http://localhost:3000/clients`, {
             method: 'PUT',
             headers: {
                 accept: 'application/json',

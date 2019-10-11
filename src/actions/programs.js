@@ -53,7 +53,7 @@ export function editWeekAndPersist(user_id, program_id, week_id, week) {
     return async dispatch => {
         dispatch(editWeek(week_id, week))
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${user_id}/${program_id}/week`, {
+        return fetch(`http://localhost:3000/programs/weeks/${week_id}`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -61,7 +61,6 @@ export function editWeekAndPersist(user_id, program_id, week_id, week) {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                week_id: week_id,
                 week: week
             })
         })
@@ -79,7 +78,7 @@ export function editWeek(week_id, week) {
 export function getProgram(user_id, program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${user_id}/${program_id}`, {
+        return fetch(`http://localhost:3000/programs/${program_id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -116,21 +115,25 @@ export function addWeekToProgram(program_id, week) {
         week
     }
 }
-export function addWeekAndPersist(user_id, program_id) {
+export function addWeekAndPersist(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${user_id}/${program_id}/week`, {
+        return fetch(`http://localhost:3000/weeks`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
-            }
+            },
+            body: JSON.stringify({
+                program_id: program_id
+            })
         }).then(res => {
             let data = res.json();
             return data;
         }).then(week => {
             dispatch(addWeekToProgram(program_id, week.week))
+            return week.week
         })
     }
 }
@@ -168,7 +171,7 @@ export function recievePrograms(programs) {
 export function getAllPrograms(user_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${user_id}`, {
+        return fetch(`http://localhost:3000/programs`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

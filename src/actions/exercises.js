@@ -1,3 +1,6 @@
+import {auth0_client} from '../auth'
+
+
 export const SAVE_EXERCISE = 'SAVE_EXERCISE';
 export const REQUEST_EXERCISES = 'REQUEST_EXERCISES';
 export const RECIEVE_EXERCISES = 'RECIEVE_EXERCISES';
@@ -13,12 +16,15 @@ function HttpExceptioon(status, body) {
 
 export function persistExercise(exercise) {
     let action = exercise._id ? 'EDIT' : 'ADD';
-    return (dispatch) => {
+    return async (dispatch) => {
+        let token = await auth0_client.getToken()
+
         return fetch(`http://localhost:3000/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
             method: action == 'EDIT' ? 'PUT' : 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(exercise)
         }).then(res => {
@@ -69,15 +75,23 @@ export function pushExerciseStatus(success, name, action) {
     }
 }
 
-function fetchAllExercises(query=null) {
-    return fetch(`http://localhost:3000/exercises${query ? `?search_text=${query}` : ''}`)
-        .then(
-            response => response.json(),
-            error => console.log('An error occured', error)
-        )
+async function fetchAllExercises(query=null) {
+    let token = await auth0_client.getToken()
+    console.log("fetch exercises")
+    return fetch(`http://localhost:3000/exercises${query ? `?search_text=${query}` : ''}`, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }).then(
+        response => response.json(),
+        error => console.log('An error occured', error)
+    )
 }
 
 export function fetchExerises(query=null) {
+    console.log("fetch")
     return (dispatch) => {
         dispatch(requestExercises())
         return fetchAllExercises(query).then(json => {
