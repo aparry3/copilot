@@ -129,6 +129,7 @@ export function addWeekAndPersist(program_id) {
                 program_id: program_id
             })
         }).then(res => {
+            console.log(res)
             let data = res.json();
             return data;
         }).then(week => {

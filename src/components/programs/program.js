@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useCallback} from "react";
+import update from 'immutability-helper';
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -45,7 +46,13 @@ function ProgramView(props) {
     })
 
     async function handleAddWeek() {
-        props.addWeek(props.program._id);
+        let week = await props.addWeek(props.program._id)
+
+        setProgram(update(program, {
+            weeks: {
+                $splice: [[program.weeks.length, 0, week._id]]
+            }
+        }))
     }
     function handleAddExercise(week_id, day) {
         setModelIsOpen(true);
