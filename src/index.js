@@ -21,7 +21,25 @@ import {auth0_client} from './auth'
 
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
-const theme = createMuiTheme();
+const light_theme = createMuiTheme();
+const dark_theme = createMuiTheme({
+    palette: {
+        primary: {main:'#2866ab'},
+        secondary: {main:'#BA833B'},
+        background: {
+            dark: '#171619',
+            main: '#3a4049',
+            light: '#505861'
+        }
+    },
+    accents: {
+        primary: '#50cc2a',
+        secondary: '#EDE74B'
+    },
+    text: {
+        primary: '#dddddd'
+    }
+})
 
 
 function App(props) {
@@ -32,7 +50,9 @@ function App(props) {
     })
     return (
         <Provider store={store} >
-            <MainPage />
+            <ThemeProvider theme={dark_theme} >
+                <MainPage />
+            </ThemeProvider>
         </Provider>
     )
 

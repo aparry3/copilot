@@ -38,7 +38,6 @@ import {
     getAllPrograms,
     getProgram,
     fetchWeek,
-    editWeek,
     addExerciseToDay,
     addExerciseAndPersist,
     addWeekAndPersist,
@@ -46,7 +45,8 @@ import {
     addProgramAndPersist,
     combineExercises,
     moveWorkoutElement,
-    editWeekAndPersist,
+    persistWorkout,
+    persistWeek,
     setDragElement
 } from './programs';
 
@@ -83,7 +83,8 @@ export {
     setFilter,
     persistExercise,
     addWeekToProgram,
-    editWeek,
+    persistWorkout,
+    persistWeek,
     addWeekAndPersist,
     addProgramAndPersist,
     getAllPrograms,
@@ -91,6 +92,5 @@ export {
     addClientAndPersist,
     combineExercises,
     moveWorkoutElement,
-    editWeekAndPersist,
     setDragElement
 };

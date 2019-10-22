@@ -14,26 +14,28 @@ import {Dashboard} from './dashboard'
 // TODO
 // Change Links to dynamically generated path and text using a map
 
-const styles = (theme) => ({
-    root: {
-      display: 'flex',
-      background: '#f6f8f9',
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(0),
-        height: '100vh'
+const styles = (theme) => {
+    console.log(theme)
+    return {
+        app: {
+          display: 'flex',
+          background: theme.palette.background.main,
+          color: theme.text.primary
+        },
+        content: {
+            flexGrow: 1,
+            padding: theme.spacing(0)
+        }
     }
-});
+};
 const useStyles = makeStyles(styles);
 const styled = withStyles(styles)
 
 class MainPage extends React.Component {
 
     render() {
-
         return (
-            <div>
+            <>
             {this.props.client_loaded ?
                 (<Router history={history}>
                     <Switch>
@@ -43,8 +45,7 @@ class MainPage extends React.Component {
                     </Switch>
                 </Router>) : <div>Loading...</div>
             }
-            </div>
-
+            </>
         )
     }
 }
@@ -61,7 +62,7 @@ const Trainer = styled(connect(state => {
         <div>
             {!props.client_loaded || props.loading ? ( <div>Loading...</div>) : (<div>
             {!!props.user ? (
-                <div className={classes.root}>
+                <div className={classes.app}>
                     <Sidebar path={match.path}/>
                     <Main>
                         <Switch>

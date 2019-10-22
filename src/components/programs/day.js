@@ -5,9 +5,11 @@ import {connect} from 'react-redux'
 import {Grid, MenuItem, Button, List, ListItem, Typography, Divider, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add'
-import {combineExercises, moveWorkoutElement, setDragElement} from '../../actions';
+import {persistDay, moveWorkoutElement, setDragElement} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {WorkoutElement} from './workout_element';
+import {WorkoutElementModal} from './exercise_modal';
+
 
 
 const styles = {
@@ -16,51 +18,16 @@ const styles = {
         width:'20%',
         flexDirection: 'column',
         paddingLeft: '5px',
-        paddingRight: '5px'
+        paddingRight: '5px',
+        textAlign: 'center'
     },
     dayList: {
-        overflow: 'auto'
+        overflow: 'auto',
+        alignItems: 'center'
     },
     dayDropArea: {
-        height:'100%'
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'row',
-        height: '80px',
-        marginBottom: '10px',
-        background: 'white',
-        boxShadow: '1px 1px 5px #dadada',
-        padding: '5px 0 5px 10px',
-        borderLeft: '5px lightblue',
-        cursor: 'move'
-
-    },
-    cardContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1
-    },
-    cardText: {
-        height: '60%',
-        alignSelf: 'flex-start',
-        overflow:'hidden',
-        textOverflow:  'ellipsis'
-    },
-    cardIcons: {
-        height: '40%',
-        alignSelf: 'flex-end',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'flex-end'
-
-    },
-    detailIcon: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    drag: {
-        alignSelf: 'center'
+        height:'100%',
+        width: '100%'
     }
 };
 
@@ -69,18 +36,26 @@ let useStyles = makeStyles(theme => styles)
 
 
 function Workout(props) {
-    let {classes, week_id, day} = props
+    let {
+        classes,
+        week_id,
+        day
+    } = props
     let [{isOver}, drop] = useDrop({
         accept: [dnd_types.SUPERSET, dnd_types.EXERCISE],
         hover(item, monitor) {
             function sameDay(location, old_location) {
-                return location.day == old_location.day && location.week == old_location.week
+                return location.day == old_location.day && location.week_id == old_location.week_id
             }
             if (monitor.isOver({shallow: true})) {
                 const drag_location = item.location
-                if (!sameDay({week, day}, drag_location)) {
+                if (!sameDay({week_id, day}, drag_location)) {
                     let new_location = props.moveItem(
-                        {week, day, workout_element_index:props.workout.length},
+                        {
+                            week_id,
+                            day,
+                            workout_element_index:props.workout.length
+                        },
                         drag_location,
                         item.moveCallback
                     )
@@ -89,10 +64,15 @@ function Workout(props) {
                 }
             }
         },
+        drop: (item, monitor) => {
+            props.save()
+            item.saveCallback()
+        },
         collect: monitor => ({
             isOver: !!monitor.isOver({shallow:true})
         })
     })
+
     return (
         <ListItem className={classes.day} >
            <div className={classes.dayDropArea} >
@@ -106,15 +86,16 @@ function Workout(props) {
                        }
                        return (
                            <WorkoutElement
-                                locationCallback={props.removeItem}
+                                key={`${week_id}-${day}-${workout_element.exercise_id}-${workout_element_index}`}
+                                editWorkoutElement={props.editWorkoutElement}
+                                save={props.save}
+                                removeItem={props.removeItem}
                                 moveItem={props.moveItem}
-                                elem={workout_element}
                                 location={location}
-                                workout_element={workout_element}
-                                classes={classes} />
+                                workout_element={workout_element} />
                        )
                    })}
-                   <MenuItem ref={drop} onClick={() => props.onAddExercise(week_id, day)}>
+                   <MenuItem ref={drop} onClick={() => props.addExercise()}>
                        <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
                </List>
            </div>
@@ -128,10 +109,16 @@ class DayView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            workout: !!props.workout && !!props.workout.workout_elements ? props.workout.workout_elements : []
+            workout: !!props.workout && !!props.workout.workout_elements ? props.workout.workout_elements : [],
+            modal_is_open: false,
+            workout_element: null
         }
         this.moveItem = this.moveItem.bind(this)
+        this.save = this.save.bind(this)
         this.removeItem = this.removeItem.bind(this)
+        this.toggleModal = this.toggleModal.bind(this)
+        this.handleModalSubmit = this.handleModalSubmit.bind(this)
+
     }
 
     componentWillReceiveProps(next_props) {
@@ -141,9 +128,15 @@ class DayView extends React.Component {
     }
 
     moveItem(new_location, old_location, removeOldItem, merge = false) {
-        let {workout_element_index, superset_index} = new_location
+
+        let {
+            workout_element_index,
+            superset_index
+        } = new_location
         let return_location = new_location
+
         let item = removeOldItem(old_location)
+
         if (new_location.superset_index != undefined && !old_location.superset_index &&
             old_location.workout_element_index < new_location.workout_element_index) {
             workout_element_index = workout_element_index - 1
@@ -168,7 +161,7 @@ class DayView extends React.Component {
         return return_location
     }
 
-    removeItem(from_location) {
+    removeItem(from_location, return_workout=false) {
         const {superset_index, workout_element_index} = from_location
         let item = this.state.workout[workout_element_index]
         let return_item = item
@@ -186,11 +179,66 @@ class DayView extends React.Component {
         this.setState({
             workout: new_workout
         })
-        return return_item
+        return return_workout ? new_workout : return_item
     }
+
+    handleModalSubmit(workout_element) {
+        if (!!workout_element.exercise_id || !!workout_element.exercises) {
+            let updated_workout_elements = [this.state.workout.length, 0, workout_element]
+            if (!!this.state.edit_location) {
+                updated_workout_elements[0] = this.state.edit_location.workout_element_index
+                updated_workout_elements[1] = 1
+            }
+            console.log(updated_workout_elements)
+            let new_workout = update(this.state.workout, {
+                $splice: [updated_workout_elements]
+            })
+            this.setState({
+                workout: new_workout,
+                workout_element: null,
+                edit_location: null
+            })
+            this.props.save(new_workout)
+        }
+    }
+
+    toggleModal(edit_location=null) {
+        let new_state = {
+            modal_is_open: !this.state.modal_is_open,
+            workout_element: null
+        }
+        if (!!edit_location) {
+            new_state.workout_element = this.state.workout[edit_location.workout_element_index],
+            new_state.edit_location = edit_location
+        }
+        this.setState(new_state)
+    }
+
+    save(workout=null) {
+        this.props.save(!!workout ? workout : this.state.workout)
+    }
+
     render() {
         let {classes, week_id, day} = this.props
-        return <Workout workout={this.state.workout} moveItem={this.moveItem} removeItem={this.removeItem} classes={classes} week_id={week_id} day={day}/>
+        return (
+            <>
+                <WorkoutElementModal
+                    workout_element={this.state.workout_element}
+                    open={this.state.modal_is_open}
+                    onSubmit={this.handleModalSubmit}
+                    onClose={this.toggleModal} />
+                <Workout
+                    editWorkoutElement={this.toggleModal}
+                    workout={this.state.workout}
+                    save={this.save}
+                    moveItem={this.moveItem}
+                    addExercise={this.toggleModal}
+                    removeItem={this.removeItem}
+                    classes={classes}
+                    week_id={week_id}
+                    day={day}/>
+            </>
+        )
     }
 }
 

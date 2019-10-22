@@ -1,14 +1,24 @@
-import React, {useEffect, useState, useCallback} from "react";
-import update from 'immutability-helper';
+import {
+    Button,
+    Card,
+    CardActions,
+    CardActionArea,
+    CardContent,
+    Divider,
+    Grid,
+    List,
+    ListItem,
+    Typography
+} from '@material-ui/core'
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import {fade, withStyles} from '@material-ui/core/styles';
-import {Grid, Button, List, ListItem, Typography, Card, Divider, CardActions, CardActionArea, CardContent} from '@material-ui/core'
-import {SIDEBAR_WIDTH} from '../styles'
+import HTML5Backend from 'react-dnd-html5-backend';
+import React, {useEffect, useState} from "react";
+import update from 'immutability-helper';
+
+import {addWeekAndPersist, getProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
-import {getProgram, editWeekAndPersist, addWeekAndPersist, addProgramAndPersist, combineExercises, moveWorkoutElement} from '../../actions';
-import {ExerciseModal} from './exercise_modal';
 import {Week} from './week'
 
 const styled = withStyles(theme => ({
@@ -18,28 +28,17 @@ const styled = withStyles(theme => ({
         justifyContent: 'space-even',
         overflow: 'hidden',
     },
-    list: {
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100%'
-    },
-    week: {
-        width: '140%',
-        height: '80vh',
-        overflow: 'auto'
-    },
     programPage: {
         background: '#f6f8f9',
-
+    },
+    weekContainer: {
+        width: '100%'
     }
 
 }));
 
 
 function ProgramView(props) {
-    let [modalIsOpen, setModelIsOpen] = useState(false);
-    let [week_id, setWeek] = useState(-1);
-    let [day, setDay] = useState(-1)
     let [program, setProgram] = useState(props.program)
     useEffect(() => {
         setProgram(props.program)
@@ -54,28 +53,6 @@ function ProgramView(props) {
             }
         }))
     }
-    function handleAddExercise(week_id, day) {
-        setModelIsOpen(true);
-        setWeek(week_id);
-        setDay(day)
-    }
-
-    function handleModalClose() {
-        setModelIsOpen(false);
-        setWeek('');
-        setDay('')
-    }
-
-    function handleSubmit(exercise, index=-1) {
-        let new_week = {...program[week_id]};
-        new_week[day].push([exercise])
-        let new_program = {
-            ...program,
-            [week_id]: new_week
-        }
-        props.editWeek(props.user._id, program._id, week_id, new_week)
-        handleModalClose();
-    }
 
     let classes = props.classes;
 
@@ -84,15 +61,14 @@ function ProgramView(props) {
             <DndProvider backend={HTML5Backend} >
                 {program.weeks.map((week_id, index) => {
                     return (
-                        <div key={`${index}`}>
-                            <Week week_id={week_id} classes={classes} />
+                        <div className={classes.weekContainer} key={`${week_id}`}>
+                            <Week week_id={week_id} />
                             <Divider variant="middle"/>
                         </div>
                     )
                 })}
                 <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
             </DndProvider>
-
         </Grid>
 
     );
@@ -121,8 +97,6 @@ export const Program = connect(
             return {
                 addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
-                editWeek: (program_id, week_id, week) => dispatch(editWeekAndPersist(program_id, week_id, week)),
-                moveWorkoutElement: (old_location, new_location) => dispatch(moveWorkoutElement(old_location, new_location))
 
             }
         }

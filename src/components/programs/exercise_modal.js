@@ -1,4 +1,5 @@
 import React from 'react';
+import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, FormControl, InputLabel, Input, Select} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
@@ -8,10 +9,10 @@ let top, left = [50, 50]
 
 let styled = withStyles(theme => ({
     paper: {
-        top: `50px`,
-        left: `50px`,
+        top: `20vh`,
+        left: `35vw`,
         position: 'absolute',
-        width: 300
+        width: '30vw'
 
     },
     formControl: {
@@ -20,103 +21,133 @@ let styled = withStyles(theme => ({
         maxWidth: 300,
     }
 }));
-function find_index(item, list) {
-    let key = Object.keys(item)[0];
-    let vals = list.map(i => i[key])
-    return vals.indexOf(item[key])
+function findIndexById(id, exercises) {
+    let vals = exercises.map(i => i._id)
+    return vals.indexOf(id)
 }
-class ExerciseModalView extends React.Component {
+class WorkoutElementModalView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            exercise_index: props.exercise_definition ? find_index(props.exercise_definition, props.exercises) : -1,
-            details: {
-                scheme: 'AMRAP'
-            }
+            workout_element: !!props.workout_element ? props.workout_element : {details: {scheme: 'AMRAP'}},
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.handleSelectExercise = this.handleSelectExercise.bind(this);
 
 
     }
-    handleChange(e) {
-        let subobject = e.target.name.split('-')
-        if (subobject.length == 1) {
-            this.setState({
-                [subobject[0]]: e.target.value
+
+    componentWillReceiveProps(next_props) {
+        this.setState({
+            workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {scheme: 'AMRAP'}}
+        })
+    }
+
+    handleSelectExercise(e) {
+        let exercise = this.props.exercises[e.target.value]
+        this.setState({
+            workout_element: update(this.state.workout_element, {
+                exercise_name: {$set: exercise.name},
+                exercise_id: {$set: exercise._id}
             })
-        }
-        else {
-            this.setState({
-                [subobject[0]]: {
-                    ...this.state[subobject[0]],
-                    [subobject[1]]: e.target.value
+        })
+    }
+
+    handleChange(e) {
+        this.setState({
+            workout_element: update(this.state.workout_element, {
+                details: {
+                    [e.target.name]: {$set: e.target.value}
                 }
             })
-        }
+        })
 
     }
+
     handleClose() {
-        this.setState({
-            exercise_index: -1
-        });
+        this.props.onSubmit(this.state.workout_element)
+        this.setState({workout_element: {details: {scheme:'AMRAP'}}})
         this.props.onClose();
     }
+
     handleSubmit(e) {
         e.preventDefault();
-        let exercise = this.props.exercises[this.state.exercise_index];
-        this.setState({
-            exercise_index: -1
-        });
-        this.props.onSubmit({exercise_name: exercise.name, exercise_id: exercise._id, details: this.state.details})
+        this.handleClose()
     }
+
+    handleCancel() {
+        this.setState({
+            workout_element: {details: {scheme:'AMRAP'}}
+        })
+        this.props.onClose();
+    }
+
     render() {
         let classes = this.props.classes
         return (
-            <Modal  open={this.props.open} onClose={this.handleClose}>
+            <Modal open={this.props.open} onClose={this.handleClose}>
                 <Paper className={classes.paper}>
                 <form onSubmit={this.handleSubmit}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="exercise_index">Exercise</InputLabel>
-                    <Select id="exercise_index"name='exercise_index' onChange={this.handleChange} value={this.state.exercise_index}>
+                    <Select
+                        id="exercise_index"
+                        name='exercise_index'
+                        onChange={this.handleSelectExercise}
+                        value={findIndexById(this.state.workout_element.exercise_id, this.props.exercises)}>
                         {this.props.exercises.map((exercise, index)=> {
                             return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
                         })}
                     </Select>
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="details-scheme">Scheme</InputLabel>
-                    <Select id="details-scheme"name='details-scheme' onChange={this.handleChange} value={this.state.details.scheme}>
+                    <InputLabel htmlFor="workout_element-details-scheme">Scheme</InputLabel>
+                    <Select
+                        id="workout_element-details-scheme"
+                        name='scheme'
+                        onChange={this.handleChange}
+                        value={this.state.workout_element.details.scheme}>
                         {WORKOUT_SCHEMES.map((scheme, index)=> {
                             return <MenuItem key={scheme} value={scheme}>{scheme}</MenuItem>
                         })}
                     </Select>
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="details-sets">Sets</InputLabel>
-                    <Input id="details-sets"name='details-sets' onChange={this.handleChange} value={this.state.details.sets} />
+                    <InputLabel htmlFor="workout_element-details-sets">Sets</InputLabel>
+                    <Input
+                        id="workout_element-details-sets"
+                        name='sets'
+                        onChange={this.handleChange}
+                        value={this.state.workout_element.details.sets} />
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="details-repetitions">Repetitions</InputLabel>
-                    <Input id="details-repetitions"name='details-repetitions' onChange={this.handleChange} value={this.state.details.repetitions} />
+                    <InputLabel htmlFor="workout_element-details-repetitions">Repetitions</InputLabel>
+                    <Input
+                        id="workout_element-details-repetitions"
+                        name='repetitions'
+                        onChange={this.handleChange}
+                        value={this.state.workout_element.details.repetitions} />
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="details-duration">Duration</InputLabel>
-                    <Input id="details-duration"name='details-duration' onChange={this.handleChange} value={this.state.details.duration} />
+                    <InputLabel htmlFor="workout_element-details-duration">Duration</InputLabel>
+                    <Input
+                        id="workout_element-details-duration"
+                        name='duration' 
+                        onChange={this.handleChange} 
+                        value={this.state.workout_element.details.duration} />
                 </FormControl>
-                <div>
-                    <input className="btn btn-primary" type="submit" value="submit" />
-                </div>
-
                 </form>
+                <button className="btn btn-default" onClick={this.handleCancel} >Cancel</button>
                 </Paper>
             </Modal>
         )
     }
 }
 
-export const ExerciseModal = connect(
+export const WorkoutElementModal = connect(
     (state) => {
         return {
             exercises: state.exercises.items.filter(item => {
@@ -129,4 +160,4 @@ export const ExerciseModal = connect(
             setFilter: (text) => dispatch(setFilter(text))
         }
     }
-)(styled(ExerciseModalView));
+)(styled(WorkoutElementModalView));

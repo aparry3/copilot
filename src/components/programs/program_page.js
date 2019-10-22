@@ -7,14 +7,14 @@ import {ProgramsList} from './programs_list'
 
 function ProgramPageView(props) {
     return (
-        <div>
+        <>
         {props.programs_loaded ? (
             <Switch>
                 <Route path={`${props.match.path}/:program_id`} component={Program}/>
                 <Route component={ProgramsList}/>
             </Switch>
         ) : <div>Loading programs...</div>}
-        </div>
+        </>
     )
 }
 

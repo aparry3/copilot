@@ -1,164 +1,208 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {useDrop, useDrag} from 'react-dnd'
-import {connect} from 'react-redux'
-import {dnd_types} from '../../constants/programs'
-import {List, ListItem, Typography, Card, Divider} from '@material-ui/core'
 import AutorenewIcon from '@material-ui/icons/Autorenew'
-import SwapVertIcon from '@material-ui/icons/SwapVert'
+import {Card, Divider, List, ListItem, Typography} from '@material-ui/core'
+import {connect} from 'react-redux'
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+import {dragAndDrop} from './drag_and_drop'
+import {makeStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import {setDragElement} from '../../actions'
+import React, {useRef, useState} from 'react';
+import SwapVertIcon from '@material-ui/icons/SwapVert'
+import {useDrop} from 'react-dnd'
+
+import {dnd_types} from '../../constants/programs'
+
+const styles = theme => ({
+    exerciseContent: {
+        display: 'flex',
+        height:' 100%',
+        width: '100%',
+        flexDirection: 'row',
+        borderRadius: 'inherit',
+        cursor: 'move'
+
+    },
+    exerciseBlock: {
+        borderRadius: '10px',
+        background: theme.palette.background.light,
+        height: '100px',
+        width: '85%',
+        position: 'relative',
+        margin: '0px 0px 10px 0px'
+
+    },
+    dragAndDrop: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+        borderRadius: '10px',
+        opacity: 0
+    },
+    workoutElement: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    hoverOverlay: {
+        height:'100%',
+        width: '100%',
+        borderRadius: '10px',
+        background: '#000000',
+        opacity: 0.5,
+        position: 'absolute'
+    },
+    supersetBlock: {
+        width: '90%',
+        background: theme.palette.secondary.main,
+        borderRadius: '10px',
+        margin: '0px 0px 10px 0px'
+    },
+    cardContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1
+    },
+    exerciseHeader: {
+        height: '40%',
+        width: '100%',
+        borderRadius: '10px 10px 0px 0px',
+        background: theme.accents.primary,
+        display: 'flex',
+        flexDirection: 'row',
+        overflow:'hidden',
+        textOverflow:  'ellipsis',
+        color: theme.text.dark
+    },
+    cardIcons: {
+        height: '40%',
+        alignSelf: 'flex-end',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-end'
+
+    },
+    detailIcon: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    drag: {
+        alignSelf: 'center'
+    }
+})
+let useStyles = makeStyles(styles)
+
 
 const ExerciseView = (props) => {
-    let {workout_element, classes, merge} = props;
+    let {
+        workout_element,
+        deleteWorkoutElement,
+        merge
+    } = props;
+    let classes = useStyles()
     return (
-        <Card className={classes.card}>
-            {merge && (<div style={{height: '100%', width:'100%', background: 'black', zIndex: '100'}}/>)}
-            <div className={classes.cardContent}>
-                <div className={classes.cardText}>
-                    <Typography gutterBottom variant="body2">
-                        {workout_element.exercise_name}
-                    </Typography>
-                </div>
-                <Divider variant="middle" />
-                <div className={classes.cardIcons}>
-                    <div className={classes.detailIcon}>
-                        <AutorenewIcon fontSize="small"/><Typography >5</Typography>
+        <>
+            {merge && (<div className={classes.hoverOverlay}/>)}
+            <div className={classes.exerciseContent} >
+                <div onClick={() => props.editWorkoutElement(props.location)} className={classes.cardContent}>
+                    <div className={classes.exerciseHeader}>
+                        <Typography gutterBottom variant="body2">
+                            {workout_element.exercise_name}
+                        </Typography>
+                        <DeleteOutlineIcon onClick={deleteWorkoutElement} />
+
                     </div>
-                    <div className={classes.detailIcon}>
-                        <SwapVertIcon fontSize="small"/><Typography >5</Typography>
+                    <div className={classes.cardIcons}>
+                        <div className={classes.detailIcon}>
+                            <AutorenewIcon fontSize="small"/><Typography >5</Typography>
+                        </div>
+                        <div className={classes.detailIcon}>
+                            <SwapVertIcon fontSize="small"/><Typography >5</Typography>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className={classes.drag}>
-                <MoreVertIcon fontSize="small"/>
-            </div>
-        </Card>
+        </>
     )
 }
 
 const SupersetView = (props) => {
-    let {workout_element, classes, location, locationCallback, ...pass_through_props} = props
+    let {
+        workout_element,
+        location,
+        deleteWorkoutElement,
+        removeItem,
+        ...pass_through_props
+    } = props
     const [, drop] = useDrop({
         accept: dnd_types.EXERCISE,
     })
-
+    let classes = useStyles()
     return (
         <>
-            <Card style={{padding:'10px'}}>
-                <div className={classes.superset} ref={drop}>
-                    <List>
-                        {workout_element.exercises.map((ex, ex_index)=> {
-                            let superset_location = {...location}
-                            superset_location.superset_index = ex_index
-                            return (<ListItem key={`${ex.name}`}><NonMergeableExercise variant='mergeable' item_type={dnd_types.EXERCISE} accept={dnd_types.EXERCISE} workout_element={ex} removeItem={locationCallback} location={superset_location} classes={classes} elem={ex} {...pass_through_props}/></ListItem>)
-                        })}
-                    </List>
-                </div>
-            </Card>
+            <DeleteOutlineIcon onClick={deleteWorkoutElement} />
+            <div className={classes.superset} ref={drop}>
+                <List>
+                    {workout_element.exercises.map((ex, ex_index)=> {
+                        let superset_location = {...location}
+                        superset_location.superset_index = ex_index
+                        return (
+                            <div className={classes.exerciseBlock} >
+                                <NonMergeableExercise
+                                    key={`${ex.exercise_id}-${ex_index}`}
+                                    variant='mergeable'
+                                    item_type={dnd_types.EXERCISE}
+                                    accept={dnd_types.EXERCISE}
+                                    workout_element={ex}
+                                    removeItem={removeItem}
+                                    location={superset_location}
+                                    classes={classes}
+                                    {...pass_through_props}/>
+                            </div>
+                        )
+                    })}
+                </List>
+            </div>
         </>
     )
 
 }
 
 export const WorkoutElement = (props) => {
-    let {locationCallback, ...pass_through_props} = props
-    return (
-        <>
-            {!props.workout_element.exercise_id ? (
-                <Superset item_type={dnd_types.SUPERSET} accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]} locationCallback={locationCallback} removeItem={locationCallback} {...pass_through_props} />
-                 ) : (
-                <MergeableExercise variant='mergeable' item_type={dnd_types.EXERCISE} accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]} removeItem={locationCallback} {...pass_through_props}/>
-            )}
-        </>
-    )
-}
-
-function dragAndDrop(draggable = true, droppable = true, mergeable = true, options = null) {
-    return (WrappedComponent) => {
-        return (props) => {
-            let {elem, variant, removeItem, item_type, accept, ...pass_through_props} = props
-            let [merge, setMerge] = useState(false)
-            let can_merge = !!variant && variant == 'mergeable'
-            let ref = useRef(null)
-            function sameLocation(old_l, new_l) {
-                return (
-                    old_l.superset_index == new_l.superset_index &&
-                    old_l.workout_element_index == new_l.workout_element_index &&
-                    old_l.day == new_l.day &&
-                    old_l.week_id == new_l.week_id
-                )
-            }
-            const [{isOver}, drop] = useDrop({
-                accept,
-                hover(item, monitor) {
-                    if (!ref.current) {
-                      return
-                    }
-                    if (monitor.isOver({shallow: true})) {
-                        const drag_location = item.location
-                        const hover_location = props.location
-                        // Don't replace items with themselves
-                        function shouldMerge() {
-                            if (!item.can_merge || !mergeable) {
-                                return false
-                            }
-                            let {x, y} = monitor.getClientOffset()
-                            let client_bounding_rect = ref.current.getBoundingClientRect()
-                            let middle_y = (client_bounding_rect.bottom - client_bounding_rect.top) / 2
-                            let client_y = y - client_bounding_rect.top
-                            return client_y > middle_y
-                        }
-                        if (!sameLocation(drag_location, hover_location)) {
-                            if (shouldMerge()) {
-                                setMerge(true)
-                            } else {
-                                setMerge(false)
-                                let new_location = props.moveItem(
-                                    hover_location,
-                                    drag_location,
-                                    item.moveCallback
-                                )
-                                item.location = new_location
-                                item.moveCallback = removeItem
-
-                            }
-                        }
-                    }
-                },
-                drop: (item, monitor) => {
-                    if (monitor.didDrop()) {
-                        return
-                    }
-                    if (merge) {
-                        props.moveItem(props.location, item.location, item.moveCallback, true)
-                        setMerge(false)
-                    }
-                },
-                collect: monitor => ({
-                    isOver: !!monitor.isOver({shallow: true})
-                })
-            })
-            useEffect(() => {
-                setMerge(false)
-            }, [isOver])
-            const [{ isDragging }, drag] = useDrag({
-                item: { type: item_type, can_merge, id:`${Math.floor(Math.random()*100000)}`, location: props.location, moveCallback:removeItem},
-                isDragging: monitor => {
-                    return sameLocation(monitor.getItem().location, props.location)
-                },
-                collect: monitor => ({
-                    isDragging: monitor.isDragging()
-                }),
-            })
-            drag(drop(ref))
-            let opacity = isOver ? 0.5 : 1
-            return (
-                <div ref={ref} style={{opacity}}>
-                    <WrappedComponent merge={merge} {...pass_through_props} />
-                </div>
-            )
-        }
+    let {removeItem, ...pass_through_props} = props
+    let classes = useStyles()
+    let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
+    function deleteWorkoutElement() {
+        let workout = removeItem(props.location, true)
+        props.save(workout)
     }
+    return (
+        <div className={classes.workoutElement}>
+            {!props.workout_element.exercise_id ? (
+                <div className={classes.supersetBlock}>
+
+                    <Superset
+                        deleteWorkoutElement={deleteWorkoutElement}
+                        item_type={dnd_types.SUPERSET}
+                        accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]}
+                        removeItem={removeItem}
+                        classes={classes}
+                        {...pass_through_props} />
+                </div>
+                 ) : (
+                 <div className={classes.exerciseBlock} >
+                     <MergeableExercise
+                         deleteWorkoutElement={deleteWorkoutElement}
+                         variant='mergeable'
+                         item_type={dnd_types.EXERCISE}
+                         accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]}
+                         removeItem={removeItem}
+                         classes={classes}
+                         {...pass_through_props}/>
+                 </div>
+
+            )}
+        </div>
+    )
 }
 
 export const Superset = dragAndDrop(true, true, false)(SupersetView);

@@ -13,7 +13,7 @@ export function ProgramsListView(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.addProgram(props.user._id, name, props.clients[client_index]);
+        props.addProgram(name, props.clients[client_index]);
     }
     function handleSelect(program) {
         props.history.push(`${props.location.pathname}/${program._id}`)
@@ -61,7 +61,7 @@ export const ProgramsList = connect(
     },
     dispatch => {
         return {
-            addProgram: (id, name, client) => dispatch(addProgramAndPersist(id, name, client)),
+            addProgram: (name, client) => dispatch(addProgramAndPersist(name, client)),
         }
     }
 )(ProgramsListView)

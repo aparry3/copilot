@@ -49,22 +49,36 @@ export function setDragElement(element) {
     }
 }
 
-export function editWeekAndPersist(user_id, program_id, week_id, week) {
-    return async dispatch => {
-        dispatch(editWeek(week_id, week))
-        let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/weeks/${week_id}`, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                week: week
-            })
+export async function persistWeek(week_id, week) {
+    let token = await auth0_client.getToken()
+    return fetch(`http://localhost:3000/weeks/${week_id}/days`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            week: week
         })
-    }
+    })
+
+}
+
+export async function persistWorkout(week_id, day, workout) {
+    let token = await auth0_client.getToken()
+    return fetch(`http://localhost:3000/weeks/${week_id}/days/${day}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            workout: workout
+        })
+    })
+
 }
 
 export function editWeek(week_id, week) {
@@ -75,7 +89,7 @@ export function editWeek(week_id, week) {
     }
 }
 
-export function getProgram(user_id, program_id) {
+export function getProgram(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
         return fetch(`http://localhost:3000/programs/${program_id}`, {
@@ -138,10 +152,10 @@ export function addWeekAndPersist(program_id) {
         })
     }
 }
-export function addProgramAndPersist(user_id, name, client) {
+export function addProgramAndPersist(name, client) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${user_id}`, {
+        return fetch(`http://localhost:3000/programs`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -149,7 +163,6 @@ export function addProgramAndPersist(user_id, name, client) {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                author_id: user_id,
                 name: name,
                 client: client
             })
@@ -169,7 +182,7 @@ export function recievePrograms(programs) {
         programs: programs
     }
 }
-export function getAllPrograms(user_id) {
+export function getAllPrograms() {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
         return fetch(`http://localhost:3000/programs`, {
