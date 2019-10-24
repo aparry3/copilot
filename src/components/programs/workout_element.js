@@ -27,7 +27,8 @@ const styles = theme => ({
         height: '100px',
         width: '85%',
         position: 'relative',
-        margin: '0px 0px 10px 0px'
+        margin: '0px 0px 10px 0px',
+        boxShadow: `0px 1px 8px -5px ${theme.palette.background.dark}`
 
     },
     dragAndDrop: {
@@ -71,7 +72,8 @@ const styles = theme => ({
         flexDirection: 'row',
         overflow:'hidden',
         textOverflow:  'ellipsis',
-        color: theme.text.dark
+        color: theme.text.dark,
+        color: "black"
     },
     cardIcons: {
         height: '40%',
@@ -105,7 +107,7 @@ const ExerciseView = (props) => {
             <div className={classes.exerciseContent} >
                 <div onClick={() => props.editWorkoutElement(props.location)} className={classes.cardContent}>
                     <div className={classes.exerciseHeader}>
-                        <Typography gutterBottom variant="body2">
+                        <Typography gutterBottom variant="body1">
                             {workout_element.exercise_name}
                         </Typography>
                         <DeleteOutlineIcon onClick={deleteWorkoutElement} />

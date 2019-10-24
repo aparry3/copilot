@@ -11,7 +11,9 @@ const styles = {
     list: {
         display: 'flex',
         flexDirection: 'row',
-        height: '100%'
+        height: '100%',
+        paddingLeft: '5px',
+        paddingRight: '5px'
     },
     week: {
         width: '140%',

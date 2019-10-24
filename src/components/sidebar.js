@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     color:"white",
     width: SIDEBAR_WIDTH,
-    background: "#2866ab"
+    background: theme.palette.primary.dark
 
   },
   sidebarHeader: {
@@ -81,7 +81,7 @@ export const Sidebar = (props) => {
             <div className={classes.sidebarHeader} >
                 <Wordmark />
             </div>
-            <Divider variant="middle"/>
+            <Divider light variant="middle"/>
             <MenuList>
                 <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
                     <MenuItem classes={{root:classes.menuItem}}  button>
@@ -100,7 +100,7 @@ export const Sidebar = (props) => {
                 </Link>
             </MenuList>
             <div className={classes.sidebarFooter}>
-            <Divider variant="middle"/>
+            <Divider light="true" variant="middle"/>
                 <MenuItem className={classes.footerMenuItem} button onClick={() => logout()}>
                     <div className={classes.footerItem}>
                         <ExitToApp />

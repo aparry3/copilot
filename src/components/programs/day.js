@@ -12,7 +12,7 @@ import {WorkoutElementModal} from './exercise_modal';
 
 
 
-const styles = {
+const styles = theme => ({
     day: {
         flexShrink: 0,
         width:'20%',
@@ -27,12 +27,14 @@ const styles = {
     },
     dayDropArea: {
         height:'100%',
-        width: '100%'
+        width: '95%',
+        borderRadius: '10px',
+        background: theme.palette.background.mediumDark
     }
-};
+});
 
-let styled = withStyles(theme => styles)
-let useStyles = makeStyles(theme => styles)
+let styled = withStyles(styles)
+let useStyles = makeStyles(styles)
 
 
 function Workout(props) {
