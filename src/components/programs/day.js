@@ -29,7 +29,9 @@ const styles = theme => ({
         height:'100%',
         width: '95%',
         borderRadius: '10px',
-        background: theme.palette.background.mediumDark
+        background: theme.palette.background.mediumDark,
+        overflow: 'auto',
+        padding: '5%'
     }
 });
 
@@ -79,7 +81,7 @@ function Workout(props) {
         <ListItem className={classes.day} >
            <div className={classes.dayDropArea} >
                <Typography variant="h6">{day}</Typography>
-               <List className={classes.dayList}>
+               <div className={classes.dayList}>
                    {props.workout.map((workout_element, workout_element_index) => {
                        let location = {
                            week_id,
@@ -97,9 +99,9 @@ function Workout(props) {
                                 workout_element={workout_element} />
                        )
                    })}
-                   <MenuItem ref={drop} onClick={() => props.addExercise()}>
-                       <Typography variant="body2"><AddIcon /> Add Exercise</Typography></MenuItem>
-               </List>
+                   <div ref={drop} onClick={() => props.addExercise()}>
+                       <Typography variant="body2"><AddIcon /> Add Exercise</Typography></div>
+               </div>
            </div>
        </ListItem>
     )

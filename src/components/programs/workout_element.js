@@ -1,5 +1,6 @@
 import AutorenewIcon from '@material-ui/icons/Autorenew'
 import {Card, Divider, List, ListItem, Typography} from '@material-ui/core'
+import clsx from 'clsx'
 import {connect} from 'react-redux'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import {dragAndDrop} from './drag_and_drop'
@@ -24,8 +25,8 @@ const styles = theme => ({
     exerciseBlock: {
         borderRadius: '10px',
         background: theme.palette.background.light,
-        height: '100px',
-        width: '85%',
+        minHeight: '100px',
+        width: '100%',
         position: 'relative',
         margin: '0px 0px 10px 0px',
         boxShadow: `0px 1px 8px -5px ${theme.palette.background.dark}`
@@ -37,7 +38,8 @@ const styles = theme => ({
         width: '100%',
         height: '100%',
         borderRadius: '10px',
-        opacity: 0
+        opacity: 0,
+        flexDirection: 'column'
     },
     workoutElement: {
         width: '100%',
@@ -53,18 +55,20 @@ const styles = theme => ({
         position: 'absolute'
     },
     supersetBlock: {
-        width: '90%',
+        width: '100%',
         background: theme.palette.secondary.main,
         borderRadius: '10px',
-        margin: '0px 0px 10px 0px'
+        margin: '0px 0px 10px 0px',
+        padding: '0 5%'
     },
     cardContent: {
         display: 'flex',
+        width: '100%',
         flexDirection: 'column',
         flexGrow: 1
     },
     exerciseHeader: {
-        height: '40%',
+        height: '40px',
         width: '100%',
         borderRadius: '10px 10px 0px 0px',
         background: theme.accents.primary,
@@ -73,22 +77,82 @@ const styles = theme => ({
         overflow:'hidden',
         textOverflow:  'ellipsis',
         color: theme.text.dark,
-        color: "black"
+        color: "black",
+        padding: '10px'
     },
-    cardIcons: {
+    exerciseNameContainer: {
+        flexGrow: 1,
+        width:'85%',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '2px',
+        minWidth: '0px'
+    },
+    exerciseName: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+    },
+    exerciseDetails: {
+        height: '30px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: '5px',
+        justifyContent: 'space-between',
+        fontSize: '14px'
+
+    },
+    notesContainer: {
+        flexGrow: 1,
+        color: '#cbced0',
+        fontSize: '12px',
+        textAlign: 'left',
+        padding: '5px 10px 0px 10px'
+    },
+    exerciseIcons: {
         height: '40%',
         alignSelf: 'flex-end',
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        fontSize: '12px'
+    },
+    deleteContainer: {
+        width: '10%',
+        display: 'flex',
+        alignItems: 'center'
+    },
+    deleteIcon: {
+        heigh: '15px',
+        width: '15px',
+        cursor: 'pointer'
+
 
     },
     detailIcon: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     drag: {
         alignSelf: 'center'
+    },
+    exerciseScheme: {
+        justifySelf: 'center'
+    },
+    superset: {
+        width: '100%',
+    },
+    supersetDeleteContainer:{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    supersetDetails: {
+        marginTop: '-10px'
     }
 })
 let useStyles = makeStyles(styles)
@@ -107,18 +171,29 @@ const ExerciseView = (props) => {
             <div className={classes.exerciseContent} >
                 <div onClick={() => props.editWorkoutElement(props.location)} className={classes.cardContent}>
                     <div className={classes.exerciseHeader}>
-                        <Typography gutterBottom variant="body1">
+                        <div className={classes.exerciseNameContainer}>
+                            <span className={classes.exerciseName}>
                             {workout_element.exercise_name}
-                        </Typography>
-                        <DeleteOutlineIcon onClick={deleteWorkoutElement} />
-
-                    </div>
-                    <div className={classes.cardIcons}>
-                        <div className={classes.detailIcon}>
-                            <AutorenewIcon fontSize="small"/><Typography >5</Typography>
+                            </span>
                         </div>
-                        <div className={classes.detailIcon}>
-                            <SwapVertIcon fontSize="small"/><Typography >5</Typography>
+                        <div className={classes.deleteContainer}>
+                            <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
+                        </div>
+                    </div>
+                    <div className={classes.notesContainer}>
+                        Keeping your head neautral and shoulders back, slowly lower the bar. Work up to 5 sets of 5 at 80% of your 1rm
+                    </div>
+                    <div className={classes.exerciseDetails}>
+                        <div className={classes.exerciseScheme}>
+                            {workout_element.details.scheme}
+                        </div>
+                        <div className={classes.exerciseIcons}>
+                            <div className={classes.detailIcon}>
+                                <AutorenewIcon fontSize="small"/><span>5</span>
+                            </div>
+                            <div className={classes.detailIcon}>
+                                <SwapVertIcon fontSize="small"/><span >5</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,28 +216,38 @@ const SupersetView = (props) => {
     let classes = useStyles()
     return (
         <>
-            <DeleteOutlineIcon onClick={deleteWorkoutElement} />
+            <div className={classes.supersetDeleteContainer}>
+                <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
+            </div>
             <div className={classes.superset} ref={drop}>
-                <List>
-                    {workout_element.exercises.map((ex, ex_index)=> {
-                        let superset_location = {...location}
-                        superset_location.superset_index = ex_index
-                        return (
-                            <div className={classes.exerciseBlock} >
-                                <NonMergeableExercise
-                                    key={`${ex.exercise_id}-${ex_index}`}
-                                    variant='mergeable'
-                                    item_type={dnd_types.EXERCISE}
-                                    accept={dnd_types.EXERCISE}
-                                    workout_element={ex}
-                                    removeItem={removeItem}
-                                    location={superset_location}
-                                    classes={classes}
-                                    {...pass_through_props}/>
-                            </div>
-                        )
-                    })}
-                </List>
+                {workout_element.exercises.map((ex, ex_index)=> {
+                    let superset_location = {...location}
+                    superset_location.superset_index = ex_index
+                    return (
+                        <div key={`${ex.exercise_id}-${ex_index}`} className={classes.exerciseBlock} >
+                            <NonMergeableExercise
+                                variant='mergeable'
+                                item_type={dnd_types.EXERCISE}
+                                accept={dnd_types.EXERCISE}
+                                workout_element={ex}
+                                removeItem={removeItem}
+                                location={superset_location}
+                                classes={classes}
+                                {...pass_through_props}/>
+                        </div>
+                    )
+                })}
+            </div>
+            <div className={clsx(classes.supersetDetails, classes.exerciseDetails)}>
+            <div >AMRAP</div>
+                <div className={classes.exerciseIcons}>
+                    <div className={classes.detailIcon}>
+                        <AutorenewIcon fontSize="small"/><span>5</span>
+                    </div>
+                    <div className={classes.detailIcon}>
+                        <SwapVertIcon fontSize="small"/><span >5</span>
+                    </div>
+                </div>
             </div>
         </>
     )
