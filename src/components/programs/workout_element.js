@@ -59,7 +59,8 @@ const styles = theme => ({
         background: theme.palette.secondary.main,
         borderRadius: '10px',
         margin: '0px 0px 10px 0px',
-        padding: '0 5%'
+        padding: '0 5%',
+        cursor: 'move'
     },
     cardContent: {
         display: 'flex',

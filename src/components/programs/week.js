@@ -11,20 +11,32 @@ const styles = {
     list: {
         display: 'flex',
         flexDirection: 'row',
-        height: '100%',
+        height: '92%',
         paddingLeft: '5px',
-        paddingRight: '5px'
+        paddingRight: '5px',
+        paddingTop: '0px'
     },
     week: {
         width: '140%',
         height: '80vh',
         overflow: 'auto'
+    },
+    weekHeader: {
+        width: '100%',
+        height: '8%',
+        padding: '0 25px',
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '-5px'
+    },
+    weekNumber: {
+        fontSize: '20px'
     }
 }
 let useStyles = makeStyles(theme => styles)
 
 export const Week = (props) => {
-    let {week_id} = props;
+    let {week_id, index} = props;
     let [week, setWeek] = useState(null)
     let [week_did_load, setWeekDidLoad] = useState(false)
     let classes = useStyles()
@@ -38,6 +50,9 @@ export const Week = (props) => {
     }, [week_did_load])
     return (
         <Grid item xs={12} className={classes.week}>
+        <div className={classes.weekHeader}>
+            <span className={classes.weekNumber}>week {index + 1}</span>
+        </div>
         {!!week_did_load && (
             <List className={classes.list} >
             {Object.keys(week.days).map((day) => {

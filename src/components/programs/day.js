@@ -32,6 +32,22 @@ const styles = theme => ({
         background: theme.palette.background.mediumDark,
         overflow: 'auto',
         padding: '5%'
+    },
+    dayHeader: {
+        marginBottom: '10px'
+    },
+    addExercise: {
+        cursor: 'pointer',
+        background: theme.palette.background.dark,
+        opacity: 0.1,
+        borderRadius: '20px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '&:hover': {
+            opacity: .5
+        }
     }
 });
 
@@ -80,7 +96,9 @@ function Workout(props) {
     return (
         <ListItem className={classes.day} >
            <div className={classes.dayDropArea} >
-               <Typography variant="h6">{day}</Typography>
+                <div className={classes.dayHeader}>
+                    <Typography variant="h6">{day}</Typography>
+                </div>
                <div className={classes.dayList}>
                    {props.workout.map((workout_element, workout_element_index) => {
                        let location = {
@@ -99,8 +117,9 @@ function Workout(props) {
                                 workout_element={workout_element} />
                        )
                    })}
-                   <div ref={drop} onClick={() => props.addExercise()}>
-                       <Typography variant="body2"><AddIcon /> Add Exercise</Typography></div>
+                   <div ref={drop} className={classes.addExercise} onClick={() => props.addExercise()}>
+                       <Typography variant="body2"><AddIcon /> Add Exercise</Typography>
+                    </div>
                </div>
            </div>
        </ListItem>
@@ -192,6 +211,15 @@ class DayView extends React.Component {
             if (!!this.state.edit_location) {
                 updated_workout_elements[0] = this.state.edit_location.workout_element_index
                 updated_workout_elements[1] = 1
+                if (this.state.edit_location.superset_index != undefined) {
+                    let new_workout_element = update(this.state.workout[this.state.edit_location.workout_element_index], {
+                        exercises: {
+                            $splice: [[this.state.edit_location.superset_index, 1, workout_element]]
+                        }
+                    })
+                    updated_workout_elements[2] = new_workout_element
+                }
+
             }
             console.log(updated_workout_elements)
             let new_workout = update(this.state.workout, {
@@ -212,7 +240,12 @@ class DayView extends React.Component {
             workout_element: null
         }
         if (!!edit_location) {
-            new_state.workout_element = this.state.workout[edit_location.workout_element_index],
+            let workout_element = this.state.workout[edit_location.workout_element_index]
+            if (edit_location.superset_index != undefined) {
+                workout_element = workout_element.exercises[edit_location.superset_index]
+                console.log(workout_element)
+            }
+            new_state.workout_element = workout_element
             new_state.edit_location = edit_location
         }
         this.setState(new_state)

@@ -62,7 +62,7 @@ function ProgramView(props) {
                 {program.weeks.map((week_id, index) => {
                     return (
                         <div className={classes.weekContainer} key={`${week_id}`}>
-                            <Week week_id={week_id} />
+                            <Week week_id={week_id} index={index} />
                             <Divider variant="middle"/>
                         </div>
                     )
