@@ -25,13 +25,18 @@ const styles = theme => ({
         overflow: 'auto',
         alignItems: 'center'
     },
-    dayDropArea: {
+    dayContainer: {
         height:'100%',
         width: '95%',
         borderRadius: '10px',
         background: theme.palette.background.mediumDark,
         overflow: 'auto',
-        padding: '5%'
+        padding: '5%',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    dayDropArea: {
+        flexGrow: 1
     },
     dayHeader: {
         marginBottom: '10px'
@@ -94,35 +99,38 @@ function Workout(props) {
     })
 
     return (
-        <ListItem className={classes.day} >
-           <div className={classes.dayDropArea} >
+        <div className={classes.day} >
+            <div className={classes.dayContainer} >
                 <div className={classes.dayHeader}>
                     <Typography variant="h6">{day}</Typography>
                 </div>
-               <div className={classes.dayList}>
-                   {props.workout.map((workout_element, workout_element_index) => {
-                       let location = {
-                           week_id,
-                           day,
-                           workout_element_index
-                       }
-                       return (
-                           <WorkoutElement
-                                key={`${week_id}-${day}-${workout_element.exercise_id}-${workout_element_index}`}
-                                editWorkoutElement={props.editWorkoutElement}
-                                save={props.save}
-                                removeItem={props.removeItem}
-                                moveItem={props.moveItem}
-                                location={location}
-                                workout_element={workout_element} />
-                       )
-                   })}
-                   <div ref={drop} className={classes.addExercise} onClick={() => props.addExercise()}>
-                       <Typography variant="body2"><AddIcon /> Add Exercise</Typography>
+                <div className={classes.dayList}>
+                    {props.workout.map((workout_element, workout_element_index) => {
+                        let location = {
+                            week_id,
+                            day,
+                            workout_element_index
+                        }
+                        return (
+                            <WorkoutElement
+                            key={`${week_id}-${day}-${workout_element.exercise_id}-${workout_element_index}`}
+                            editWorkoutElement={props.editWorkoutElement}
+                            save={props.save}
+                            removeItem={props.removeItem}
+                            moveItem={props.moveItem}
+                            location={location}
+                            workout_element={workout_element} />
+                        )
+                    })}
+                </div>
+
+                <div ref={drop} className={classes.dayDropArea}>
+                    <div className={classes.addExercise} onClick={() => props.addExercise()}>
+                        <Typography variant="body2"><AddIcon /> Add Exercise</Typography>
                     </div>
-               </div>
-           </div>
-       </ListItem>
+                </div>
+            </div>
+        </div>
     )
 
 }

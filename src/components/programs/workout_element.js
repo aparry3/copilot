@@ -259,7 +259,8 @@ export const WorkoutElement = (props) => {
     let {removeItem, ...pass_through_props} = props
     let classes = useStyles()
     let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
-    function deleteWorkoutElement() {
+    function deleteWorkoutElement(e) {
+        e.stopPropagation()
         let workout = removeItem(props.location, true)
         props.save(workout)
     }
