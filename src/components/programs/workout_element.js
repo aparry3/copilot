@@ -25,7 +25,7 @@ const styles = theme => ({
     exerciseBlock: {
         borderRadius: '10px',
         background: theme.palette.background.light,
-        minHeight: '100px',
+        minHeight: '70px',
         width: '100%',
         position: 'relative',
         margin: '0px 0px 10px 0px',
@@ -129,8 +129,6 @@ const styles = theme => ({
         heigh: '15px',
         width: '15px',
         cursor: 'pointer'
-
-
     },
     detailIcon: {
         display: 'flex',
@@ -181,20 +179,26 @@ const ExerciseView = (props) => {
                             <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
                         </div>
                     </div>
-                    <div className={classes.notesContainer}>
-                        Keeping your head neautral and shoulders back, slowly lower the bar. Work up to 5 sets of 5 at 80% of your 1rm
-                    </div>
+                    {!!workout_element.notes && (
+                        <div className={classes.notesContainer}>
+                            {workout_element.notes}
+                        </div>
+                    )}
                     <div className={classes.exerciseDetails}>
                         <div className={classes.exerciseScheme}>
                             {workout_element.details.scheme}
                         </div>
                         <div className={classes.exerciseIcons}>
-                            <div className={classes.detailIcon}>
-                                <AutorenewIcon fontSize="small"/><span>5</span>
-                            </div>
-                            <div className={classes.detailIcon}>
-                                <SwapVertIcon fontSize="small"/><span >5</span>
-                            </div>
+                            {!!workout_element.details.sets && (
+                                <div className={classes.detailIcon}>
+                                    <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets}</span>
+                                </div>
+                            )}
+                            {!!workout_element.details.repetitions && (
+                                <div className={classes.detailIcon}>
+                                    <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -264,6 +268,7 @@ export const WorkoutElement = (props) => {
         let workout = removeItem(props.location, true)
         props.save(workout)
     }
+
     return (
         <div className={classes.workoutElement}>
             {!props.workout_element.exercise_id ? (

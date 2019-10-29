@@ -1,14 +1,6 @@
 import {
-    Button,
-    Card,
-    CardActions,
-    CardActionArea,
-    CardContent,
     Divider,
-    Grid,
-    List,
-    ListItem,
-    Typography
+    Grid
 } from '@material-ui/core'
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
