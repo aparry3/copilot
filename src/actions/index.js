@@ -47,7 +47,9 @@ import {
     moveWorkoutElement,
     persistWorkout,
     persistWeek,
-    setDragElement
+    setDragElement,
+    deleteWeekFromProgram,
+    deleteWeekAndPersist
 } from './programs';
 
 export {
@@ -92,5 +94,7 @@ export {
     addClientAndPersist,
     combineExercises,
     moveWorkoutElement,
-    setDragElement
+    setDragElement,
+    deleteWeekFromProgram,
+    deleteWeekAndPersist
 };

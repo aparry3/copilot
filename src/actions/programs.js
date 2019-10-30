@@ -129,6 +129,42 @@ export function addWeekToProgram(program_id, week) {
         week
     }
 }
+export function addWeekToProgram(program_id, week) {
+    return {
+        type: ADD_WEEK,
+        program_id,
+        week
+    }
+}
+export function deleteWeekFromProgram(program_id, week_id) {
+    return {
+        type: DELETE_WEEK,
+        program_id,
+        week_id
+    }
+}
+
+export function deleteWeekAndPersist(program_id, week_id) {
+    return async dispatch => {
+        let token = await auth0_client.getToken()
+        return fetch(`http://localhost:3000/weeks/${week_id}`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            console.log(res)
+            let data = res.json();
+            return data;
+        }).then(week => {
+            dispatch(deleteWeekFromProgram(program_id, week_id))
+            return week.week
+        })
+    }
+}
+
 export function addWeekAndPersist(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()

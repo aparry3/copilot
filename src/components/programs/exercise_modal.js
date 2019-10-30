@@ -79,17 +79,35 @@ const styles = theme => ({
         padding: '10px',
         color: theme.text.primary,
         background: theme.palette.background.mediumDark,
-        resize: 'none',
         textAlign: 'center',
         width: '50px',
         '&:hover': {
-            background: theme.palette.background.dark
+            background: theme.palette.background.dark,
+            opacity: 0.3
+        },
+        '&:focus': {
+            outline: 'none',
+            background: theme.palette.background.light,
+            '&:hover': {
+                opacity: 1
+            }
+        }
+    },
+    textareaInput: {
+        outline: 'none',
+        padding: '10px',
+        borderRadius: '10px',
+        border: 'none',
+        color: theme.text.primary,
+        background: theme.palette.background.mediumDark,
+        '&:hover': {
+            background: theme.palette.background.dark,
+            opacity: 0.3
         },
         '&:focus': {
             outline: 'none',
             background: theme.palette.background.light
         }
-
     },
     hr: {
         width: '80%',
@@ -292,6 +310,7 @@ class WorkoutElementModalView extends React.Component {
                             name="notes"
                             input_component={
                                 <textarea
+                                    className={classes.textareaInput}
                                     rows='5'
                                     id="workout_element-notes"
                                     name='notes'

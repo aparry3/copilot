@@ -35,10 +35,15 @@ const dark_theme = createMuiTheme({
     },
     accents: {
         primary: '#89cc75',
-        secondary: '#ceb15c'
+        secondary: '#ceb15c',
+        error: '#c77272'
     },
     text: {
-        primary: '#dddddd'
+        primary: '#dddddd',
+        secondary: '#707275',
+        accents: {
+            error: '#6f1f1f'
+        }
     }
 })
 

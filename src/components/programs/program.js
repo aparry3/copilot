@@ -2,6 +2,7 @@ import {
     Divider,
     Grid
 } from '@material-ui/core'
+import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
 import {fade, withStyles} from '@material-ui/core/styles';
@@ -25,6 +26,31 @@ const styled = withStyles(theme => ({
     },
     weekContainer: {
         width: '100%'
+    },
+    weekHeader: {
+        width: '100%',
+        height: '50px',
+        padding: '0 25px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    deleteWeek: {
+        width: '30px',
+        height: '30px',
+        borderRadius: '8px',
+        color: theme.text.secondary,
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '&:hover': {
+            color: theme.text.accents.error,
+            background: theme.accents.error
+        }
+    },
+    deleteIcon: {
+        height: '25px'
     }
 
 }));
@@ -45,6 +71,14 @@ function ProgramView(props) {
             }
         }))
     }
+    async function handleDeleteWeek(index) {
+        setProgram(update(program, {
+            weeks: {
+                $splice: [[index, 1]]
+            }
+        }))
+
+    }
 
     let classes = props.classes;
 
@@ -54,6 +88,12 @@ function ProgramView(props) {
                 {program.weeks.map((week_id, index) => {
                     return (
                         <div className={classes.weekContainer} key={`${week_id}`}>
+                            <div className={classes.weekHeader}>
+                                <span className={classes.weekNumber}>week {index + 1}</span>
+                                <div className={classes.deleteWeek} onClick={() => handleDeleteWeek(index)}>
+                                    <ClearIcon className={classes.deleteIcon} />
+                                </div>
+                            </div>
                             <Week week_id={week_id} index={index} />
                             <Divider variant="middle"/>
                         </div>

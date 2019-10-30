@@ -81,7 +81,7 @@ export const Sidebar = (props) => {
             <div className={classes.sidebarHeader} >
                 <Wordmark />
             </div>
-            <Divider light variant="middle"/>
+            <Divider variant="middle"/>
             <MenuList>
                 <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
                     <MenuItem classes={{root:classes.menuItem}}  button>
@@ -100,7 +100,7 @@ export const Sidebar = (props) => {
                 </Link>
             </MenuList>
             <div className={classes.sidebarFooter}>
-            <Divider light="true" variant="middle"/>
+            <Divider variant="middle"/>
                 <MenuItem className={classes.footerMenuItem} button onClick={() => logout()}>
                     <div className={classes.footerItem}>
                         <ExitToApp />

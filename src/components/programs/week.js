@@ -21,14 +21,6 @@ const styles = {
         height: '80vh',
         overflow: 'auto'
     },
-    weekHeader: {
-        width: '100%',
-        height: '8%',
-        padding: '0 25px',
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '-5px'
-    },
     weekNumber: {
         fontSize: '20px'
     }
@@ -50,21 +42,19 @@ export const Week = (props) => {
     }, [week_did_load])
     return (
         <Grid item xs={12} className={classes.week}>
-        <div className={classes.weekHeader}>
-            <span className={classes.weekNumber}>week {index + 1}</span>
-        </div>
-        {!!week_did_load && (
-            <List className={classes.list} >
-            {Object.keys(week.days).map((day) => {
-                return (
-                    <Day
-                        key={`${week_id}-${day}`}
-                        save={(workout) => persistWorkout(week_id, day, workout)}
-                        day={day}
-                        workout={week.days[day]} />
-                )
-            })}
-            </List>)}
+            {!!week_did_load && (
+                <List className={classes.list} >
+                    {Object.keys(week.days).map((day) => {
+                        return (
+                            <Day
+                                key={`${week_id}-${day}`}
+                                save={(workout) => persistWorkout(week_id, day, workout)}
+                                day={day}
+                                workout={week.days[day]} />
+                        )
+                    })}
+                </List>
+            )}
         </Grid>
     )
 }
