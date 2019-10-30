@@ -72,7 +72,7 @@ function ProgramView(props) {
         }))
     }
     async function handleDeleteWeek(index) {
-        let week = await props.deleteWeek(props.program._id, program.weeks[index]._id)
+        let week = await props.deleteWeek(props.program._id, program.weeks[index])
 
         setProgram(update(program, {
             weeks: {
