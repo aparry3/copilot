@@ -129,13 +129,7 @@ export function addWeekToProgram(program_id, week) {
         week
     }
 }
-export function addWeekToProgram(program_id, week) {
-    return {
-        type: ADD_WEEK,
-        program_id,
-        week
-    }
-}
+
 export function deleteWeekFromProgram(program_id, week_id) {
     return {
         type: DELETE_WEEK,

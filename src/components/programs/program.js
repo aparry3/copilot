@@ -10,7 +10,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState} from "react";
 import update from 'immutability-helper';
 
-import {addWeekAndPersist, getProgram} from '../../actions';
+import {addWeekAndPersist, deleteWeekAndPersist, getProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
 
@@ -72,6 +72,8 @@ function ProgramView(props) {
         }))
     }
     async function handleDeleteWeek(index) {
+        let week = await props.deleteWeek(props.program._id, program.weeks[index]._id)
+
         setProgram(update(program, {
             weeks: {
                 $splice: [[index, 1]]
@@ -128,7 +130,8 @@ export const Program = connect(
         (dispatch) => {
             return {
                 addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
-                getProgram: (program_id) => dispatch(getProgram(program_id))
+                getProgram: (program_id) => dispatch(getProgram(program_id)),
+                deleteWeek: (program_id, week_id) => dispatch(deleteWeekAndPersist(program_id, week_id))
 
             }
         }
