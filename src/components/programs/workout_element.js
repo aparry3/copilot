@@ -273,14 +273,26 @@ export const WorkoutElement = (props) => {
     let {removeItem, ...pass_through_props} = props
     let classes = useStyles()
     let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
+    let [menu_open, setMenuOpen] = useState(false)
     function deleteWorkoutElement(e) {
         e.stopPropagation()
         let workout = removeItem(props.location, true)
         props.save(workout)
     }
+    function handleRightClick(e) {
+        e.preventDefault()
+        e.stopPropagation()
+        setMenuOpen(true)
+    }
+    function renderRightClickMenu() {
+        if (!menu_open) {
+            return null
+        }
+    }
 
     return (
-        <div className={classes.workoutElement}>
+        <div className={classes.workoutElement} onContextMenu={handleRightClick}>
+            {renderRightClickMenu()}
             {!props.workout_element.exercise_id ? (
                 <div className={classes.supersetBlock}>
 

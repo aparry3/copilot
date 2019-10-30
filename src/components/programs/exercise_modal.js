@@ -144,8 +144,8 @@ class WorkoutElementModalView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            workout_element: !!props.workout_element ? props.workout_element : {details: {scheme: 'AMRAP'}},
-            is_superset: !!props.workout_element && !!props.workout_element.exercises,
+            workout_element: !!props.workout_element ? props.workout_element : {details: {}},
+            is_exercise: !props.workout_element || !!props.workout_element && !!props.workout_element.exercise_id,
             edit_workout_element: !!props.workout_element
         }
         this.handleChange = this.handleChange.bind(this);
@@ -159,8 +159,8 @@ class WorkoutElementModalView extends React.Component {
 
     componentWillReceiveProps(next_props) {
         this.setState({
-            workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {scheme: 'AMRAP'}},
-            is_exercise: !!next_props.workout_element && !!next_props.workout_element.exercise_id,
+            workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {}},
+            is_exercise: !next_props.workout_element ||  !!next_props.workout_element && !!next_props.workout_element.exercise_id,
             edit_workout_element: !!next_props.workout_element
         })
     }
