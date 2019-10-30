@@ -128,7 +128,7 @@ export const Program = connect(
         (dispatch) => {
             return {
                 addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
-                getProgram: (program_id) => dispatch(getProgram(program_id)),
+                getProgram: (program_id) => dispatch(getProgram(program_id))
 
             }
         }
