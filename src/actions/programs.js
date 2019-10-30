@@ -6,6 +6,7 @@ export const REARRANGE_WORKOUT = 'REARRANGE_WORKOUT';
 export const REARRANGE_EXERCISE = 'REARRANGE_EXERCISE';
 export const ADD_WEEK = 'ADD_WEEK';
 export const EDIT_WEEK = 'EDIT_WEEK';
+export const DELETE_WEEK = 'DELETE_WEEK';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
 export const RECIEVE_PROGRAM = 'RECIEVE_PROGRAM';
@@ -154,7 +155,7 @@ export function deleteWeekAndPersist(program_id, week_id) {
             return data;
         }).then(week => {
             dispatch(deleteWeekFromProgram(program_id, week_id))
-            return week.week
+            return week.week_id
         })
     }
 }

@@ -220,7 +220,7 @@ const SupersetView = (props) => {
     })
     let classes = useStyles()
     return (
-        <>
+        <div onClick={() => props.editWorkoutElement(props.location)}>
             <div className={classes.supersetDeleteContainer}>
                 <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
             </div>
@@ -254,7 +254,7 @@ const SupersetView = (props) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 
 }

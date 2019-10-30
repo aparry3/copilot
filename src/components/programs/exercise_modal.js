@@ -145,6 +145,8 @@ class WorkoutElementModalView extends React.Component {
         super(props);
         this.state = {
             workout_element: !!props.workout_element ? props.workout_element : {details: {scheme: 'AMRAP'}},
+            is_superset: !!props.workout_element && !!props.workout_element.exercises,
+            edit_workout_element: !!props.workout_element
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -157,7 +159,9 @@ class WorkoutElementModalView extends React.Component {
 
     componentWillReceiveProps(next_props) {
         this.setState({
-            workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {scheme: 'AMRAP'}}
+            workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {scheme: 'AMRAP'}},
+            is_exercise: !!next_props.workout_element && !!next_props.workout_element.exercise_id,
+            edit_workout_element: !!next_props.workout_element
         })
     }
 
@@ -216,27 +220,29 @@ class WorkoutElementModalView extends React.Component {
             <form onSubmit={this.handleSubmit}>
                 <Paper className={classes.paper}>
                 <div className={classes.modalHeader}>
-                    <span>{!!this.state.workout_element.exercise_id ? 'Edit' : 'Add'} Exercise</span>
+                    <span>{!!this.state.edit_workout_element ? 'Edit' : 'Add'} {this.state.is_exercise ? 'Exercise' : 'Superset'}</span>
                 </div>
                 <div className={classes.modalContent}>
-                    <div className={classes.modalContentSection}>
-                        <DetailGroup
-                            className={classes.formControl}
-                            name="exercise_index"
-                            label="Exercise"
-                            input_component={(
-                                <Select
-                                    id="exercise_index"
-                                    name="exercise_index"
-                                    onChange={this.handleSelectExercise}
-                                    value={findIndexById(this.state.workout_element.exercise_id, this.props.exercises)}>
-                                    {this.props.exercises.map((exercise, index)=> {
-                                        return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
-                                    })}
-                                </Select>
-                            )}
-                            />
-                    </div>
+                    {this.state.is_exercise && (
+                        <div className={classes.modalContentSection}>
+                            <DetailGroup
+                                className={classes.formControl}
+                                name="exercise_index"
+                                label="Exercise"
+                                input_component={(
+                                    <Select
+                                        id="exercise_index"
+                                        name="exercise_index"
+                                        onChange={this.handleSelectExercise}
+                                        value={findIndexById(this.state.workout_element.exercise_id, this.props.exercises)}>
+                                        {this.props.exercises.map((exercise, index)=> {
+                                            return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
+                                        })}
+                                    </Select>
+                                )}
+                                />
+                        </div>
+                    )}
                     <hr className={classes.hr}/>
                     <div className={classes.modalContentSection}>
                         <DetailGroup

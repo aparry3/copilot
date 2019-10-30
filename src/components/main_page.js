@@ -25,7 +25,8 @@ const styles = (theme) => {
         content: {
             flexGrow: 1,
             padding: theme.spacing(0),
-            minWidth: '0px'
+            minWidth: '0px',
+            minHeight: '100vh'
         }
     }
 };

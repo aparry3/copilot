@@ -8,7 +8,8 @@ import {
     REARRANGE_EXERCISE,
     ADD_PROGRAM,
     EDIT_WEEK,
-    SET_DRAG_ELEMENT
+    SET_DRAG_ELEMENT,
+    DELETE_WEEK
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
@@ -27,6 +28,17 @@ function _addWeekToProgram(all_programs, program_id, week_id) {
         if (p._id == program_id) {
             let new_weeks = [...p.weeks];
             new_weeks.push(week_id)
+            p.weeks = new_weeks
+        }
+        return p
+    })
+}
+
+function _removeWeekFromProgram(all_programs, program_id, week_id) {
+    let new_programs = [...all_programs];
+    return new_programs.map(p => {
+        if (p._id == program_id) {
+            let new_weeks = p.weeks.filter(week => week_id != week);
             p.weeks = new_weeks
         }
         return p
@@ -93,6 +105,14 @@ const programs = (state = initialState, action) => {
             }
 
             return new_state;
+        }
+        case DELETE_WEEK: {
+            let {week_id, program_id} = action;
+            return {
+                ...state,
+                programs_loaded: true,
+                all_programs: _removeWeekFromProgram(state.all_programs, program_id, week_id)
+            }
         }
         case EDIT_WEEK: {
             let {week, week_id} = action;

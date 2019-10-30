@@ -182,7 +182,7 @@ class DayView extends React.Component {
                 old_item = old_item[0]
             }
         }
-        let insert_elements = superset_index != undefined ? [old_item] : merge ? [{exercises:[old_item, item]}] : !!old_item ? [item, old_item] : [item]
+        let insert_elements = superset_index != undefined ? [old_item] : merge ? [{exercises:[old_item, item], details: {}}] : !!old_item ? [item, old_item] : [item]
         let new_workout = update(this.state.workout, {
             $splice: [[workout_element_index, 1].concat(insert_elements)]
         })

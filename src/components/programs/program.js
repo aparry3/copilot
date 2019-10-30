@@ -2,6 +2,7 @@ import {
     Divider,
     Grid
 } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
 import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
@@ -23,6 +24,10 @@ const styled = withStyles(theme => ({
     },
     programPage: {
         background: '#f6f8f9',
+    },
+    program: {
+        width:'100%',
+        height: '100%'
     },
     weekContainer: {
         width: '100%'
@@ -51,6 +56,27 @@ const styled = withStyles(theme => ({
     },
     deleteIcon: {
         height: '25px'
+    },
+    addWeekSection: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '10px'
+    },
+    addWeek: {
+        borderRadius: '25px',
+        height: '50px',
+        width: '30%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        cursor: 'pointer',
+        background: theme.palette.background.mediumDark,
+        opacity: 0.1,
+        '&:hover': {
+            opacity: .5
+        }
     }
 
 }));
@@ -85,7 +111,7 @@ function ProgramView(props) {
     let classes = props.classes;
 
     return (
-        <Grid container>
+        <div className={classes.program}>
             <DndProvider backend={HTML5Backend} >
                 {program.weeks.map((week_id, index) => {
                     return (
@@ -101,9 +127,11 @@ function ProgramView(props) {
                         </div>
                     )
                 })}
-                <button className='btn btn-success' onClick={handleAddWeek}>Add Week</button>
+                <div className={classes.addWeekSection}>
+                    <div className={classes.addWeek} onClick={handleAddWeek}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
+                </div>
             </DndProvider>
-        </Grid>
+        </div>
 
     );
 
