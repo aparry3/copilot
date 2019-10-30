@@ -164,11 +164,15 @@ const ExerciseView = (props) => {
         merge
     } = props;
     let classes = useStyles()
+    function editWorkoutElement(e) {
+        e.stopPropagation()
+        props.editWorkoutElement(props.location)
+    }
     return (
         <>
             {merge && (<div className={classes.hoverOverlay}/>)}
             <div className={classes.exerciseContent} >
-                <div onClick={() => props.editWorkoutElement(props.location)} className={classes.cardContent}>
+                <div onClick={editWorkoutElement} className={classes.cardContent}>
                     <div className={classes.exerciseHeader}>
                         <div className={classes.exerciseNameContainer}>
                             <span className={classes.exerciseName}>
