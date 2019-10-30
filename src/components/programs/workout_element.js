@@ -244,14 +244,20 @@ const SupersetView = (props) => {
                 })}
             </div>
             <div className={clsx(classes.supersetDetails, classes.exerciseDetails)}>
-            <div >AMRAP</div>
+                <div className={classes.exerciseScheme}>
+                    {workout_element.details.scheme}
+                </div>
                 <div className={classes.exerciseIcons}>
-                    <div className={classes.detailIcon}>
-                        <AutorenewIcon fontSize="small"/><span>5</span>
-                    </div>
-                    <div className={classes.detailIcon}>
-                        <SwapVertIcon fontSize="small"/><span >5</span>
-                    </div>
+                    {!!workout_element.details.sets && (
+                        <div className={classes.detailIcon}>
+                            <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets}</span>
+                        </div>
+                    )}
+                    {!!workout_element.details.repetitions && (
+                        <div className={classes.detailIcon}>
+                            <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions}</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
