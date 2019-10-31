@@ -12,6 +12,10 @@ import {useDrop} from 'react-dnd'
 
 import {dnd_types} from '../../constants/programs'
 
+const TOOLTIP_WIDTH = 100
+const TOOLTIP_HEIGHT = 80
+const ARROW_SIZE = 25
+
 const styles = theme => ({
     exerciseContent: {
         display: 'flex',
@@ -152,6 +156,27 @@ const styles = theme => ({
     },
     supersetDetails: {
         marginTop: '-10px'
+    },
+    rightClickMenu: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: `${TOOLTIP_HEIGHT}px`,
+        width: `${TOOLTIP_WIDTH}px`,
+        position: 'fixed',
+        zIndex: '10',
+        background: theme.palette.background.light,
+        border: 'none',
+        borderRadius: '10px'
+    },
+    nonRightClickMenu: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zindex: '7'
     }
 })
 let useStyles = makeStyles(styles)
@@ -171,7 +196,7 @@ const ExerciseView = (props) => {
     return (
         <>
             {merge && (<div className={classes.hoverOverlay}/>)}
-            <div className={classes.exerciseContent} >
+            <div className={classes.exerciseContent} onFocus={() => {console.log('focus')}}>
                 <div onClick={editWorkoutElement} className={classes.cardContent}>
                     <div className={classes.exerciseHeader}>
                         <div className={classes.exerciseNameContainer}>
@@ -188,6 +213,7 @@ const ExerciseView = (props) => {
                             {workout_element.notes}
                         </div>
                     )}
+                    {!!workout_element.details && (
                     <div className={classes.exerciseDetails}>
                         <div className={classes.exerciseScheme}>
                             {workout_element.details.scheme}
@@ -204,7 +230,7 @@ const ExerciseView = (props) => {
                                 </div>
                             )}
                         </div>
-                    </div>
+                    </div>)}
                 </div>
             </div>
         </>
@@ -274,20 +300,33 @@ export const WorkoutElement = (props) => {
     let classes = useStyles()
     let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
     let [menu_open, setMenuOpen] = useState(false)
+    let [menu_location, setMenuLocation] = useState([0,0])
     function deleteWorkoutElement(e) {
         e.stopPropagation()
         let workout = removeItem(props.location, true)
         props.save(workout)
     }
     function handleRightClick(e) {
-        e.preventDefault()
         e.stopPropagation()
+        e.preventDefault()
         setMenuOpen(true)
+        setMenuLocation([e.clientX, e.clientY])
     }
+
     function renderRightClickMenu() {
         if (!menu_open) {
             return null
         }
+        console.log('location')
+        console.log(menu_location)
+        return (
+            <>
+                <div className={classes.nonRightClickMenu} onClick={() => setMenuOpen(false)} />
+                <div style={{top: menu_location[1] - TOOLTIP_HEIGHT/2, left: menu_location[0] + ARROW_SIZE }} className={classes.rightClickMenu}>
+                    <button >Copy</button>
+                </div>
+            </>
+        )
     }
 
     return (
