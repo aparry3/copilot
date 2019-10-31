@@ -11,10 +11,11 @@ import SwapVertIcon from '@material-ui/icons/SwapVert'
 import {useDrop} from 'react-dnd'
 
 import {dnd_types} from '../../constants/programs'
+import {copyWorkoutElement} from '../../actions';
 
 const TOOLTIP_WIDTH = 100
 const TOOLTIP_HEIGHT = 80
-const ARROW_SIZE = 25
+const ARROW_SIZE = 15
 
 const styles = theme => ({
     exerciseContent: {
@@ -159,6 +160,7 @@ const styles = theme => ({
     },
     rightClickMenu: {
         display: 'flex',
+        boxShadow: `0 0 15px -5px ${theme.palette.background.dark}`,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
@@ -166,7 +168,7 @@ const styles = theme => ({
         width: `${TOOLTIP_WIDTH}px`,
         position: 'fixed',
         zIndex: '10',
-        background: theme.palette.background.light,
+        background: theme.palette.background.tooltip,
         border: 'none',
         borderRadius: '10px'
     },
@@ -177,6 +179,17 @@ const styles = theme => ({
         right: 0,
         bottom: 0,
         zindex: '7'
+    },
+    arrow: {
+        position: 'absolute',
+
+        left: `-${ARROW_SIZE}px`,
+        width: 0,
+        height: 0,
+        borderRight: `${ARROW_SIZE}px solid ${theme.palette.background.tooltip}`,
+        borderBottom: `${ARROW_SIZE}px solid transparent`,
+        borderTop: `${ARROW_SIZE}px solid transparent`
+
     }
 })
 let useStyles = makeStyles(styles)
@@ -295,7 +308,12 @@ const SupersetView = (props) => {
 
 }
 
-export const WorkoutElement = (props) => {
+export const WorkoutElement = connect(
+    null,
+    dispatch => ({
+        copyWorkoutElement: workout_element => dispatch(copyWorkoutElement(workout_element))
+    })
+)((props) => {
     let {removeItem, ...pass_through_props} = props
     let classes = useStyles()
     let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
@@ -313,6 +331,11 @@ export const WorkoutElement = (props) => {
         setMenuLocation([e.clientX, e.clientY])
     }
 
+    function handleCopy() {
+        props.copyWorkoutElement(props.workout_element)
+        setMenuOpen(false)
+    }
+
     function renderRightClickMenu() {
         if (!menu_open) {
             return null
@@ -321,9 +344,10 @@ export const WorkoutElement = (props) => {
         console.log(menu_location)
         return (
             <>
-                <div className={classes.nonRightClickMenu} onClick={() => setMenuOpen(false)} />
+                <div className={classes.nonRightClickMenu} onClick={() => setMenuOpen(false)} onContextMenu={(e) => {e.stopPropagation(); setMenuOpen(false);}}/>
                 <div style={{top: menu_location[1] - TOOLTIP_HEIGHT/2, left: menu_location[0] + ARROW_SIZE }} className={classes.rightClickMenu}>
-                    <button >Copy</button>
+                    <div className={classes.arrow} />
+                    <button onClick={handleCopy}>Copy</button>
                 </div>
             </>
         )
@@ -358,7 +382,7 @@ export const WorkoutElement = (props) => {
             )}
         </div>
     )
-}
+})
 
 export const Superset = dragAndDrop(true, true, false)(SupersetView);
 export const MergeableExercise = dragAndDrop(true, true, true)(ExerciseView)

@@ -9,11 +9,12 @@ import {
     ADD_PROGRAM,
     EDIT_WEEK,
     SET_DRAG_ELEMENT,
-    DELETE_WEEK
+    DELETE_WEEK,
+    COPY_WORKOUT_ELEMENT
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
-const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null }
+const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null, clipboard: null}
 
 function _newProgram(active_program, week) {
     let new_program = {...active_program};
@@ -130,6 +131,14 @@ const programs = (state = initialState, action) => {
             }
 
             return new_state;
+        }
+        case COPY_WORKOUT_ELEMENT: {
+            let {type, workout_element} = action
+            return {
+                ...state,
+                clipboard: JSON.parse(JSON.stringify(workout_element))
+            }
+
         }
         case EDIT_WORKOUT: {
             let {type, client, program_id, variation, exercise, week, day } = action;

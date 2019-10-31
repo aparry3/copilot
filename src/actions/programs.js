@@ -11,9 +11,18 @@ export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
 export const RECIEVE_PROGRAM = 'RECIEVE_PROGRAM';
 export const SET_DRAG_ELEMENT = 'SET_DRAG_ELEMENT';
+export const COPY_WORKOUT_ELEMENT = 'COPY_WORKOUT_ELEMENT';
 
 export function combineExercises(item, drop_location) {
     console.log(item)
+
+}
+
+export function copyWorkoutElement(workout_element) {
+    return {
+        type: COPY_WORKOUT_ELEMENT,
+        workout_element
+    }
 
 }
 export function moveWorkoutElement(old_week, old_day, old_index, new_week, new_day, new_index) {

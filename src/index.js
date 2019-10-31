@@ -30,7 +30,8 @@ const dark_theme = createMuiTheme({
             dark: '#121212',
             mediumDark: '#2e343c',
             main: '#3a4049',
-            light: '#505861'
+            light: '#505861',
+            tooltip: '#cbcdd0'
         }
     },
     accents: {

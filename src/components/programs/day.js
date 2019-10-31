@@ -60,7 +60,11 @@ let styled = withStyles(styles)
 let useStyles = makeStyles(styles)
 
 
-function Workout(props) {
+const Workout = connect(
+    state => ({
+        clipboard: state.programs.clipboard
+    })
+)((props) => {
     let {
         classes,
         week_id,
@@ -98,9 +102,10 @@ function Workout(props) {
         })
     })
 
+
     return (
         <div className={classes.day} >
-            <div className={classes.dayContainer} >
+            <div className={classes.dayContainer} onContextMenu={(e) => {e.preventDefault(); e.stopPropagation(); props.pasteExercise(props.clipboard);}}>
                 <div className={classes.dayHeader}>
                     <Typography variant="h6">{day}</Typography>
                 </div>
@@ -133,7 +138,7 @@ function Workout(props) {
         </div>
     )
 
-}
+})
 
 
 class DayView extends React.Component {
@@ -276,6 +281,7 @@ class DayView extends React.Component {
                     editWorkoutElement={this.toggleModal}
                     workout={this.state.workout}
                     save={this.save}
+                    pasteExercise={this.handleModalSubmit}
                     moveItem={this.moveItem}
                     addExercise={this.toggleModal}
                     removeItem={this.removeItem}
