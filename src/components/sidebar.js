@@ -83,11 +83,7 @@ export const Sidebar = (props) => {
             </div>
             <Divider variant="middle"/>
             <MenuList>
-                <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
-                    <MenuItem classes={{root:classes.menuItem}}  button>
-                        <ListItemText primary={<Typography variant="body2">Dashboard</Typography>} />
-                    </MenuItem>
-                </Link>
+
                 <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
                     <MenuItem classes={{root:classes.menuItem}}  button>
                         <ListItemText primary={<Typography variant="body2">Exercises</Typography>} />
@@ -114,7 +110,11 @@ export const Sidebar = (props) => {
         </Drawer>
     );
 }
-
+// <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
+//     <MenuItem classes={{root:classes.menuItem}}  button>
+//         <ListItemText primary={<Typography variant="body2">Dashboard</Typography>} />
+//     </MenuItem>
+// </Link>
 
 export const SidebarList = (props) => {
     return (

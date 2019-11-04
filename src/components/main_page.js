@@ -71,7 +71,7 @@ const Trainer = styled(connect(state => {
                             <Route path={`${match.path}/exercises`} component={ExercisesPage} />
                             <Route path={`${match.path}/programs`} component={ProgramPage} />
                             <Route path={`${match.path}/dashboard`} component={Dashboard} />
-                            <Redirect to={`${match.path}/dashboard`}/>
+                            <Redirect to={`${match.path}/programs`}/>
                         </Switch>
                     </Main>
                 </div>

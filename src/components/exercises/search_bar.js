@@ -7,34 +7,22 @@ import SearchIcon from '@material-ui/icons/Search';
 import {SIDEBAR_WIDTH} from '../styles';
 
 const useStyles = makeStyles(theme => ({
-    appBar: {
-        width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-        marginLeft: SIDEBAR_WIDTH,
-    },
-    title: {
-        flexGrow: 1,
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
+    searchBar: {
+        width: `100%`,
+        display: 'flex',
+        justifyContent: 'space-around',
+        padding: '20px',
+        height: '15%'
     },
     search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
+        width: '80%',
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
             backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
+        }
     },
     searchIcon: {
         width: theme.spacing(7),
-        height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
         display: 'flex',
@@ -54,6 +42,9 @@ const useStyles = makeStyles(theme => ({
                 width: 200,
             },
         },
+    },
+    newExercise: {
+        width: '20%'
     }
 }));
 
@@ -61,31 +52,26 @@ const useStyles = makeStyles(theme => ({
 const SearchBarView = (props) => {
     let classes = useStyles();
     return (
-        <AppBar className={classes.appBar} position='fixed'>
-            <Toolbar>
-                <Typography  className={classes.title} variant="h6" noWrap>
-                    Exercises
-                </Typography>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon />
-
-                    </div>
-                    <InputBase
-                    placeholder="Filter Exercises…"
-                    value={props.filter}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => props.setFilter(e.target.value)}
-                    />
+        <div className={classes.searchBar} >
+            <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                    <SearchIcon />
                 </div>
-
-                    <button className="btn btn-success" onClick={props.onNewExercise}>Add Exercise</button>
-            </Toolbar>
-        </AppBar>
+                <InputBase
+                placeholder="Search Exercises…"
+                value={props.filter}
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => props.setFilter(e.target.value)}
+                />
+            </div>
+            <div className={classes.newExercise} >
+                <button className="btn btn-success" onClick={props.onNewExercise}>Add Exercise</button>
+            </div>
+        </div>
     )
 
 }

@@ -4,10 +4,18 @@ import {fade, withStyles} from '@material-ui/core/styles';
 import {ViewExercises} from './view_exercises';
 import {NewExercise} from './new_exercise';
 import {setFilter} from '../../actions'
-import {SearchBar} from './search_bar';
 import {SIDEBAR_WIDTH} from '../styles'
 const styled = withStyles(theme => ({
-
+    exercisesPageContainer: {
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        padding: '20px',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden'
+    }
 }));
 
 
@@ -54,11 +62,10 @@ class ExercisesPageView extends React.Component {
     render() {
         let classes = this.props.classes;
         return (
-            <div >
-                <SearchBar onNewExercise={this.handleNewExercise}/>
+            <div className={classes.exercisesPageContainer}>
                     {this.state.is_adding ? (
                         <NewExercise onEditOver={this.handleEditOver}/> ) : (
-                        <ViewExercises /> )
+                        <ViewExercises onNewExercise={this.handleNewExercise}/> )
                     }
             </div>
         );

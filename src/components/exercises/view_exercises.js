@@ -5,13 +5,31 @@ import {persistExercise} from '../../actions'
 import {ExerciseForm} from './exercise_form';
 import { normalize, titleCase } from '../util';
 import {Grid, Paper, List, ListItem, ListItemText, Typography} from '@material-ui/core';
+import {SearchBar} from './search_bar';
 
 const EXERCISE_LIST_WIDTH = 250;
 
 const styled = withStyles(theme => ({
     toolbar: theme.mixins.toolbar,
-    container: {
-        flexGrow:1,
+    viewExercisesContainer: {
+        flexGrow: 1,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-around',
+        paddingTop: '20px',
+        height: '85%',
+        overflow: 'hidden'
+    },
+    exercisesListContainer: {
+        width: '30%',
+        height: '100%',
+        overflow: 'auto',
+        background: theme.palette.background.light
+    },
+    exerciseViewContainer: {
+        width: '70%',
+        height: '100%',
+        paddingLeft: '20px'
     }
 }))
 
@@ -38,33 +56,25 @@ class ViewExercisesView extends React.Component {
     render() {
         let classes = this.props.classes;
         return (
-            <div >
-                <Grid container className={classes.container} >
-                    <Grid item xs={3} >
+            <>
+                <SearchBar onNewExercise={this.props.onNewExercise} />
+                <div className={classes.viewExercisesContainer} >
+                    <div className={classes.exercisesListContainer} >
+                        <List >
+                            {this.props.exercises.map((exercise, index)=>{
+                                return <ExerciseListItem index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                            })}
+                        </List>
+                    </div>
+                    <div className={classes.exerciseViewContainer}>
                         <Paper>
-                            <List style={{maxHeight: '100vh', overflow: 'auto'}}>
-                                <ListItem><div className={classes.toolbar} /></ListItem>
-                                {this.props.exercises.map((exercise, index)=>{
-                                    return <ExerciseListItem index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                                })}
-                            </List>
+                            { this.state.selected_exercise_index != null && (
+                                <ExerciseForm onSave={this.props.onSave} exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
+                            )}
                         </Paper>
-                    </Grid>
-                    <Grid item xs={9} >
-                        <Grid container justify="center" >
-                            <Grid item>
-                                <Paper>
-                                    <div className={classes.toolbar} />
-
-                                    { this.state.selected_exercise_index != null && (
-                                        <ExerciseForm onSave={this.props.onSave} exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
-                                    )}
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </div>
+                    </div>
+                </div>
+            </>
         )
     }
 }
