@@ -2,7 +2,7 @@ import AutorenewIcon from '@material-ui/icons/Autorenew'
 import {Card, Divider, List, ListItem, Typography} from '@material-ui/core'
 import clsx from 'clsx'
 import {connect} from 'react-redux'
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+import FilterNoneIcon from '@material-ui/icons/FilterNone'
 import {dragAndDrop} from './drag_and_drop'
 import {makeStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -158,7 +158,7 @@ const styles = theme => ({
     supersetDetails: {
         marginTop: '-10px'
     },
-    rightClickMenu: {
+    optionMenu: {
         display: 'flex',
         boxShadow: `0 0 15px -5px ${theme.palette.background.dark}`,
         flexDirection: 'column',
@@ -170,9 +170,10 @@ const styles = theme => ({
         zIndex: '10',
         background: theme.palette.background.tooltip,
         border: 'none',
+        padding: '5px',
         borderRadius: '10px'
     },
-    nonRightClickMenu: {
+    rightClickUnderlay: {
         position: 'fixed',
         top: 0,
         left: 0,
@@ -189,8 +190,36 @@ const styles = theme => ({
         borderRight: `${ARROW_SIZE}px solid ${theme.palette.background.tooltip}`,
         borderBottom: `${ARROW_SIZE}px solid transparent`,
         borderTop: `${ARROW_SIZE}px solid transparent`
-
+    },
+    optionButton: {
+        width: '100%',
+        height: '30px',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        borderRadius: '5px',
+        border:'none',
+        cursor: 'pointer'
+    },
+    deleteButton: {
+        background: theme.accents.error,
+        '&:hover': {
+            background: theme.accents.errorHover
+        }
+    },
+    copyButton: {
+        background: theme.accents.secondary,
+        '&:hover': {
+            background: theme.accents.secondaryHover
+        }
+    },
+    optionButtonContainer: {
+        padding:'5px',
+        width: '100%'
     }
+
 })
 let useStyles = makeStyles(styles)
 
@@ -198,7 +227,7 @@ let useStyles = makeStyles(styles)
 const ExerciseView = (props) => {
     let {
         workout_element,
-        deleteWorkoutElement,
+        handleOptionsClick,
         merge
     } = props;
     let classes = useStyles()
@@ -218,7 +247,7 @@ const ExerciseView = (props) => {
                             </span>
                         </div>
                         <div className={classes.deleteContainer}>
-                            <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
+                            <FilterNoneIcon className={classes.deleteIcon} onClick={(e) => handleOptionsClick(e, props.location)} />
                         </div>
                     </div>
                     {!!workout_element.notes && (
@@ -254,7 +283,7 @@ const SupersetView = (props) => {
     let {
         workout_element,
         location,
-        deleteWorkoutElement,
+        handleOptionsClick,
         removeItem,
         ...pass_through_props
     } = props
@@ -265,7 +294,7 @@ const SupersetView = (props) => {
     return (
         <div onClick={() => props.editWorkoutElement(props.location)}>
             <div className={classes.supersetDeleteContainer}>
-                <DeleteOutlineIcon className={classes.deleteIcon} onClick={deleteWorkoutElement} />
+                <FilterNoneIcon className={classes.deleteIcon} onClick={(e) => handleOptionsClick(e, props.location)} />
             </div>
             <div className={classes.superset} ref={drop}>
                 {workout_element.exercises.map((ex, ex_index)=> {
@@ -278,6 +307,7 @@ const SupersetView = (props) => {
                                 item_type={dnd_types.EXERCISE}
                                 accept={dnd_types.EXERCISE}
                                 workout_element={ex}
+                                handleOptionsClick={handleOptionsClick}
                                 removeItem={removeItem}
                                 location={superset_location}
                                 classes={classes}
@@ -319,24 +349,30 @@ export const WorkoutElement = connect(
     let [confirm_delete_open, setConfirmDeleteOpen] = useState(false)
     let [menu_open, setMenuOpen] = useState(false)
     let [menu_location, setMenuLocation] = useState([0,0])
-    function deleteWorkoutElement(e) {
-        e.stopPropagation()
-        let workout = removeItem(props.location, true)
+    let [options_location, setOptionsLocation] = useState(null)
+    function deleteWorkoutElement() {
+        let workout = removeItem(options_location, true)
         props.save(workout)
+        setMenuOpen(false)
     }
-    function handleRightClick(e) {
+    function handleOptionsClick(e, location) {
         e.stopPropagation()
         e.preventDefault()
         setMenuOpen(true)
-        setMenuLocation([e.clientX, e.clientY])
+        setMenuLocation([e.clientX, e.clientY - 5])
+        setOptionsLocation(location)
     }
 
     function handleCopy() {
-        props.copyWorkoutElement(props.workout_element)
+        let workout_element = props.workout_element
+        if (options_location.superset_index != undefined) {
+            workout_element = workout_element.exercises[options_location.superset_index]
+        }
+        props.copyWorkoutElement(workout_element)
         setMenuOpen(false)
     }
 
-    function renderRightClickMenu() {
+    function renderOptionsMenu() {
         if (!menu_open) {
             return null
         }
@@ -344,38 +380,39 @@ export const WorkoutElement = connect(
         console.log(menu_location)
         return (
             <>
-                <div className={classes.nonRightClickMenu} onClick={() => setMenuOpen(false)} onContextMenu={(e) => {e.stopPropagation(); setMenuOpen(false);}}/>
-                <div style={{top: menu_location[1] - TOOLTIP_HEIGHT/2, left: menu_location[0] + ARROW_SIZE }} className={classes.rightClickMenu}>
+                <div className={classes.rightClickUnderlay} onClick={() => setMenuOpen(false)} onContextMenu={(e) => {e.stopPropagation(); setMenuOpen(false);}}/>
+                <div style={{top: menu_location[1] - TOOLTIP_HEIGHT/2, left: menu_location[0] + ARROW_SIZE }} className={classes.optionMenu}>
                     <div className={classes.arrow} />
-                    <button onClick={handleCopy}>Copy</button>
+                    <div className={classes.optionButtonContainer}><div className={clsx(classes.optionButton, classes.copyButton)} onClick={handleCopy}><span>Copy</span></div></div>
+                    <div className={classes.optionButtonContainer}><div className={clsx(classes.optionButton, classes.deleteButton)} onClick={deleteWorkoutElement}><span>Delete</span></div></div>
                 </div>
             </>
         )
     }
 
     return (
-        <div className={classes.workoutElement} onContextMenu={handleRightClick}>
-            {renderRightClickMenu()}
+        <div className={classes.workoutElement} >
+            {renderOptionsMenu()}
             {!props.workout_element.exercise_id ? (
                 <div className={classes.supersetBlock}>
 
                     <Superset
-                        deleteWorkoutElement={deleteWorkoutElement}
                         item_type={dnd_types.SUPERSET}
                         accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]}
                         removeItem={removeItem}
                         classes={classes}
+                        handleOptionsClick={handleOptionsClick}
                         {...pass_through_props} />
                 </div>
                  ) : (
                  <div className={classes.exerciseBlock} >
                      <MergeableExercise
-                         deleteWorkoutElement={deleteWorkoutElement}
                          variant='mergeable'
                          item_type={dnd_types.EXERCISE}
                          accept={[dnd_types.SUPERSET, dnd_types.EXERCISE]}
                          removeItem={removeItem}
                          classes={classes}
+                         handleOptionsClick={handleOptionsClick}
                          {...pass_through_props}/>
                  </div>
 

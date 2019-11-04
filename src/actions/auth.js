@@ -8,6 +8,7 @@ export const AUTH_CLIENT_DID_LOAD = 'LOGGING_OUT';
 export const ADD_CLIENT = 'ADD_CLIENT';
 
 export function login(...p) {
+    console.log(p)
     auth0_client.login(...p)
 }
 export function loggingIn() {

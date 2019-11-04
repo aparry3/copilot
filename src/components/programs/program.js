@@ -114,6 +114,7 @@ function ProgramView(props) {
         <div className={classes.program}>
             <DndProvider backend={HTML5Backend} >
                 {program.weeks.map((week_id, index) => {
+
                     return (
                         <div className={classes.weekContainer} key={`${week_id}`}>
                             <div className={classes.weekHeader}>

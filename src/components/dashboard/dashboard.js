@@ -4,7 +4,7 @@ import {Card, Grid, List, ListItem, ListItemText, Typography, FormControl, Input
 import {addClientAndPersist} from '../../actions'
 
 function DashboardView(props) {
-
+console.log(props)
   return (
     <div>
         {`Welcome ${props.user.name.first}!`}

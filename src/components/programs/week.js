@@ -48,6 +48,7 @@ export const Week = (props) => {
                         return (
                             <Day
                                 key={`${week_id}-${day}`}
+                                week_id={week_id}
                                 save={(workout) => persistWorkout(week_id, day, workout)}
                                 day={day}
                                 workout={week.days[day]} />
