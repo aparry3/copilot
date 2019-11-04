@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import update from 'immutability-helper';
 import React, {useRef, useState, useEffect} from 'react';
 import {useDrop, useDrag} from 'react-dnd';
@@ -5,6 +6,7 @@ import {connect} from 'react-redux'
 import {Grid, MenuItem, Button, List, ListItem, Typography, Divider, Card, CardActions, CardActionArea, CardContent} from '@material-ui/core'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add'
+import FilterIcon from '@material-ui/icons/Filter'
 import {persistDay, moveWorkoutElement, setDragElement} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {WorkoutElement} from './workout_element';
@@ -41,17 +43,50 @@ const styles = theme => ({
     dayHeader: {
         marginBottom: '10px'
     },
-    addExercise: {
-        cursor: 'pointer',
-        background: theme.palette.background.dark,
-        opacity: 0.1,
+    addExerciseContainer: {
         borderRadius: '20px',
         height: '40px',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center'
+    },
+    addExercise: {
+        cursor: 'pointer',
+        background: theme.palette.background.dark,
+        opacity: 0.1,
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
+        width:'100%',
+        borderRadius: '20px',
+        height: '100%',
         '&:hover': {
-            opacity: .5
+            opacity: 0.5
+        }
+    },
+    addButton: {
+        width: '50%',
+        height: '100%',
+        opacity: 0.1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        '&:hover': {
+            opacity: 1
+        }
+
+    },
+    paste: {
+        borderRadius: '0 20px 20px 0',
+        '&:hover': {
+            background: theme.accents.secondaryHover
+        }
+    },
+    addNewExercise: {
+        borderRadius: '20px 0px 0px 20px',
+        '&:hover': {
+            background: theme.accents.primaryHover
         }
     }
 });
@@ -105,7 +140,7 @@ const Workout = connect(
 
     return (
         <div className={classes.day} >
-            <div className={classes.dayContainer} onContextMenu={(e) => {e.preventDefault(); e.stopPropagation(); props.pasteExercise(props.clipboard);}}>
+            <div className={classes.dayContainer}>
                 <div className={classes.dayHeader}>
                     <Typography variant="h6">{day}</Typography>
                 </div>
@@ -130,9 +165,7 @@ const Workout = connect(
                 </div>
 
                 <div ref={drop} className={classes.dayDropArea}>
-                    <div className={classes.addExercise} onClick={() => props.addExercise()}>
-                        <Typography variant="body2"><AddIcon /> Add Exercise</Typography>
-                    </div>
+                    <AddExercise pasteExercise={props.pasteExercise} addExercise={props.addExercise} />
                 </div>
             </div>
         </div>
@@ -140,6 +173,28 @@ const Workout = connect(
 
 })
 
+const AddExercise = styled(connect(state => ({clipboard: state.programs.clipboard}))((props) => {
+    let [mouse_over, setMouseOver] = useState(false)
+    let {classes} = props
+    return (
+        <div className={classes.addExerciseContainer} onMouseEnter={() => setMouseOver(true)} onMouseLeave={() => setMouseOver(false)}>
+            {(mouse_over && !!props.clipboard) ? (
+                <>
+                    <div className={clsx(classes.addButton, classes.addNewExercise)} onClick={() => props.addExercise()}>
+                        <AddIcon />
+                    </div>
+                    <div className={clsx(classes.addButton, classes.paste)} onClick={(e) => {e.preventDefault(); e.stopPropagation(); props.pasteExercise(props.clipboard);}}>
+                        <FilterIcon />
+                    </div>
+                </>
+            ) : (
+                <div className={classes.addExercise} onClick={() => props.addExercise()}>
+                    <Typography variant="body2"><AddIcon /> Add Exercise</Typography>
+                </div>
+            )}
+        </div>
+    )
+}))
 
 class DayView extends React.Component {
     constructor(props) {

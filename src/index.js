@@ -36,6 +36,7 @@ const dark_theme = createMuiTheme({
     },
     accents: {
         primary: '#89cc75',
+        primaryHover: '#51943d',
         secondary: '#ceb15c',
         secondaryHover: '#bd941a',
         error: '#c77272',
