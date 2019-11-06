@@ -1,3 +1,5 @@
+import clsx from 'clsx'
+import {makeStyles, withStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import {addProgramAndPersist, getProgram} from '../../actions';
@@ -5,12 +7,57 @@ import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
 
+let styles = (theme) => ({
+    programListPageContainer: {
+        height: '100%',
+        width: '100%'
+    },
+    programListHeader: {
+        width: '100%',
+        height: '15%',
+        background: theme.palette.background.light,
+        boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-start',
+        fontSize: '40px',
+        fontWeight: 100,
+        textAlign: 'center'
+    },
+    hr: {
+        width: '100%',
+        background: theme.palette.background.dark,
+        opacity: 0.1,
+        margin: '0',
+        border: 0,
+        borderTop: '2px solid rgba(0,0,0,.1)'
+    },
+    programListPageContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '20px',
+        width: '100%'
+    },
+    programListContainer: {
+        display: 'flex',
+        width: '50%',
+        flexDirection:' column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        background: theme.palette.background.light,
+        boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`
+    }
+})
+let useStyles = makeStyles(styles)
 
 export function ProgramsListView(props) {
     let {programs} = props
     let [client_index, setClientIndex] = useState(-1);
     let [name, setName] = useState('');
-
+    let classes = useStyles()
     function handleSubmit(e) {
         e.preventDefault();
         props.addProgram(name, props.clients[client_index]);
@@ -19,36 +66,36 @@ export function ProgramsListView(props) {
         props.history.push(`${props.location.pathname}/${program._id}`)
     }
     return (
-        <Card>
-            <List>
-                <ListItem button>
-                    <form onSubmit={handleSubmit}>
-                        <FormControl >
-                            <InputLabel htmlFor="program_name">Name</InputLabel>
-                            <Input id="program_name"name='program_name' onChange={(e) => setName(e.target.value)} placeholder="Name Program" value={name} />
-                        </FormControl>
-
-                        <FormControl >
-                            <InputLabel htmlFor="client_index">Client</InputLabel>
-                            <Select id="client_index"name='client_index' onChange={(e) => setClientIndex(e.target.value)} value={client_index}>
-                                {props.clients.map((client, index)=> {
-                                    return <MenuItem key={`${index}_`} value={index}>{`${client.name}`}</MenuItem>
-                                })}
-                            </Select>
-                        </FormControl>
-                        <input className="btn btn-primary" type="submit" value="Save" />
-
-                    </form>
-                </ListItem>
-                {programs.length > 0 && programs.map(program => {
-                    return (
-                        <ListItem button onClick={() => handleSelect(program)}>
-                            <ListItemText primary={<Typography>{`${program.client_name} - ${program.name}`}</Typography>} secondary={`${program.client_email}`} />
-                        </ListItem>
-                    )
-                })}
-            </List>
-        </Card>
+        <div className={classes.programListPageContainer}>
+            <div className={classes.programListHeader}>
+                <span>Programs</span>
+                <hr className={classes.hr}/>
+            </div>
+            <div className={classes.programListPageContent}>
+                <div className={classes.programListContainer}>
+                    <div className={classes.programListForm}>
+                        <form onSubmit={handleSubmit}>
+                            <FormControl >
+                                <InputLabel htmlFor="program_name">Name</InputLabel>
+                                <Input id="program_name"name='program_name' onChange={(e) => setName(e.target.value)} placeholder="Name Program" value={name} />
+                            </FormControl>
+                            <input className="btn btn-primary" type="submit" value="Save" />
+                        </form>
+                    </div>
+                    <div className={classes.programList}>
+                    {programs.length > 0 && programs.map(program => {
+                        console.log(program)
+                        return (
+                            <div onClick={() => handleSelect(program)}>
+                                <div>{program.name}</div>
+                                <div></div>
+                            </div>
+                        )
+                    })}
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 export const ProgramsList = connect(

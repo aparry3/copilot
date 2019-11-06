@@ -4,6 +4,7 @@ import {setFilter} from '../../actions';
 import {AppBar, Toolbar, Typography, InputBase, TextField} from '@material-ui/core';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import AddIcon from '@material-ui/icons/Add'
 import {SIDEBAR_WIDTH} from '../styles';
 
 const useStyles = makeStyles(theme => ({
@@ -12,39 +13,47 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-around',
         padding: '20px',
-        height: '15%'
+        height: '15%',
+        background: theme.palette.background.light
     },
     search: {
         width: '80%',
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        }
-    },
-    searchIcon: {
-        width: theme.spacing(7),
-        position: 'absolute',
-        pointerEvents: 'none',
         display: 'flex',
+        justifyContent:'flex-start',
         alignItems: 'center',
-        justifyContent: 'center',
+        fontSize: '35px',
+        color: theme.text.secondary
     },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 7),
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: 120,
-            '&:focus': {
-                width: 200,
-            },
-        },
+    icon: {
+        width: '60px',
+        height: '60px'
     },
     newExercise: {
-        width: '20%'
+        width: '20%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '10px',
+        textAlign: 'center',
+        fontSize: '20px',
+        background: theme.palette.background.light,
+        color: theme.text.secondary,
+        opacity:0.1,
+        cursor: 'pointer',
+        '&:hover': {
+            background: theme.palette.background.main,
+            opacity: 0.5
+        }
+    },
+    searchInput: {
+        background: theme.palette.background.light,
+        border: 'none',
+        flexGrow:1,
+        outline: 'none',
+        color: theme.text.primary,
+        '&::placeholder': {
+            color: theme.text.secondary
+        }
     }
 }));
 
@@ -54,22 +63,18 @@ const SearchBarView = (props) => {
     return (
         <div className={classes.searchBar} >
             <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon />
+                <div >
+                    <SearchIcon className={classes.icon} />
                 </div>
-                <InputBase
+                <input
+                className={classes.searchInput}
                 placeholder="Search Exercises…"
                 value={props.filter}
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ 'aria-label': 'search' }}
                 onChange={(e) => props.setFilter(e.target.value)}
                 />
             </div>
-            <div className={classes.newExercise} >
-                <button className="btn btn-success" onClick={props.onNewExercise}>Add Exercise</button>
+            <div className={classes.newExercise} onClick={props.onNewExercise}>
+                <span><AddIcon className={classes.icon}/> Add Exercise</span>
             </div>
         </div>
     )

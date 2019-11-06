@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import MenuList from '@material-ui/core/MenuList';
@@ -69,6 +69,7 @@ const useStyles = makeStyles(theme => ({
 }));
 export const Sidebar = (props) => {
     const classes = useStyles();
+    let [selected_page, setSelectedPage] = useState('exercises')
     return (
         <Drawer
             variant="permanent"
@@ -85,12 +86,12 @@ export const Sidebar = (props) => {
             <MenuList>
 
                 <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                    <MenuItem classes={{root:classes.menuItem}}  button>
+                    <MenuItem selected={selected_page=='exercises'} onClick={() => setSelectedPage('exercises')} classes={{root:classes.menuItem}}  button>
                         <ListItemText primary={<Typography variant="body2">Exercises</Typography>} />
                     </MenuItem>
                 </Link>
                 <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
-                    <MenuItem classes={{root:classes.menuItem}} button>
+                    <MenuItem selected={selected_page=='programs'} onClick={() => setSelectedPage('programs')} classes={{root:classes.menuItem}} button>
                         <ListItemText primary={<Typography variant="body2">Programs</Typography>} />
                     </MenuItem>
                 </Link>

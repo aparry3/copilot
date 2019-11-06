@@ -43,6 +43,7 @@ const dark_theme = createMuiTheme({
         errorHover: '#b34949'
     },
     text: {
+        white: '#ffffff',
         primary: '#dddddd',
         secondary: '#707275',
         accents: {
