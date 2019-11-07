@@ -75,20 +75,15 @@ export function ProgramsListView(props) {
                 <div className={classes.programListContainer}>
                     <div className={classes.programListForm}>
                         <form onSubmit={handleSubmit}>
-                            <FormControl >
-                                <InputLabel htmlFor="program_name">Name</InputLabel>
-                                <Input id="program_name"name='program_name' onChange={(e) => setName(e.target.value)} placeholder="Name Program" value={name} />
-                            </FormControl>
-                            <input className="btn btn-primary" type="submit" value="Save" />
+                                <input id="program_name"name='program_name' onChange={(e) => setName(e.target.value)} placeholder="Program name..." value={name} />
                         </form>
                     </div>
                     <div className={classes.programList}>
                     {programs.length > 0 && programs.map(program => {
-                        console.log(program)
                         return (
                             <div onClick={() => handleSelect(program)}>
                                 <div>{program.name}</div>
-                                <div></div>
+                                <div>{Date(program.modified)}</div>
                             </div>
                         )
                     })}

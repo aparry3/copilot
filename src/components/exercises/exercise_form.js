@@ -25,7 +25,7 @@ const styled = withStyles(theme => ({
         overflow: 'auto'
     },
     formSection: {
-        width: '100%',
+        flexGrow: 1,
         boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
         background: theme.palette.background.light,
         display: 'flex',
@@ -33,6 +33,10 @@ const styled = withStyles(theme => ({
         alignItems: 'flex-start',
         marginBottom: '20px',
         padding: '10px'
+    },
+    formSectionContainer: {
+        display: 'flex',
+        width: '90%'
     },
     formSectionHeader: {
         height: '20px',
@@ -45,7 +49,8 @@ const styled = withStyles(theme => ({
         fontWeight: 300
     },
     form: {
-        width: '100%'
+        width: '100%',
+        height: '100%'
     },
     formSectionInput: {
         color: theme.text.primary,
@@ -68,7 +73,9 @@ const styled = withStyles(theme => ({
     formSectionInputContainer: {
         padding: '5px',
         width: '100%'
-
+    },
+    description: {
+        minWidth: '50%'
     }
 }));
 
@@ -130,7 +137,8 @@ const multiSelectStyles = theme => ({
         color: theme.text.dark,
         cursor: 'pointer',
         '&:hover': {
-            background: theme.palette.background.light
+            background: theme.palette.background.light,
+            color: theme.text.primary
         }
     },
     deleteChip: {
@@ -216,7 +224,7 @@ const MultiSelect = (props) => {
                     </div>
                 )
             })}
-                <div className={classes.multiSelectTextContainer}><input value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder='Add primary muslces...' className={classes.multiSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/></div>
+                <div className={classes.multiSelectTextContainer}><input autocomplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.multiSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/></div>
             </div>
             {focus && (
                 <div className={classes.multiSelectDropdown}>
@@ -271,35 +279,37 @@ class ExerciseFormView extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <div className={classes.exerciseForm}>
-                <form className={classes.form} onSubmit={this.handleSubmit}>
-                    <div className={clsx(classes.formSection)}>
-                        <div className={classes.formSectionHeader}><span>Name</span></div>
-                        <div className={classes.formSectionInputContainer}><input className={clsx(classes.nameInput, classes.formSectionInput)} id="name" name='name' onChange={this.handleChange} value={this.state.exercise.name} /></div>
+            <form className={classes.form} onSubmit={this.handleSubmit}>
+                <div className={classes.exerciseForm}>
+                    <div className={classes.formSectionContainer}>
+                        <div className={clsx(classes.formSection)}>
+                            <div className={classes.formSectionHeader}><span>Name</span></div>
+                            <div className={classes.formSectionInputContainer}><input autocomplete="off" className={clsx(classes.nameInput, classes.formSectionInput)} id="name" name='name' onChange={this.handleChange} value={this.state.exercise.name} /></div>
+                        </div>
                     </div>
-                    <div className={clsx(classes.formSection)}>
-                        <div className={classes.formSectionHeader}><span>Description</span></div>
-                        <div className={classes.formSectionInputContainer}><input className={classes.formSectionInput} id='description' name='description' onChange={this.handleChange} value={this.state.exercise.description} /></div>
+                    <div className={classes.formSectionContainer}>
+                        <div className={clsx(classes.formSection, classes.description)}>
+                            <div className={classes.formSectionHeader}><span>Description</span></div>
+                            <div className={classes.formSectionInputContainer}><textarea autocomplete="off" className={classes.formSectionInput} id='description' name='description' onChange={this.handleChange} value={this.state.exercise.description} /></div>
+                        </div>
+                        <div className={clsx(classes.formSection)}>
+                            <div className={classes.formSectionHeader}><span>Categories</span></div>
+                            <MultiSelect placeholder="Categories..." name="categories" onChange={this.handleChange} value={this.state.exercise.categories} elements={CATEGORIES}/>
+                        </div>
                     </div>
-                    <div className={clsx(classes.formSection)}>
-                    <div className={classes.formSectionHeader}><span>Primary muscles</span></div>
-                        <MultiSelect name='primary_muscles' onChange={this.handleChange} value={this.state.exercise.primary_muscles} elements={allMuscles()} />
+                    <div className={classes.formSectionContainer}>
+                        <div className={clsx(classes.formSection)}>
+                            <div className={classes.formSectionHeader}><span>Primary muscles</span></div>
+                            <MultiSelect placeholder='Add primary muscles...' name='primary_muscles' onChange={this.handleChange} value={this.state.exercise.primary_muscles} elements={allMuscles()} />
+                        </div>
                     </div>
-                    <div className={clsx(classes.formSection)}>
-                        <div className={classes.formSectionHeader}><span>Secondary muscles</span></div>
-                        <Select multiple id="secondary_muscles" name='secondary_muscles' onChange={(e) => {console.log(e); this.handleChange(e)}} value={this.state.exercise.secondary_muscles}>
-                            {allMuscles().map(muscle => {
-                                return <MenuItem key={`secondary-${muscle}`} value={muscle}>{muscle}</MenuItem>
-                            })}
-                        </Select>
+                    <div className={classes.formSectionContainer}>
+                        <div className={clsx(classes.formSection)}>
+                            <div className={classes.formSectionHeader}><span>Secondary muscles</span></div>
+                            <MultiSelect placeholder='Add secondary muscles...' name='secondary_muscles' onChange={this.handleChange} value={this.state.exercise.secondary_muscles} elements={allMuscles()} />
+                        </div>
                     </div>
-                    <div className={clsx(classes.formSection)}>
-                        <div className={classes.formSectionHeader}><span>Categories</span></div>
-                        <Select id="categories"name='categories' onChange={this.handleChange} value={this.state.exercise.categories}>
-                            {CATEGORIES.map(muscle => {
-                                return <MenuItem key={`secondary-${muscle}`} value={muscle}>{muscle}</MenuItem>
-                            })}
-                        </Select>
+                    <div className={classes.formSectionContainer}>
                     </div>
                     <div>
                         <input className="btn btn-primary" type="submit" value="submit" />
@@ -307,8 +317,9 @@ class ExerciseFormView extends React.Component {
                     <div>
                         <button className="btn btn-light" onClick={this.handleCancel}>Cancel</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
+
         )
     }
 }
