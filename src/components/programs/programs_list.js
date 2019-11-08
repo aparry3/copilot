@@ -7,6 +7,7 @@ import {addProgramAndPersist, getProgram} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
+import {ProgramHeader} from './utils'
 
 let styles = (theme) => ({
     programListPageContainer: {
@@ -29,14 +30,6 @@ let styles = (theme) => ({
         fontSize: '40px',
         fontWeight: 100,
         textAlign: 'center'
-    },
-    hr: {
-        width: '100%',
-        background: theme.palette.background.dark,
-        opacity: 0.1,
-        margin: '0',
-        border: 0,
-        borderTop: '2px solid rgba(0,0,0,.1)'
     },
     programListPageContent: {
         display: 'flex',
@@ -172,10 +165,9 @@ export function ProgramsListView(props) {
     }
     return (
         <div className={classes.programListPageContainer}>
-            <div className={classes.programListHeader}>
+            <ProgramHeader>
                 <span>Programs</span>
-                <hr className={classes.hr}/>
-            </div>
+            </ProgramHeader>
             <div className={classes.programListPageContent}>
                 <div className={classes.programListContainer}>
                     <div className={clsx(classes.programItem)}>

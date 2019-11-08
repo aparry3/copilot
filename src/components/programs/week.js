@@ -18,7 +18,7 @@ const styles = {
     },
     week: {
         width: '140%',
-        height: '80vh',
+        height: '100%',
         overflow: 'auto'
     },
     weekNumber: {

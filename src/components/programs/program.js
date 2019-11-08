@@ -10,27 +10,37 @@ import {fade, withStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState} from "react";
 import update from 'immutability-helper';
-
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {addWeekAndPersist, deleteWeekAndPersist, getProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
+import {ProgramHeader} from './utils'
 
 const styled = withStyles(theme => ({
-    programContainer: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-even',
-        overflow: 'hidden',
-    },
     programPage: {
-        background: '#f6f8f9',
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
+    },
+    back: {
+        color: theme.text.secondary,
+        fontSize: '18px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     program: {
-        width:'100%',
-        height: '100%'
+        flexGrow: 1,
+        overflow: 'auto'
     },
     weekContainer: {
-        width: '100%'
+        width: '100%',
+        height: '80%',
+        display: 'flex',
+        flexDirection: 'column'
     },
     weekHeader: {
         width: '100%',
@@ -109,10 +119,14 @@ function ProgramView(props) {
     }
 
     let classes = props.classes;
-
     return (
-        <div className={classes.program}>
+        <div className={classes.programPage}>
+            <ProgramHeader>
+                <div onClick={() => props.history.goBack()} className={classes.back}><KeyboardBackspaceIcon /><span>Back</span></div>
+                <span>{program.name}</span>
+            </ProgramHeader>
             <DndProvider backend={HTML5Backend} >
+            <div className={classes.program}>
                 {program.weeks.map((week_id, index) => {
 
                     return (
@@ -131,6 +145,7 @@ function ProgramView(props) {
                 <div className={classes.addWeekSection}>
                     <div className={classes.addWeek} onClick={handleAddWeek}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
                 </div>
+            </div>
             </DndProvider>
         </div>
 
