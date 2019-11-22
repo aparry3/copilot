@@ -376,8 +376,6 @@ export const WorkoutElement = connect(
         if (!menu_open) {
             return null
         }
-        console.log('location')
-        console.log(menu_location)
         return (
             <>
                 <div className={classes.rightClickUnderlay} onClick={() => setMenuOpen(false)} onContextMenu={(e) => {e.stopPropagation(); setMenuOpen(false);}}/>

@@ -41,7 +41,6 @@ export const Week = (props) => {
         loadWeek()
     }, [])
     function save(workouts) {
-        console.log(workouts)
         let new_week = {...week}
         workouts.forEach(wo => {
             new_week = update(new_week, {
@@ -50,10 +49,6 @@ export const Week = (props) => {
             persistWorkout(week_id, wo[0], wo[1])
         })
         setWeek(new_week)
-
-    }
-    if (!!week) {
-        console.log(week.days)
 
     }
     return (
