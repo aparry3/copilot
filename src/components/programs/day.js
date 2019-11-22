@@ -304,7 +304,7 @@ class DayView extends React.Component {
                 workout_element: null,
                 edit_location: null
             })
-            this.save([day, new_workout])
+            this.save([this.props.day, new_workout])
         }
     }
 
