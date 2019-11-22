@@ -1,4 +1,5 @@
 import {auth0_client} from '../auth'
+import {API_URI} from '../config'
 
 export const CREATE_WORKOUT = 'CREATE_WORKOUT';
 export const EDIT_WORKOUT = 'EDIT_WORKOUT';
@@ -35,7 +36,7 @@ export function moveWorkoutElement(old_week, old_day, old_index, new_week, new_d
 
 export async function fetchWeek(week_id) {
     let token = await auth0_client.getToken()
-    return fetch(`http://localhost:3000/weeks/${week_id}`, {
+    return fetch(`${API_URI}/weeks/${week_id}`, {
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -61,7 +62,7 @@ export function setDragElement(element) {
 
 export async function persistWeek(week_id, week) {
     let token = await auth0_client.getToken()
-    return fetch(`http://localhost:3000/weeks/${week_id}/days`, {
+    return fetch(`${API_URI}/weeks/${week_id}/days`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -77,7 +78,7 @@ export async function persistWeek(week_id, week) {
 
 export async function persistWorkout(week_id, day, workout) {
     let token = await auth0_client.getToken()
-    return fetch(`http://localhost:3000/weeks/${week_id}/days/${day}`, {
+    return fetch(`${API_URI}/weeks/${week_id}/days/${day}`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -102,7 +103,7 @@ export function editWeek(week_id, week) {
 export function getProgram(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs/${program_id}`, {
+        return fetch(`${API_URI}/programs/${program_id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -119,7 +120,6 @@ export function getProgram(program_id) {
     }
 }
 function recieveProgram(program) {
-    console.log(program)
     return {
         type: RECIEVE_PROGRAM,
         program
@@ -151,7 +151,7 @@ export function deleteWeekFromProgram(program_id, week_id) {
 export function deleteWeekAndPersist(program_id, week_id) {
     return async dispatch => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/weeks/${week_id}`, {
+        return fetch(`${API_URI}/weeks/${week_id}`, {
             method: 'DELETE',
             headers: {
                 Accept: 'application/json',
@@ -159,7 +159,6 @@ export function deleteWeekAndPersist(program_id, week_id) {
                 Authorization: `Bearer ${token}`
             }
         }).then(res => {
-            console.log(res)
             let data = res.json();
             return data;
         }).then(week => {
@@ -172,7 +171,7 @@ export function deleteWeekAndPersist(program_id, week_id) {
 export function addWeekAndPersist(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/weeks`, {
+        return fetch(`${API_URI}/weeks`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -183,11 +182,10 @@ export function addWeekAndPersist(program_id) {
                 program_id: program_id
             })
         }).then(res => {
-            console.log(res)
             let data = res.json();
             return data;
         }).then(week => {
-            dispatch(addWeekToProgram(program_id, week.week))
+            // dispatch(addWeekToProgram(program_id, week.week))
             return week.week
         })
     }
@@ -195,7 +193,7 @@ export function addWeekAndPersist(program_id) {
 export function addProgramAndPersist(name) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs`, {
+        return fetch(`${API_URI}/programs`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -224,7 +222,7 @@ export function recievePrograms(programs) {
 export function getAllPrograms() {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
-        return fetch(`http://localhost:3000/programs`, {
+        return fetch(`${API_URI}/programs`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

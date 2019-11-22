@@ -129,8 +129,12 @@ const Workout = connect(
             }
         },
         drop: (item, monitor) => {
-            props.save()
-            item.saveCallback()
+            if (item.original_location.week_id == week_id) {
+                props.save([item.original_location.day, item.originalState()])
+            } else {
+                props.save()
+                item.saveCallback()
+            }
         },
         collect: monitor => ({
             isOver: !!monitor.isOver({shallow:true})
@@ -156,6 +160,7 @@ const Workout = connect(
                             key={`${week_id}-${day}-${workout_element.exercise_id}-${workout_element_index}`}
                             editWorkoutElement={props.editWorkoutElement}
                             save={props.save}
+                            getWorkoutState={props.getWorkoutState}
                             removeItem={props.removeItem}
                             moveItem={props.moveItem}
                             location={location}
@@ -209,6 +214,7 @@ class DayView extends React.Component {
         this.removeItem = this.removeItem.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
         this.handleModalSubmit = this.handleModalSubmit.bind(this)
+        this.getWorkoutState = this.getWorkoutState.bind(this)
 
     }
 
@@ -298,7 +304,7 @@ class DayView extends React.Component {
                 workout_element: null,
                 edit_location: null
             })
-            this.props.save(new_workout)
+            this.save([day, new_workout])
         }
     }
 
@@ -320,7 +326,12 @@ class DayView extends React.Component {
     }
 
     save(workout=null) {
-        this.props.save(!!workout ? workout : this.state.workout)
+        let updates = !!workout ? [[this.props.day, this.state.workout], workout] : [[this.props.day, this.state.workout]]
+        this.props.save(updates)
+    }
+
+    getWorkoutState() {
+        return this.state.workout
     }
 
     render() {
@@ -340,6 +351,7 @@ class DayView extends React.Component {
                     moveItem={this.moveItem}
                     addExercise={this.toggleModal}
                     removeItem={this.removeItem}
+                    getWorkoutState={this.getWorkoutState}
                     classes={classes}
                     week_id={week_id}
                     day={day}/>

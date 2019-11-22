@@ -1,3 +1,4 @@
+import {API_URI} from '../config'
 import {auth0_client} from '../auth'
 import {getAllPrograms} from './programs'
 
@@ -24,7 +25,7 @@ export function fetchUser() {
             dispatch(authClientDidLoad(true));
             const token = await auth0_client.getToken();
             const auth_user = await auth0_client.getUser();
-            fetch(`http://localhost:3000/users/identity`, {
+            fetch(`${API_URI}/users/identity`, {
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
@@ -36,8 +37,8 @@ export function fetchUser() {
                 return data;
             }).then(data => {
                 let user = data.user;
-                if (!user) {
-                    fetch(`http://localhost:3000/users`, {
+                if (!user || !user._id) {
+                    fetch(`${API_URI}/users`, {
                         method: 'POST',
                         headers: {
                             accept: 'application/json',
@@ -109,7 +110,7 @@ export function addClientAndPersist(id, name, email) {
     return async dispatch => {
         dispatch(addClient(name, email));
         const token = await auth0_client.getToken();
-        fetch(`http://localhost:3000/clients`, {
+        fetch(`${API_URI}/clients`, {
             method: 'PUT',
             headers: {
                 accept: 'application/json',

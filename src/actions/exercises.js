@@ -1,5 +1,5 @@
 import {auth0_client} from '../auth'
-
+import {API_URI} from '../config'
 
 export const SAVE_EXERCISE = 'SAVE_EXERCISE';
 export const REQUEST_EXERCISES = 'REQUEST_EXERCISES';
@@ -19,7 +19,7 @@ export function persistExercise(exercise) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
 
-        return fetch(`http://localhost:3000/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
+        return fetch(`${API_URI}/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
             method: action == 'EDIT' ? 'PUT' : 'POST',
             headers: {
                 Accept: 'application/json',
@@ -78,7 +78,7 @@ export function pushExerciseStatus(success, name, action) {
 async function fetchAllExercises(query=null) {
     let token = await auth0_client.getToken()
     console.log("fetch exercises")
-    return fetch(`http://localhost:3000/exercises${query ? `?search_text=${query}` : ''}`, {
+    return fetch(`${API_URI}/exercises${query ? `?search_text=${query}` : ''}`, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

@@ -15,7 +15,6 @@ import {Dashboard} from './dashboard'
 // Change Links to dynamically generated path and text using a map
 
 const styles = (theme) => {
-    console.log(theme)
     return {
         app: {
           display: 'flex',

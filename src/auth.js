@@ -2,7 +2,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 import {history} from './util'
+import {API_URI} from './config'
 
+console.log(API_URI)
 const onRedirectCallback = appState => {
   history.push(
       appState && appState.targetUrl
@@ -35,17 +37,14 @@ export class Auth0Client {
         if (!!this.client) {
             return this.client
         } else {
-            try {
-                this.client = await createAuth0Client({
+            this.client = await createAuth0Client({
                 redirect_uri: this.redirect_uri,
                 client_id: this.client_id,
                 domain: this.domain,
                 audience: this.audience
-                })
-                return this.client
-            } catch (e) {
-                throw new Error('createAuth0Client() error', e)
-            }
+            })
+            return this.client
+
         }
 
     }

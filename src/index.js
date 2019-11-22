@@ -8,6 +8,7 @@ import thunkMiddleware from 'redux-thunk';
 import { fetchExerises, getAllPrograms, fetchUser } from './actions'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import {API_URI} from './config'
 
 
 

@@ -95,12 +95,13 @@ const styled = withStyles(theme => ({
 function ProgramView(props) {
     let [program, setProgram] = useState(props.program)
     useEffect(() => {
+        console.log("effect")
         setProgram(props.program)
-    })
+    }, [])
 
     async function handleAddWeek() {
         let week = await props.addWeek(props.program._id)
-
+        console.log("updated local state")
         setProgram(update(program, {
             weeks: {
                 $splice: [[program.weeks.length, 0, week._id]]
@@ -109,7 +110,6 @@ function ProgramView(props) {
     }
     async function handleDeleteWeek(index) {
         let week = await props.deleteWeek(props.program._id, program.weeks[index])
-
         setProgram(update(program, {
             weeks: {
                 $splice: [[index, 1]]
@@ -117,7 +117,7 @@ function ProgramView(props) {
         }))
 
     }
-
+    console.log(program)
     let classes = props.classes;
     return (
         <div className={classes.programPage}>
@@ -128,7 +128,7 @@ function ProgramView(props) {
             <DndProvider backend={HTML5Backend} >
             <div className={classes.program}>
                 {program.weeks.map((week_id, index) => {
-
+                    console.log(week_id)
                     return (
                         <div className={classes.weekContainer} key={`${week_id}`}>
                             <div className={classes.weekHeader}>
@@ -148,12 +148,8 @@ function ProgramView(props) {
             </div>
             </DndProvider>
         </div>
-
     );
-
 }
-
-
 
 export const Program = connect(
         (state, ownProps) => {
@@ -166,6 +162,7 @@ export const Program = connect(
                 }
                 return null
             }
+            console.log("updated redux")
             return {
                 program: findProgram(state.programs.all_programs, ownProps.match.params.program_id),
                 user: state.auth.user

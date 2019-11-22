@@ -67,6 +67,7 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                     }
                 },
                 drop: async (item, monitor) => {
+                    console.log("drop element")
                     if (monitor.didDrop()) {
                         return
                     }
@@ -74,8 +75,12 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                         props.moveItem(props.location, item.location, item.moveCallback, true)
                         setMerge(false)
                     }
-                    await item.saveCallback()
-                    await props.save()
+                    if (item.original_location.week_id == props.location.week_id) {
+                        props.save([item.original_location.day, item.originalState()])
+                    } else {
+                        await item.saveCallback()
+                        await props.save()
+                    }
                 },
                 collect: monitor => ({
                     isOver: !!monitor.isOver({shallow: true})
@@ -91,7 +96,9 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                     id:`${Math.floor(Math.random()*100000)}`,
                     location: props.location,
                     moveCallback:props.removeItem,
-                    saveCallback:props.save
+                    saveCallback:props.save,
+                    original_location: props.location,
+                    originalState: props.getWorkoutState
                 },
                 isDragging: monitor => {
                     return sameLocation(monitor.getItem().location, props.location)

@@ -206,7 +206,7 @@ export function ProgramsListView(props) {
                     <div className={classes.programList}>
                     {programs.length > 0 && programs.map(program => {
                         return (
-                            <div className={clsx(classes.programItem, classes.programListItem)} onClick={() => handleSelect(program)}>
+                            <div key={program._id} className={clsx(classes.programItem, classes.programListItem)} onClick={() => handleSelect(program)}>
                                 <div className={classes.programDetailContainer}>
                                     <div className={classes.programDetailHeader}>
                                         <span>Name</span>
