@@ -49,7 +49,6 @@ export const Week = (props) => {
             })
             persistWorkout(week_id, wo[0], wo[1])
         })
-        console.log(new_week)
         setWeek(new_week)
 
     }

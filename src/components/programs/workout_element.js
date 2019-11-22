@@ -352,7 +352,7 @@ export const WorkoutElement = connect(
     let [options_location, setOptionsLocation] = useState(null)
     function deleteWorkoutElement() {
         let workout = removeItem(options_location, true)
-        props.save(workout)
+        props.save([props.location.day, workout])
         setMenuOpen(false)
     }
     function handleOptionsClick(e, location) {
