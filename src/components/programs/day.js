@@ -280,6 +280,7 @@ class DayView extends React.Component {
     }
 
     handleModalSubmit(workout_element) {
+        console.log(workout_element)
         if (!!workout_element.exercise_id || !!workout_element.exercises) {
             let updated_workout_elements = [this.state.workout.length, 0, workout_element]
             if (!!this.state.edit_location) {
@@ -326,6 +327,8 @@ class DayView extends React.Component {
     }
 
     save(workout=null) {
+        console.log("new_workout")
+        console.log(workout)
         let updates = !!workout ? [[this.props.day, this.state.workout], workout] : [[this.props.day, this.state.workout]]
         this.props.save(updates)
     }

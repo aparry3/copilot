@@ -5,6 +5,7 @@ import {ViewExercises} from './view_exercises';
 import {NewExercise} from './new_exercise';
 import {setFilter} from '../../actions'
 import {SIDEBAR_WIDTH} from '../styles'
+
 const styled = withStyles(theme => ({
     exercisesPageContainer: {
         height: '100vh',
@@ -73,10 +74,7 @@ class ExercisesPageView extends React.Component {
 }
 
 export const ExercisesPage = connect(
-        (state) => {
-            return {
-                statuses: state.exercises.statuses
-            }
-        },
-        null
+        (state) => ({
+            statuses: state.exercises.statuses
+        })
 )(styled(ExercisesPageView))

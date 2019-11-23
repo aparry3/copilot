@@ -67,7 +67,6 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                     }
                 },
                 drop: async (item, monitor) => {
-                    console.log("drop element")
                     if (monitor.didDrop()) {
                         return
                     }

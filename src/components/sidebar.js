@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import MenuList from '@material-ui/core/MenuList';
@@ -6,32 +6,31 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {ListItemIcon, ListItemText, Typography} from '@material-ui/core';
 import Divider from '@material-ui/core/divider';
 import {ExitToApp} from '@material-ui/icons'
+import TableChartIcon from '@material-ui/icons/TableChart'
+import ViewListIcon from '@material-ui/icons/ViewList'
 import { Link } from "react-router-dom";
 import {Wordmark} from './util';
 import {makeStyles} from '@material-ui/core/styles'
 import {SIDEBAR_WIDTH} from './styles'
-import {logout} from '../actions'
+import {logout, setActivePage} from '../actions'
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
 
   drawer: {
-    width: SIDEBAR_WIDTH,
+    width: '65px',
     background: "#2866ab",
     display: 'flex',
-    flexDirection: 'column'
-  },
-  drawerPaper: {
+    flexDirection: 'column',
     color:"white",
-    width: SIDEBAR_WIDTH,
     background: theme.palette.primary.dark
-
   },
   sidebarHeader: {
       height: '70px',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'flex-start'
 
   },
   sidebarFooter: {
@@ -58,10 +57,9 @@ const useStyles = makeStyles(theme => ({
           color:"white",
           textDecoration: "none",
       },
-      height:"25px"
   },
   menuItem: {
-      height:'28px',
+      height:'65px',
       minHeight: "28px",
       fontWeight: "300"
 },
@@ -69,37 +67,38 @@ const useStyles = makeStyles(theme => ({
 }));
 export const Sidebar = connect(
     state => ({
-        selected_page: state.pages.active_page
+        selected_page: state.app.active_page
+    }),
+    dispatch => ({
+        setActivePage: (page) => dispatch(setActivePage(page))
     })
 )((props) => {
     const classes = useStyles();
     let {selected_page} = props
+    useEffect(() => {
+        console.log("effect")
+        let page = window.location.pathname.match(/trainer\/(\w+)/i)[1]
+        props.setActivePage(page)
+    }, [])
     return (
-        <Drawer
-            variant="permanent"
-            classes={{
-                root: classes.drawer,
-                paper: classes.drawerPaper
-            }}
-            anchor='left'
-        >
+        <div
+            className={classes.drawer}>
             <div className={classes.sidebarHeader} >
                 <Wordmark />
             </div>
             <Divider variant="middle"/>
-            <MenuList>
-
+            <div className={classes.menuItemList}>
                 <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                    <MenuItem selected={selected_page=='exercises'} onClick={() => setSelectedPage('exercises')} classes={{root:classes.menuItem}}  button>
-                        <ListItemText primary={<Typography variant="body2">Exercises</Typography>} />
-                    </MenuItem>
+                    <div selected={selected_page=='exercises'} onClick={() => props.setActivePage('exercises')} className={classes.menuItem}>
+                        <div><span>Exercises</span></div>
+                    </div>
                 </Link>
                 <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
-                    <MenuItem selected={selected_page=='programs'} onClick={() => setSelectedPage('programs')} classes={{root:classes.menuItem}} button>
-                        <ListItemText primary={<Typography variant="body2">Programs</Typography>} />
-                    </MenuItem>
+                    <div selected={selected_page=='programs'} onClick={() => props.setActivePage('programs')} className={classes.menuItem}>
+                        <div><span>Programs</span></div>
+                    </div>
                 </Link>
-            </MenuList>
+            </div>
             <div className={classes.sidebarFooter}>
             <Divider variant="middle"/>
                 <MenuItem className={classes.footerMenuItem} button onClick={() => logout()}>
@@ -112,14 +111,10 @@ export const Sidebar = connect(
                 </MenuItem>
             </div>
 
-        </Drawer>
+        </div>
     );
 })
-// <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
-//     <MenuItem classes={{root:classes.menuItem}}  button>
-//         <ListItemText primary={<Typography variant="body2">Dashboard</Typography>} />
-//     </MenuItem>
-// </Link>
+
 
 export const SidebarList = (props) => {
     return (

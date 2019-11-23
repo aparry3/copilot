@@ -35,7 +35,6 @@ export const Week = (props) => {
     useEffect(() => {
         async function loadWeek() {
             let week = await fetchWeek(week_id)
-            console.log(week)
             setWeek(week)
         }
         loadWeek()
@@ -56,8 +55,6 @@ export const Week = (props) => {
             {!!week && (
                 <List className={classes.list} >
                     {Object.keys(week.days).map((day) => {
-                        console.log(`render ${day}`)
-
                         return (
                             <Day
                                 key={`${week_id}-${day}`}

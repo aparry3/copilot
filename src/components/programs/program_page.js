@@ -18,8 +18,7 @@ function ProgramPageView(props) {
     )
 }
 
-export const ProgramPage = connect(state => {
-    return {
+export const ProgramPage = connect(state => ({
         programs_loaded: state.programs.programs_loaded
-    }
-})(ProgramPageView)
+    })
+)(ProgramPageView)

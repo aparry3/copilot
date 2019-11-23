@@ -21,6 +21,7 @@ const styles = theme => ({
     exerciseContent: {
         display: 'flex',
         height:' 100%',
+        background: theme.palette.background.light,
         width: '100%',
         flexDirection: 'row',
         borderRadius: 'inherit',
@@ -29,7 +30,6 @@ const styles = theme => ({
     },
     exerciseBlock: {
         borderRadius: '10px',
-        background: theme.palette.background.light,
         minHeight: '70px',
         width: '100%',
         position: 'relative',
@@ -60,10 +60,13 @@ const styles = theme => ({
         position: 'absolute'
     },
     supersetBlock: {
+        margin: '0px 0px 10px 0px',
+        width: '100%'
+    },
+    supersetContent: {
         width: '100%',
         background: theme.palette.secondary.main,
         borderRadius: '10px',
-        margin: '0px 0px 10px 0px',
         padding: '0 5%',
         cursor: 'move'
     },
@@ -292,7 +295,7 @@ const SupersetView = (props) => {
     })
     let classes = useStyles()
     return (
-        <div onClick={() => props.editWorkoutElement(props.location)}>
+        <div className={classes.supersetContent} onClick={() => props.editWorkoutElement(props.location)}>
             <div className={classes.supersetDeleteContainer}>
                 <FilterNoneIcon className={classes.deleteIcon} onClick={(e) => handleOptionsClick(e, props.location)} />
             </div>

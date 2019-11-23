@@ -23,6 +23,12 @@ import {
     addClientAndPersist
 } from './auth';
 
+
+import {
+    SET_ACTIVE_PAGE,
+    setActivePage
+} from './app'
+
 import {
     ADD_WEEK,
     ADD_PROGRAM,
@@ -68,6 +74,7 @@ export {
     EDIT_WORKOUT,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
+    SET_ACTIVE_PAGE,
     LOGGING_IN,
     LOGGED_IN,
     LOGGING_OUT,
@@ -98,5 +105,6 @@ export {
     moveWorkoutElement,
     setDragElement,
     deleteWeekFromProgram,
-    deleteWeekAndPersist
+    deleteWeekAndPersist,
+    setActivePage
 };
