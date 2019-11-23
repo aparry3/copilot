@@ -67,9 +67,13 @@ const useStyles = makeStyles(theme => ({
 },
   toolbar: theme.mixins.toolbar,
 }));
-export const Sidebar = (props) => {
+export const Sidebar = connect(
+    state => ({
+        selected_page: state.pages.active_page
+    })
+)((props) => {
     const classes = useStyles();
-    let [selected_page, setSelectedPage] = useState('exercises')
+    let {selected_page} = props
     return (
         <Drawer
             variant="permanent"
@@ -110,7 +114,7 @@ export const Sidebar = (props) => {
 
         </Drawer>
     );
-}
+})
 // <Link className={classes.link} color="inherit" list_key="dashboard" to={`${props.path}/`}>
 //     <MenuItem classes={{root:classes.menuItem}}  button>
 //         <ListItemText primary={<Typography variant="body2">Dashboard</Typography>} />
