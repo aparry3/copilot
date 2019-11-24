@@ -52,7 +52,6 @@ const styles = theme => ({
     },
     addExercise: {
         cursor: 'pointer',
-        background: theme.palette.background.dark,
         opacity: 0.1,
         display: 'flex',
         alignItems: 'center',
