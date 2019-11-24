@@ -11,7 +11,7 @@ export function normalize(str) {
 
 export const Logo = (props) => {
     return (
-        <div id="logo-container">
+        <div style={props.style} id="logo-container">
             <svg height="100%" viewBox="0 0 688 705" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                 <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                     <g id="logo" fill="#FFFFFF">

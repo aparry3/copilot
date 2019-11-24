@@ -9,7 +9,7 @@ import {ExitToApp} from '@material-ui/icons'
 import TableChartIcon from '@material-ui/icons/TableChart'
 import ViewListIcon from '@material-ui/icons/ViewList'
 import { Link } from "react-router-dom";
-import {Wordmark} from './util';
+import {Logo} from './util';
 import {makeStyles} from '@material-ui/core/styles'
 import {SIDEBAR_WIDTH} from './styles'
 import {logout, setActivePage} from '../actions'
@@ -18,12 +18,19 @@ import { connect } from 'react-redux';
 const useStyles = makeStyles(theme => ({
 
   drawer: {
+    minWidth: '65px',
     width: '65px',
     background: "#2866ab",
     display: 'flex',
     flexDirection: 'column',
     color:"white",
-    background: theme.palette.primary.dark
+    background: theme.palette.primary.main,
+    whiteSpace: 'no-wrap',
+    overflow: 'hidden',
+    '&:hover': {
+        width: '180px',
+        minWidth: '180px'
+    }
   },
   sidebarHeader: {
       height: '70px',
@@ -34,9 +41,7 @@ const useStyles = makeStyles(theme => ({
 
   },
   sidebarFooter: {
-      height: '50px',
-      position: "absolute",
-      bottom: "0px",
+      height: '65px',
       width:"100%"
   },
   footerMenuItem: {
@@ -44,7 +49,7 @@ const useStyles = makeStyles(theme => ({
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       color: 'white'
   },
   footerItem: {
@@ -60,9 +65,38 @@ const useStyles = makeStyles(theme => ({
   },
   menuItem: {
       height:'65px',
-      minHeight: "28px",
-      fontWeight: "300"
-},
+      minHeight: "65px",
+      fontWeight: "300",
+      display: 'flex',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      cursor: 'pointer',
+      '&:hover': {
+          background: theme.palette.primary.dark
+      }
+  },
+  sidebarIcon: {
+      minWidth: '65px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  sidebarContent: {
+      display: 'flex',
+      flexGrow: 1,
+      flexDirection: 'column',
+      justifyContent: 'space-between'
+  },
+  sidebarTitle: {
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      textAlign: 'center',
+      fontWeight: '100',
+      fontSize: '30px',
+      letterSpacing: '2.5px'
+  },
   toolbar: theme.mixins.toolbar,
 }));
 export const Sidebar = connect(
@@ -81,36 +115,39 @@ export const Sidebar = connect(
         props.setActivePage(page)
     }, [])
     return (
-        <div
-            className={classes.drawer}>
+        <div className={classes.drawer}>
             <div className={classes.sidebarHeader} >
-                <Wordmark />
+                <div className={classes.sidebarIcon}><Logo style={{height:'40px'}}/></div>
+                <div className={classes.sidebarTitle}><span>copilot</span></div>
             </div>
             <Divider variant="middle"/>
-            <div className={classes.menuItemList}>
-                <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                    <div selected={selected_page=='exercises'} onClick={() => props.setActivePage('exercises')} className={classes.menuItem}>
-                        <div><span>Exercises</span></div>
+            <div className={classes.sidebarContent}>
+                <div className={classes.menuItemList}>
+                    <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
+                        <div onClick={() => props.setActivePage('exercises')} className={classes.menuItem}>
+                            <div className={classes.sidebarIcon}><ViewListIcon /></div>
+                            <div><span>Exercises</span></div>
+                        </div>
+                    </Link>
+                    <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
+                        <div onClick={() => props.setActivePage('programs')} className={classes.menuItem}>
+                            <div className={classes.sidebarIcon}><span><TableChartIcon /></span></div>
+                            <div><span>Programs</span></div>
+                        </div>
+                    </Link>
+                </div>
+                <div className={classes.sidebarFooter}>
+                <Divider variant="middle"/>
+                    <div className={classes.menuItem} button onClick={() => logout()}>
+                        <div className={classes.sidebarIcon}>
+                            <ExitToApp />
+                        </div>
+                        <div>
+                            <span >Logout</span>
+                        </div>
                     </div>
-                </Link>
-                <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
-                    <div selected={selected_page=='programs'} onClick={() => props.setActivePage('programs')} className={classes.menuItem}>
-                        <div><span>Programs</span></div>
-                    </div>
-                </Link>
+                </div>
             </div>
-            <div className={classes.sidebarFooter}>
-            <Divider variant="middle"/>
-                <MenuItem className={classes.footerMenuItem} button onClick={() => logout()}>
-                    <div className={classes.footerItem}>
-                        <ExitToApp />
-                    </div>
-                    <div className={classes.footerItem}>
-                        <Typography >Logout</Typography>
-                    </div>
-                </MenuItem>
-            </div>
-
         </div>
     );
 })

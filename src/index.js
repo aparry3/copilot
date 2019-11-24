@@ -25,7 +25,7 @@ const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 const light_theme = createMuiTheme();
 const dark_theme = createMuiTheme({
     palette: {
-        primary: {main:'#2866ab', dark:'#20344a'},
+        primary: {main:'#20344a', dark: '#17293c'},
         secondary: {main:'#BA833B'},
         background: {
             dark: '#121212',

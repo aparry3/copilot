@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-
+import DehazeIcon from '@material-ui/icons/Dehaze';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 
 
@@ -9,15 +9,28 @@ const styles = theme => ({
         width: '100%',
         height: '15%',
         background: theme.palette.background.light,
-        boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
+        // boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
         padding: '20px',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         fontSize: '40px',
         fontWeight: 100,
         textAlign: 'center'
+    },
+    programHeaderContent: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexGrow: 1
+    },
+    programHeaderMenuIcon: {
+        padding: '10px 20px 10px 0px',
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     hr: {
         width: '100%',
@@ -35,10 +48,11 @@ export function ProgramHeader(props) {
     let classes = useStyles()
     return(
         <div className={classes.programListHeader}>
-            {
-                props.children
-            }
-            <hr className={classes.hr}/>
+            <div className={classes.programHeaderContent}>
+                { !!props.show_menu && (<div onClick={props.onMenuClick} className={classes.programHeaderMenuIcon}><DehazeIcon /></div>) }
+                { props.children }
+            </div>
+            <div className={classes.programHeaderAction}></div>
         </div>
     )
 

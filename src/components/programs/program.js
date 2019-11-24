@@ -10,17 +10,24 @@ import {fade, withStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState} from "react";
 import update from 'immutability-helper';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import {addWeekAndPersist, deleteWeekAndPersist, getProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
 import {ProgramHeader} from './utils'
+import {ProgramMenu} from './program_menu'
 
 const styled = withStyles(theme => ({
+    programPageContainer: {
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row'
+    },
     programPage: {
         height: '100vh',
         width: '100%',
         display: 'flex',
+        flexGrow: 1,
         flexDirection: 'column',
         overflow: 'hidden'
     },
@@ -91,9 +98,10 @@ const styled = withStyles(theme => ({
 
 }));
 
-
 function ProgramView(props) {
     let [program, setProgram] = useState(props.program)
+    let [menu_open, setMenuOpen] = useState(false)
+
     useEffect(() => {
         console.log("effect")
         setProgram(props.program)
@@ -117,36 +125,41 @@ function ProgramView(props) {
         }))
 
     }
-    console.log(program)
+    function toggleMenuOpen() {
+        setMenuOpen(!menu_open)
+    }
+
     let classes = props.classes;
     return (
-        <div className={classes.programPage}>
-            <ProgramHeader>
-                <div onClick={() => props.history.goBack()} className={classes.back}><KeyboardBackspaceIcon /><span>Back</span></div>
-                <span>{program.name}</span>
-            </ProgramHeader>
-            <DndProvider backend={HTML5Backend} >
-            <div className={classes.program}>
-                {program.weeks.map((week_id, index) => {
-                    console.log(week_id)
-                    return (
-                        <div className={classes.weekContainer} key={`${week_id}`}>
-                            <div className={classes.weekHeader}>
-                                <span className={classes.weekNumber}>week {index + 1}</span>
-                                <div className={classes.deleteWeek} onClick={() => handleDeleteWeek(index)}>
-                                    <ClearIcon className={classes.deleteIcon} />
+        <div className={classes.programPageContainer}>
+            <ProgramMenu open={menu_open} back={props.history.goBack} program={program}/>
+            <div className={classes.programPage} >
+                <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={program} >
+                    <div>{props.program.name}</div>
+                </ProgramHeader>
+                <DndProvider backend={HTML5Backend} >
+                <div className={classes.program}>
+                    {program.weeks.map((week_id, index) => {
+                        console.log(week_id)
+                        return (
+                            <div className={classes.weekContainer} key={`${week_id}`}>
+                                <div className={classes.weekHeader}>
+                                    <span className={classes.weekNumber}>week {index + 1}</span>
+                                    <div className={classes.deleteWeek} onClick={() => handleDeleteWeek(index)}>
+                                        <ClearIcon className={classes.deleteIcon} />
+                                    </div>
                                 </div>
+                                <Week week_id={week_id} index={index} />
+                                <Divider variant="middle"/>
                             </div>
-                            <Week week_id={week_id} index={index} />
-                            <Divider variant="middle"/>
-                        </div>
-                    )
-                })}
-                <div className={classes.addWeekSection}>
-                    <div className={classes.addWeek} onClick={handleAddWeek}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
+                        )
+                    })}
+                    <div className={classes.addWeekSection}>
+                        <div className={classes.addWeek} onClick={handleAddWeek}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
+                    </div>
                 </div>
+                </DndProvider>
             </div>
-            </DndProvider>
         </div>
     );
 }
