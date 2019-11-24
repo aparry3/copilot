@@ -97,6 +97,9 @@ const useStyles = makeStyles(theme => ({
       fontSize: '30px',
       letterSpacing: '2.5px'
   },
+  selected: {
+      background: theme.palette.primary.dark
+  },
   toolbar: theme.mixins.toolbar,
 }));
 export const Sidebar = connect(
@@ -124,13 +127,15 @@ export const Sidebar = connect(
             <div className={classes.sidebarContent}>
                 <div className={classes.menuItemList}>
                     <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                        <div onClick={() => props.setActivePage('exercises')} className={classes.menuItem}>
+                        <div onClick={() => props.setActivePage('exercises')}
+                            className={selected_page == 'exercises' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
                             <div className={classes.sidebarIcon}><ViewListIcon /></div>
                             <div><span>Exercises</span></div>
                         </div>
                     </Link>
                     <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
-                        <div onClick={() => props.setActivePage('programs')} className={classes.menuItem}>
+                        <div onClick={() => props.setActivePage('programs')}
+                            className={selected_page == 'programs' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
                             <div className={classes.sidebarIcon}><span><TableChartIcon /></span></div>
                             <div><span>Programs</span></div>
                         </div>

@@ -2,6 +2,9 @@ import clsx from 'clsx'
 
 import AddIcon from '@material-ui/icons/Add'
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from "react";
 
@@ -9,7 +12,7 @@ import React, {useEffect, useState} from "react";
 let styles = (theme) => ({
     programMenu: {
         height: '100%',
-        background: theme.palette.background.mediumDark,
+        background: theme.palette.background.light,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden'
@@ -39,8 +42,8 @@ let styles = (theme) => ({
         minHeight: '40px',
         display: 'flex',
         padding: '10px',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         borderRadius: '5px',
         cursor: 'pointer',
         '&:hover': {
@@ -69,7 +72,20 @@ let styles = (theme) => ({
         alignItems: 'center'
     },
     programMenuSectionListItem: {
-        alignItems: 'center'
+        justifyContent: 'center'
+    },
+    programMenuSectionIcon: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0px 10px 0px 10px'
+    },
+    back: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        cursor: 'pointer'
     },
     programMenuContent: {
     }
@@ -93,11 +109,19 @@ export const ProgramMenu = (props) => {
             <div className={classes.programMenuContent}>
                 <div className={classes.programMenuSection}>
                     <div className={classes.programMenuItem}>
-                        <span>About</span>
+                        <div className={classes.programMenuSectionIcon}><TrendingUpIcon /></div>
+                        <div className={classes.programMenuSectionText}>
+                            <span>About</span>
+                        </div>
                     </div>
                 </div>
                 <div className={classes.programMenuSection}>
-                    <div className={classes.programMenuItem}><span>Weeks</span></div>
+                    <div className={classes.programMenuItem}>
+                        <div className={classes.programMenuSectionIcon}><FormatListNumberedIcon /></div>
+                        <div className={classes.programMenuSectionText}>
+                            <span>Weeks</span>
+                        </div>
+                    </div>
                     <div className={classes.programSectionList} >
                         <hr className={classes.hr}/>
                         {
@@ -110,7 +134,10 @@ export const ProgramMenu = (props) => {
                 </div>
                 <div className={classes.programMenuSection}>
                     <div className={classes.programMenuItem}>
-                        <span>Export</span>
+                        <div className={classes.programMenuSectionIcon}><GetAppIcon /></div>
+                        <div className={classes.programMenuSectionText}>
+                            <span>Export</span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ import update from 'immutability-helper';
 import {addWeekAndPersist, deleteWeekAndPersist, getProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
-import {ProgramHeader} from './utils'
+import {ProgramHeader} from './program_header'
 import {ProgramMenu} from './program_menu'
 
 const styled = withStyles(theme => ({

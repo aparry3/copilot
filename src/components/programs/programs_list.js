@@ -7,7 +7,7 @@ import {addProgramAndPersist, getProgram} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
-import {ProgramHeader} from './utils'
+import {ProgramHeader} from './program_header'
 
 let styles = (theme) => ({
     programListPageContainer: {

@@ -8,8 +8,6 @@ const styles = theme => ({
     programListHeader: {
         width: '100%',
         height: '15%',
-        background: theme.palette.background.light,
-        // boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
         padding: '20px',
         display: 'flex',
         flexDirection: 'row',
@@ -23,7 +21,9 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        flexGrow: 1
+        flexGrow: 1,
+        fontSize: '30px',
+        fontWeight: 400
     },
     programHeaderMenuIcon: {
         padding: '10px 20px 10px 0px',
