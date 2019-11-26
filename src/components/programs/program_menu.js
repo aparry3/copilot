@@ -135,7 +135,7 @@ export const ProgramMenu = (props) => {
                                 <div onClick={() => selectWeek(w, i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
                             ))
                         }
-                        <div className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Add Week</span></div>
+                        <div onClick={props.addWeek} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Add Week</span></div>
                     </div>
                 </div>
                 <div className={classes.programMenuSection}>

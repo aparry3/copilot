@@ -149,7 +149,7 @@ function ProgramView(props) {
     console.log(current_week)
     return (
         <div className={classes.programPageContainer}>
-            <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={setPage} setCurrentWeek={setCurrentWeek} program={props.program}/>
+            <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={setPage} addWeek={() => props.addWeek(props.program._id)} setCurrentWeek={setCurrentWeek} program={props.program}/>
             <div className={classes.programPage} >
                 <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
                     <div>{props.program.name}{page == 'week' ? ` - Week: ${current_week.index + 1}` : ''}</div>
