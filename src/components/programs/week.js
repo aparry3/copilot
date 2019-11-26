@@ -28,26 +28,24 @@ const styles = {
 }
 let useStyles = makeStyles(theme => styles)
 
-export const Week = (props) => {
-    let {week_id, index} = props;
-    let [week, setWeek] = useState(null)
-    let classes = useStyles()
-    useEffect(() => {
-        async function loadWeek() {
-            let week = await fetchWeek(week_id)
-            setWeek(week)
+export const Week = connect(
+    null,
+    (dispatch) => {
+        return {
+            persistWorkout: (week_id, day, workout) => dispatch(persistWorkout(week_id, day, workout))
         }
-        loadWeek()
-    }, [])
+})((props) => {
+    let [week, setWeek] = useState(props.week)
+
+    let classes = useStyles()
     function save(workouts) {
         let new_week = {...week}
         workouts.forEach(wo => {
             new_week = update(new_week, {
                 days: {[wo[0]]: {workout_elements: {$set: wo[1]}}}
             })
-            persistWorkout(week_id, wo[0], wo[1])
+            props.persistWorkout(week._id, wo[0], wo[1])
         })
-        setWeek(new_week)
 
     }
     return (
@@ -57,8 +55,8 @@ export const Week = (props) => {
                     {Object.keys(week.days).map((day) => {
                         return (
                             <Day
-                                key={`${week_id}-${day}`}
-                                week_id={week_id}
+                                key={`${week._id}-${day}`}
+                                week_id={week._id}
                                 save={(workouts) => save(workouts)}
                                 day={day}
                                 workout={week.days[day]} />
@@ -68,4 +66,4 @@ export const Week = (props) => {
             )}
         </Grid>
     )
-}
+})

@@ -21,7 +21,7 @@ const styles = theme => ({
     exerciseContent: {
         display: 'flex',
         height:' 100%',
-        background: theme.palette.background.light,
+        background: theme.palette.background.main,
         width: '100%',
         flexDirection: 'row',
         borderRadius: 'inherit',

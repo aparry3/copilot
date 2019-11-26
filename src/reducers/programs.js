@@ -10,10 +10,14 @@ import {
     EDIT_WEEK,
     SET_DRAG_ELEMENT,
     DELETE_WEEK,
-    COPY_WORKOUT_ELEMENT
+    COPY_WORKOUT_ELEMENT,
+    SET_ACTIVE_PROGRAM,
+    UPDATE_WORKOUT
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
+
+
 const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null, clipboard: null}
 
 function _newProgram(active_program, week) {
@@ -39,7 +43,7 @@ function _removeWeekFromProgram(all_programs, program_id, week_id) {
     let new_programs = [...all_programs];
     return new_programs.map(p => {
         if (p._id == program_id) {
-            let new_weeks = p.weeks.filter(week => week_id != week);
+            let new_weeks = p.weeks.filter(week => week_id != week._id);
             p.weeks = new_weeks
         }
         return p
@@ -100,19 +104,26 @@ const programs = (state = initialState, action) => {
         }
         case ADD_WEEK: {
             let {week, program_id} = action;
+            let new_program = JSON.parse(JSON.stringify(state.active_program))
+            new_program.weeks.push(week)
             let new_state = {
                 ...state,
-                all_programs: _addWeekToProgram(state.all_programs, program_id, week._id)
+                all_programs: _addWeekToProgram(state.all_programs, program_id, week),
+                active_program: new_program
             }
 
             return new_state;
         }
         case DELETE_WEEK: {
             let {week_id, program_id} = action;
+            let new_program = JSON.parse(JSON.stringify(state.active_program))
+            new_program.weeks = new_program.weeks.filter(week => week._id != week_id)
+
             return {
                 ...state,
                 programs_loaded: true,
-                all_programs: _removeWeekFromProgram(state.all_programs, program_id, week_id)
+                all_programs: _removeWeekFromProgram(state.all_programs, program_id, week_id),
+                active_program: new_program
             }
         }
         case EDIT_WEEK: {
@@ -157,6 +168,27 @@ const programs = (state = initialState, action) => {
                 return new_state;
             }
             return state;
+        }
+        case SET_ACTIVE_PROGRAM: {
+            return {
+                ...state,
+                active_program: state.all_programs.find(x => x._id == action.id)
+            }
+        }
+        case UPDATE_WORKOUT: {
+            let {week_id, day, workout} = action
+            let new_program = JSON.parse(JSON.stringify(state.active_program))
+            new_program.weeks = new_program.weeks.map(w => {
+                if (w._id == week_id) {
+                    w.days[day].workout_elements = workout
+                }
+                return w
+            })
+            console.log(new_program)
+            return {
+                ...state,
+                active_program: new_program
+            }
         }
         default:
             return state;

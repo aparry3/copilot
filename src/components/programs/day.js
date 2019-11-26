@@ -338,6 +338,7 @@ class DayView extends React.Component {
 
     render() {
         let {classes, week_id, day} = this.props
+        console.log(day)
         return (
             <>
                 <WorkoutElementModal

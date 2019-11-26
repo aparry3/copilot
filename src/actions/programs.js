@@ -13,6 +13,16 @@ export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
 export const RECIEVE_PROGRAM = 'RECIEVE_PROGRAM';
 export const SET_DRAG_ELEMENT = 'SET_DRAG_ELEMENT';
 export const COPY_WORKOUT_ELEMENT = 'COPY_WORKOUT_ELEMENT';
+export const SET_ACTIVE_PROGRAM = 'SELECT_ACTIVE_PROGRAM';
+export const UPDATE_WORKOUT = 'UPDATE_WORKOUT';
+
+
+export function setActiveProgram(program_id) {
+    return {
+        type: SET_ACTIVE_PROGRAM,
+        id: program_id
+    }
+}
 
 export function combineExercises(item, drop_location) {
     console.log(item)
@@ -76,19 +86,31 @@ export async function persistWeek(week_id, week) {
 
 }
 
-export async function persistWorkout(week_id, day, workout) {
-    let token = await auth0_client.getToken()
-    return fetch(`${API_URI}/weeks/${week_id}/days/${day}`, {
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            workout: workout
+function updateWorkout(week_id, day, workout) {
+    return {
+        type: UPDATE_WORKOUT,
+        week_id,
+        day,
+        workout
+    }
+}
+
+export function persistWorkout(week_id, day, workout) {
+    return async dispatch => {
+        dispatch(updateWorkout(week_id, day, workout))
+        let token = await auth0_client.getToken()
+        fetch(`${API_URI}/weeks/${week_id}/days/${day}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                workout: workout
+            })
         })
-    })
+    }
 
 }
 
@@ -185,7 +207,7 @@ export function addWeekAndPersist(program_id) {
             let data = res.json();
             return data;
         }).then(week => {
-            // dispatch(addWeekToProgram(program_id, week.week))
+            dispatch(addWeekToProgram(program_id, week.week))
             return week.week
         })
     }

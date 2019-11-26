@@ -10,7 +10,7 @@ import {fade, withStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState} from "react";
 import update from 'immutability-helper';
-import {addWeekAndPersist, deleteWeekAndPersist, getProgram} from '../../actions';
+import {addWeekAndPersist, deleteWeekAndPersist, getProgram, setActiveProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
 import {ProgramHeader} from './program_header'
@@ -99,65 +99,63 @@ const styled = withStyles(theme => ({
 }));
 
 function ProgramView(props) {
-    let [program, setProgram] = useState(props.program)
+    let classes = props.classes;
+    console.log("program")
+
     let [menu_open, setMenuOpen] = useState(false)
+    let [page, setPage] = useState('program')
+    let [current_week, setCurrentWeek] = useState(null)
 
-    useEffect(() => {
-        console.log("effect")
-        setProgram(props.program)
-    }, [])
-
-    async function handleAddWeek() {
-        let week = await props.addWeek(props.program._id)
-        console.log("updated local state")
-        setProgram(update(program, {
-            weeks: {
-                $splice: [[program.weeks.length, 0, week._id]]
-            }
-        }))
-    }
     async function handleDeleteWeek(index) {
-        let week = await props.deleteWeek(props.program._id, program.weeks[index])
-        setProgram(update(program, {
-            weeks: {
-                $splice: [[index, 1]]
-            }
-        }))
-
+        props.deleteWeek(props.program._id, props.program.weeks[index]._id)
     }
     function toggleMenuOpen() {
         setMenuOpen(!menu_open)
     }
-
-    let classes = props.classes;
-    return (
-        <div className={classes.programPageContainer}>
-            <ProgramMenu open={menu_open} back={props.history.goBack} program={program}/>
-            <div className={classes.programPage} >
-                <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={program} >
-                    <div>{props.program.name}</div>
-                </ProgramHeader>
-                <DndProvider backend={HTML5Backend} >
+    function renderPageConent(page, current_week) {
+        let content = {
+            'week': () => {
+                console.log(current_week)
+                return (
+                <div className={classes.week}>
+                    <Week week_id={current_week.id} index={current_week.index} />
+                </div>
+            )},
+            'program': () => (
                 <div className={classes.program}>
-                    {program.weeks.map((week_id, index) => {
-                        console.log(week_id)
+                    {props.program.weeks.map((week, index) => {
                         return (
-                            <div className={classes.weekContainer} key={`${week_id}`}>
+                            <div className={classes.weekContainer} key={`${week._id}`}>
                                 <div className={classes.weekHeader}>
                                     <span className={classes.weekNumber}>week {index + 1}</span>
                                     <div className={classes.deleteWeek} onClick={() => handleDeleteWeek(index)}>
                                         <ClearIcon className={classes.deleteIcon} />
                                     </div>
                                 </div>
-                                <Week week_id={week_id} index={index} />
+                                <Week week={week} index={index} />
                                 <Divider variant="middle"/>
                             </div>
                         )
                     })}
                     <div className={classes.addWeekSection}>
-                        <div className={classes.addWeek} onClick={handleAddWeek}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
+                        <div className={classes.addWeek} onClick={() => props.addWeek(props.program._id)}><span className={classes.addWeekText}><AddIcon /> Add Week</span></div>
                     </div>
                 </div>
+            )
+        }
+        return content[page]()
+    }
+
+    console.log(props.program)
+    return (
+        <div className={classes.programPageContainer}>
+            <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={setPage} setCurrentWeek={setCurrentWeek} program={props.program}/>
+            <div className={classes.programPage} >
+                <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
+                    <div>{props.program.name}{page == 'week' ? ` - Week: ${current_week.index + 1}` : ''}</div>
+                </ProgramHeader>
+                <DndProvider backend={HTML5Backend} >
+                    {renderPageConent(page, current_week)}
                 </DndProvider>
             </div>
         </div>
@@ -166,18 +164,9 @@ function ProgramView(props) {
 
 export const Program = connect(
         (state, ownProps) => {
-            function findProgram(programs, id) {
-
-                for (var prog of programs) {
-                    if (prog._id == id) {
-                        return prog
-                    }
-                }
-                return null
-            }
-            console.log("updated redux")
             return {
-                program: findProgram(state.programs.all_programs, ownProps.match.params.program_id),
+                week_count: !!state.programs.active_program ? state.programs.active_program.weeks.length : null,
+                props_program: state.programs.active_program,
                 user: state.auth.user
             }
         },
@@ -185,8 +174,29 @@ export const Program = connect(
             return {
                 addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
-                deleteWeek: (program_id, week_id) => dispatch(deleteWeekAndPersist(program_id, week_id))
+                deleteWeek: (program_id, week_id) => dispatch(deleteWeekAndPersist(program_id, week_id)),
+                setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
 
             }
         }
-)(styled(ProgramView))
+)(styled((props) => {
+    let {props_program, week_count, ...pass_through_props} = props
+    let [program, setProgram] = useState(null)
+
+    useEffect(() => {
+        console.log("set prog")
+        if (!props_program) {
+            props.setActiveProgram(props.match.params.program_id)
+        } else {
+            setProgram(JSON.parse(JSON.stringify(props_program)))
+        }
+    }, [week_count])
+
+    return (
+        <>
+            {!!program ? (
+                <ProgramView program={program} {...pass_through_props} />
+            ) : <div>Loading...</div>}
+        </>
+    )
+}))

@@ -3,7 +3,7 @@ import AddIcon from '@material-ui/icons/Add'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {addProgramAndPersist, getProgram} from '../../actions';
+import {addProgramAndPersist, setActiveProgram} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
@@ -161,6 +161,7 @@ export function ProgramsListView(props) {
         setAddingNewExercise(false)
     }
     function handleSelect(program) {
+        props.setActiveProgram(program._id)
         props.history.push(`${props.location.pathname}/${program._id}`)
     }
     return (
@@ -243,6 +244,7 @@ export const ProgramsList = connect(
     dispatch => {
         return {
             addProgram: (name) => dispatch(addProgramAndPersist(name)),
+            setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
         }
     }
 )(ProgramsListView)

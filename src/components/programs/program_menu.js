@@ -98,6 +98,12 @@ export const ProgramMenu = (props) => {
     let classes = useStyles()
     let {program} = props
     let class_group = props.open ? clsx(classes.programMenu, classes.programMenuOpen) : clsx(classes.programMenu, classes.programMenuClosed)
+
+    function selectWeek(week, index) {
+        props.selectPage("week")
+        props.setCurrentWeek({id: week, index})
+    }
+
     return (
         <div className={class_group}>
             <div className={classes.programMenuAction}>
@@ -108,7 +114,7 @@ export const ProgramMenu = (props) => {
             </div>
             <div className={classes.programMenuContent}>
                 <div className={classes.programMenuSection}>
-                    <div className={classes.programMenuItem}>
+                    <div onClick={() => props.selectPage("about")} className={classes.programMenuItem}>
                         <div className={classes.programMenuSectionIcon}><TrendingUpIcon /></div>
                         <div className={classes.programMenuSectionText}>
                             <span>About</span>
@@ -116,7 +122,7 @@ export const ProgramMenu = (props) => {
                     </div>
                 </div>
                 <div className={classes.programMenuSection}>
-                    <div className={classes.programMenuItem}>
+                    <div onClick={() => props.selectPage("program")} className={classes.programMenuItem}>
                         <div className={classes.programMenuSectionIcon}><FormatListNumberedIcon /></div>
                         <div className={classes.programMenuSectionText}>
                             <span>Weeks</span>
@@ -126,14 +132,14 @@ export const ProgramMenu = (props) => {
                         <hr className={classes.hr}/>
                         {
                             program.weeks.map((w, i) => (
-                                <div className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
+                                <div onClick={() => selectWeek(w, i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
                             ))
                         }
                         <div className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Add Week</span></div>
                     </div>
                 </div>
                 <div className={classes.programMenuSection}>
-                    <div className={classes.programMenuItem}>
+                    <div onClick={() => props.selectPage("export")} className={classes.programMenuItem}>
                         <div className={classes.programMenuSectionIcon}><GetAppIcon /></div>
                         <div className={classes.programMenuSectionText}>
                             <span>Export</span>
