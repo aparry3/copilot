@@ -35,8 +35,7 @@ export const Week = connect(
             persistWorkout: (week_id, day, workout) => dispatch(persistWorkout(week_id, day, workout))
         }
 })((props) => {
-    let [week, setWeek] = useState(props.week)
-
+    let {week} = props
     let classes = useStyles()
     function save(workouts) {
         let new_week = {...week}

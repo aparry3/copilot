@@ -118,7 +118,7 @@ function ProgramView(props) {
                 console.log(current_week)
                 return (
                 <div className={classes.week}>
-                    <Week week_id={current_week.id} index={current_week.index} />
+                    <Week week={current_week} index={current_week.index} />
                 </div>
             )},
             'program': () => (
@@ -145,8 +145,8 @@ function ProgramView(props) {
         }
         return content[page]()
     }
-
-    console.log(props.program)
+    console.log("current_week")
+    console.log(current_week)
     return (
         <div className={classes.programPageContainer}>
             <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={setPage} setCurrentWeek={setCurrentWeek} program={props.program}/>

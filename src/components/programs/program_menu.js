@@ -101,7 +101,7 @@ export const ProgramMenu = (props) => {
 
     function selectWeek(week, index) {
         props.selectPage("week")
-        props.setCurrentWeek({id: week, index})
+        props.setCurrentWeek({...week, index})
     }
 
     return (
