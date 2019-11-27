@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, InputLabel, Input, Select} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {setFilter} from '../../actions'
-import {WORKOUT_SCHEMES} from '../../constants/programs'
+import {WORKOUT_SCHEMES, DETAILS} from '../../constants/workout_elements'
 import {CustomSelect} from '../util'
 let top, left = [50, 50]
 
@@ -33,21 +33,20 @@ const styles = theme => ({
         padding: '5px 30px',
         width: '100%',
         minHeight: '60px',
-        flexDirection: 'column',
-        alignItems: 'center'
+        flexDirection: 'row'
     },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
         maxWidth: 300,
     },
-    detailGroup: {
-        width: '100%',
+    formGroup: {
+        flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start'
     },
-    detailLabelContainer: {
+    formLabelContainer: {
         // padding: '5px',
         display: 'flex',
         justifyContent: 'flex-start',
@@ -56,10 +55,10 @@ const styles = theme => ({
         fontSize: '12px',
         opacity: 0.5
     },
-    detailLabel: {
+    formLabel: {
         margin: '0'
     },
-    detailInput: {
+    formInput: {
         padding: '5px',
         width: '100%',
         display: 'flex',
@@ -139,19 +138,69 @@ function findIndexById(id, exercises) {
     return vals.indexOf(id)
 }
 
-function DetailGroup(props) {
+function FormGroup(props) {
     let classes = useStyles()
     let {name} = props
 
     return (
-        <div className={classes.detailGroup}>
-            <div className={classes.detailLabelContainer}><span>{props.label}</span></div>
-            <div className={classes.detailInput}>{props.children}</div>
+        <div className={classes.formGroup}>
+            <div className={classes.formLabelContainer}><span>{props.label}</span></div>
+            <div className={classes.formInput}>{props.children}</div>
         </div>
     )
 
 }
+const VerticalLine = () => (<div style={{
+    height: '80%',
+    width: 0,
+    border: '1px solid black'
+}}/>)
 
+const Details = (props) => {
+    let classes = useStyles()
+    let [details, setDetails] = useState([...Object.keys(DETAILS)])
+
+    useEffect(() => {
+        setDetails([...details].filter(k => !Object.keys(props.details).includes(k)))
+    }, [Object.keys(props.details).length])
+    function renderDetail(detail, units) {
+        return (
+            <div>
+                <div><span>{detail}</span></div>
+                <div><input /></div>
+                { !!units && (
+                    <div><select></select></div>
+                )}
+            </div>
+        )
+    }
+    function addDetail(e) {
+        let detail = e.target.value
+        let new_details = {...props.details}
+        new_details[detail] = null
+        props.onChange(new_details)
+    }
+    function removeDetail(detail) {
+
+    }
+    console.log(props.details)
+
+    return (
+        <div className={classes.detailsContainer}>
+            { Object.keys(props.details).map(detail => (
+                renderDetail(detail, DETAILS[detail])
+            ))}
+            <CustomSelect
+                id="detail"
+                no_filter
+                name="detail"
+                placeholder="Select detail..."
+                onChange={addDetail}
+                elements={details}>
+            </CustomSelect>
+        </div>
+    )
+}
 class WorkoutElementModalView extends React.Component {
     constructor(props) {
         super(props);
@@ -165,6 +214,7 @@ class WorkoutElementModalView extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleSelectExercise = this.handleSelectExercise.bind(this);
+        this.handleChangeDetails = this.handleChangeDetails.bind(this);
 
 
     }
@@ -174,6 +224,13 @@ class WorkoutElementModalView extends React.Component {
             workout_element: !!next_props.workout_element ? next_props.workout_element : {details: {}},
             is_exercise: !next_props.workout_element ||  !!next_props.workout_element && !!next_props.workout_element.exercise_id,
             edit_workout_element: !!next_props.workout_element
+        })
+    }
+    handleChangeDetails(details) {
+        this.setState({
+            workout_element: update(this.state.workout_element, {
+                details: {$set: details}
+            })
         })
     }
 
@@ -240,7 +297,7 @@ class WorkoutElementModalView extends React.Component {
                             <div className={classes.modalContent}>
                                 {this.state.is_exercise && (
                                     <div className={classes.modalContentSection}>
-                                        <DetailGroup
+                                        <FormGroup
                                             className={classes.formControl}
                                             label="Exercise">
                                                 <CustomSelect
@@ -251,10 +308,37 @@ class WorkoutElementModalView extends React.Component {
                                                     value={this.state.workout_element.exercise_name}
                                                     elements={this.props.exercises.map(e => e.name)}>
                                                 </CustomSelect>
-                                        </DetailGroup>
+                                        </FormGroup>
                                     </div>
                                 )}
                                 <hr className={classes.hr}/>
+                                <div className={classes.modalContentSection}>
+                                    <FormGroup
+                                        className={classes.formControl}
+                                        label="Details">
+                                            <Details
+                                                id="details"
+                                                name="details"
+                                                onChange={this.handleChangeDetails}
+                                                details={this.state.workout_element.details}
+                                            />
+                                    </FormGroup>
+                                    <FormGroup
+                                        className={classes.formControl}
+                                        label="Notes">
+                                            <textarea
+                                                className={classes.textareaInput}
+                                                rows='5'
+                                                id="workout_element-notes"
+                                                name='notes'
+                                                onChange={this.handleChange}
+                                                value={this.state.workout_element.notes} />
+
+
+
+                                    </FormGroup>
+
+                                </div>
                             </div>
                             <button className="btn btn-default" onClick={this.handleCancel} >Cancel</button>
                         </form>

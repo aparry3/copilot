@@ -104,12 +104,12 @@ const styles = theme => ({
 let useStyles = makeStyles(styles)
 
 export const CustomSelect = (props) => {
-    let {multiple} = props
+    let {multiple, no_filter} = props
     const input_ref = useRef(null);
     let [selected_elements, setSelectedElements] = useState(props.value ? props.value : multiple ? [] : null)
     let [mouse_down_element, setMouseDownElement] = useState(null)
     let [focus, setFocus] = useState(false)
-    let [filter_text, setFilterText] = useState(!multiple && !!props.value ? props.value : '')
+    let [filter_text, setFilterText] = useState(!multiple && !!props.value && !no_filter ? props.value : '')
     let classes = useStyles()
     function selectElement(el) {
         let new_selected_elements = !!multiple ? update(selected_elements, {
@@ -117,7 +117,7 @@ export const CustomSelect = (props) => {
         }) : el
         props.onChange({target:{value:new_selected_elements, name:props.name}})
         setSelectedElements(new_selected_elements)
-        if (!multiple) {
+        if (!multiple && !no_filter) {
             setFilterText(el)
         }
     }
@@ -176,10 +176,17 @@ export const CustomSelect = (props) => {
                     </div>
                 )
             })}
-            { (!!multiple) && (
+            {
+                !!no_filter && (
+                    <div className={classes.customSelectTextContainer} onClick={() => setFocus(true)}>
+                        <span>{props.placeholder}</span>
+                    </div>
+                )
+            }
+            { (!!multiple && !no_filter) && (
                 <div className={classes.customSelectTextContainer}><input ref={input_ref} autocomplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/></div>
             )}
-            { (!multiple) && (
+            { (!multiple && !no_filter) && (
                 <div className={classes.customSelectTextContainer} onClick={() => {input_ref.current.focus(); setFocus(true)}}>
                     <input ref={input_ref} style={input_style} autoComplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/>
                     <span style={span_style}>{selected_elements}</span>
