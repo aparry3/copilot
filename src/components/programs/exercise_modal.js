@@ -5,19 +5,11 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {setFilter} from '../../actions'
 import {WORKOUT_SCHEMES} from '../../constants/programs'
+import {CustomSelect} from '../util'
 let top, left = [50, 50]
 
 const styles = theme => ({
-    paper: {
-        borderRadius: '10px',
-        top: `20vh`,
-        left: `30vw`,
-        position: 'absolute',
-        width: '40vw',
-        background: theme.palette.background.main,
-        color: theme.text.primary
 
-    },
     modalHeader: {
         display: 'flex',
         flexDirection: 'row',
@@ -38,11 +30,10 @@ const styles = theme => ({
     },
     modalContentSection: {
         display: 'flex',
-        padding: '20px',
+        padding: '5px 30px',
         width: '100%',
         minHeight: '60px',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center'
     },
     formControl: {
@@ -53,21 +44,24 @@ const styles = theme => ({
     detailGroup: {
         width: '100%',
         display: 'flex',
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignItems: 'flex-start'
     },
     detailLabelContainer: {
-        width: '40%',
-        margin: '0',
-        padding: '5px',
+        // padding: '5px',
         display: 'flex',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        textAlign: 'center',
+        fontSize: '12px',
+        opacity: 0.5
     },
     detailLabel: {
         margin: '0'
     },
     detailInput: {
         padding: '5px',
-        width: '60%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'flex-start'
 
@@ -116,6 +110,24 @@ const styles = theme => ({
         margin: '0',
         border: 0,
         borderTop: '2px solid rgba(0,0,0,.1)'
+    },
+    addExerciseOverlay: {
+        zIndex: 100,
+        position: 'fixed',
+        display: 'flex',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    },
+    nonFormArea: {
+        width: '60%',
+        background: theme.palette.background.dark,
+        opacity: 0.6
+    },
+    formArea: {
+        flexGrow: 1,
+        background: theme.palette.background.main
     }
 });
 
@@ -133,8 +145,8 @@ function DetailGroup(props) {
 
     return (
         <div className={classes.detailGroup}>
-            <div className={classes.detailLabelContainer}><label className={classes.detailLabel} htmlFor={name}>{props.label}</label></div>
-            <div className={classes.detailInput}>{props.input_component}</div>
+            <div className={classes.detailLabelContainer}><span>{props.label}</span></div>
+            <div className={classes.detailInput}>{props.children}</div>
         </div>
     )
 
@@ -166,11 +178,11 @@ class WorkoutElementModalView extends React.Component {
     }
 
     handleSelectExercise(e) {
-        let exercise = this.props.exercises[e.target.value]
+        let exercise_name = e.target.value
         this.setState({
             workout_element: update(this.state.workout_element, {
-                exercise_name: {$set: exercise.name},
-                exercise_id: {$set: exercise._id}
+                exercise_name: {$set: exercise_name},
+                exercise_id: {$set: this.props.exercises.find(e => e.name == exercise_name)}
             })
         })
     }
@@ -216,125 +228,126 @@ class WorkoutElementModalView extends React.Component {
     render() {
         let classes = this.props.classes
         return (
-            <Modal open={this.props.open} onClose={this.handleClose}>
-            <form onSubmit={this.handleSubmit}>
-                <Paper className={classes.paper}>
-                <div className={classes.modalHeader}>
-                    <span>{!!this.state.edit_workout_element ? 'Edit' : 'Add'} {this.state.is_exercise ? 'Exercise' : 'Superset'}</span>
-                </div>
-                <div className={classes.modalContent}>
-                    {this.state.is_exercise && (
-                        <div className={classes.modalContentSection}>
-                            <DetailGroup
-                                className={classes.formControl}
-                                name="exercise_index"
-                                label="Exercise"
-                                input_component={(
-                                    <Select
-                                        id="exercise_index"
-                                        name="exercise_index"
-                                        onChange={this.handleSelectExercise}
-                                        value={findIndexById(this.state.workout_element.exercise_id, this.props.exercises)}>
-                                        {this.props.exercises.map((exercise, index)=> {
-                                            return <MenuItem key={exercise._id} value={index}>{exercise.name}</MenuItem>
-                                        })}
-                                    </Select>
+            <>
+            {this.props.open && (
+                <div className={classes.addExerciseOverlay}>
+                    <div className={classes.nonFormArea} onClick={this.handleClose}></div>
+                    <div className={classes.formArea}>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className={classes.modalHeader}>
+                                <span>{!!this.state.edit_workout_element ? 'Edit' : 'Add'} {this.state.is_exercise ? 'Exercise' : 'Superset'}</span>
+                            </div>
+                            <div className={classes.modalContent}>
+                                {this.state.is_exercise && (
+                                    <div className={classes.modalContentSection}>
+                                        <DetailGroup
+                                            className={classes.formControl}
+                                            label="Exercise">
+                                                <CustomSelect
+                                                    id="exercise_name"
+                                                    name="exercise_name"
+                                                    placeholder="Selet Exercise..."
+                                                    onChange={this.handleSelectExercise}
+                                                    value={this.state.workout_element.exercise_name}
+                                                    elements={this.props.exercises.map(e => e.name)}>
+                                                </CustomSelect>
+                                        </DetailGroup>
+                                    </div>
                                 )}
-                                />
-                        </div>
-                    )}
-                    <hr className={classes.hr}/>
-                    <div className={classes.modalContentSection}>
-                        <DetailGroup
-                            className={classes.formControl}
-                            label="Scheme"
-                            input_component={
-                                <Select
-                                    id="workout_element-details-scheme"
-                                    name='scheme'
-                                    onChange={this.handleChange}
-                                    value={this.state.workout_element.details.scheme}>
-                                    {WORKOUT_SCHEMES.map((scheme, index)=> {
-                                        return <MenuItem key={scheme} value={scheme}>{scheme}</MenuItem>
-                                    })}
-                                </Select>
-                            }
-                            name="scheme"
-                            />
+                                <hr className={classes.hr}/>
+                            </div>
+                            <button className="btn btn-default" onClick={this.handleCancel} >Cancel</button>
+                        </form>
                     </div>
-                    <hr className={classes.hr}/>
-                    <div className={classes.modalContentSection}>
-                        <DetailGroup
-                            className={classes.formControl}
-                            label="Sets"
-                            input_component={
-                                <input
-                                    className={classes.textInput}
-                                    id="workout_element-details-sets"
-                                    name='sets'
-                                    onChange={this.handleChange}
-                                    value={this.state.workout_element.details.sets} />
-
-                            }
-                            name="sets"
-                            />
-                        <DetailGroup
-                            className={classes.formControl}
-                            label="Repetitions"
-                            input_component={
-                                <input
-                                    className={classes.textInput}
-                                    id="workout_element-details-repetitions"
-                                    name='repetitions'
-                                    onChange={this.handleChange}
-                                    value={this.state.workout_element.details.repetitions} />
-
-                            }
-                            name="repetitions"
-                            />
-                        <DetailGroup
-                            className={classes.formControl}
-                            label="Duration"
-                            input_component={
-                                <input
-                                    className={classes.textInput}
-                                    id="workout_element-details-duration"
-                                    name='duration'
-                                    onChange={this.handleChange}
-                                    value={this.state.workout_element.details.duration} />
-
-                            }
-                            name="duration"
-                            />
-
-                    </div>
-                    <hr className={classes.hr}/>
-                    <div className={classes.modalContentSection}>
-                        <DetailGroup
-                            className={classes.formControl}
-                            label="Notes"
-                            name="notes"
-                            input_component={
-                                <textarea
-                                    className={classes.textareaInput}
-                                    rows='5'
-                                    id="workout_element-notes"
-                                    name='notes'
-                                    onChange={this.handleChange}
-                                    value={this.state.workout_element.notes} />
-
-                            }
-                            />
-                    </div>
-
                 </div>
-                <button className="btn btn-default" onClick={this.handleCancel} >Cancel</button>
-                </Paper>
-                </form>
-            </Modal>
+            )}
+            </>
         )
     }
 }
+// <div className={classes.modalContentSection}>
+//     <DetailGroup
+//         className={classes.formControl}
+//         label="Scheme"
+//         input_component={
+//             <Select
+//                 id="workout_element-details-scheme"
+//                 name='scheme'
+//                 onChange={this.handleChange}
+//                 value={this.state.workout_element.details.scheme}>
+//                 {WORKOUT_SCHEMES.map((scheme, index)=> {
+//                     return <MenuItem key={scheme} value={scheme}>{scheme}</MenuItem>
+//                 })}
+//             </Select>
+//         }
+//         name="scheme"
+//         />
+// </div>
+// <hr className={classes.hr}/>
+// <div className={classes.modalContentSection}>
+//     <DetailGroup
+//         className={classes.formControl}
+//         label="Sets"
+//         input_component={
+//             <input
+//                 className={classes.textInput}
+//                 id="workout_element-details-sets"
+//                 name='sets'
+//                 onChange={this.handleChange}
+//                 value={this.state.workout_element.details.sets} />
+//
+//         }
+//         name="sets"
+//         />
+//     <DetailGroup
+//         className={classes.formControl}
+//         label="Repetitions"
+//         input_component={
+//             <input
+//                 className={classes.textInput}
+//                 id="workout_element-details-repetitions"
+//                 name='repetitions'
+//                 onChange={this.handleChange}
+//                 value={this.state.workout_element.details.repetitions} />
+//
+//         }
+//         name="repetitions"
+//         />
+//     <DetailGroup
+//         className={classes.formControl}
+//         label="Duration"
+//         input_component={
+//             <input
+//                 className={classes.textInput}
+//                 id="workout_element-details-duration"
+//                 name='duration'
+//                 onChange={this.handleChange}
+//                 value={this.state.workout_element.details.duration} />
+//
+//         }
+//         name="duration"
+//         />
+//
+// </div>
+// <hr className={classes.hr}/>
+// <div className={classes.modalContentSection}>
+//     <DetailGroup
+//         className={classes.formControl}
+//         label="Notes"
+//         name="notes"
+//         input_component={
+//             <textarea
+//                 className={classes.textareaInput}
+//                 rows='5'
+//                 id="workout_element-notes"
+//                 name='notes'
+//                 onChange={this.handleChange}
+//                 value={this.state.workout_element.notes} />
+//
+//         }
+//         />
+// </div>
+
 
 export const WorkoutElementModal = connect(
     (state) => {

@@ -94,6 +94,9 @@ const styled = withStyles(theme => ({
         '&:hover': {
             opacity: .5
         }
+    },
+    week: {
+        height: '100%'
     }
 
 }));
