@@ -246,7 +246,7 @@ class WorkoutElementModalView extends React.Component {
                                                 <CustomSelect
                                                     id="exercise_name"
                                                     name="exercise_name"
-                                                    placeholder="Selet Exercise..."
+                                                    placeholder="Select Exercise..."
                                                     onChange={this.handleSelectExercise}
                                                     value={this.state.workout_element.exercise_name}
                                                     elements={this.props.exercises.map(e => e.name)}>

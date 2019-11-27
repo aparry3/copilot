@@ -117,6 +117,9 @@ export const CustomSelect = (props) => {
         }) : el
         props.onChange({target:{value:new_selected_elements, name:props.name}})
         setSelectedElements(new_selected_elements)
+        if (!multiple) {
+            setFilterText(el)
+        }
     }
     function deselectElement(index) {
         let new_selected_elements = update(selected_elements, {
