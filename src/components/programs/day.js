@@ -279,7 +279,6 @@ class DayView extends React.Component {
     }
 
     handleModalSubmit(workout_element) {
-        console.log(workout_element)
         if (!!workout_element.exercise_id || !!workout_element.exercises) {
             let updated_workout_elements = [this.state.workout.length, 0, workout_element]
             if (!!this.state.edit_location) {
@@ -295,7 +294,7 @@ class DayView extends React.Component {
                 }
 
             }
-            console.log(updated_workout_elements)
+            console.log(workout_element)
             let new_workout = update(this.state.workout, {
                 $splice: [updated_workout_elements]
             })
@@ -304,6 +303,7 @@ class DayView extends React.Component {
                 workout_element: null,
                 edit_location: null
             })
+            console.log(new_workout)
             this.save([this.props.day, new_workout])
         }
     }
@@ -317,7 +317,6 @@ class DayView extends React.Component {
             let workout_element = this.state.workout[edit_location.workout_element_index]
             if (edit_location.superset_index != undefined) {
                 workout_element = workout_element.exercises[edit_location.superset_index]
-                console.log(workout_element)
             }
             new_state.workout_element = workout_element
             new_state.edit_location = edit_location
@@ -326,9 +325,10 @@ class DayView extends React.Component {
     }
 
     save(workout=null) {
-        console.log("new_workout")
-        console.log(workout)
         let updates = !!workout ? [[this.props.day, this.state.workout], workout] : [[this.props.day, this.state.workout]]
+        if (!!workout && workout[0] == this.props.day) {
+            updates = [workout]
+        }
         this.props.save(updates)
     }
 
@@ -338,7 +338,6 @@ class DayView extends React.Component {
 
     render() {
         let {classes, week_id, day} = this.props
-        console.log(day)
         return (
             <>
                 <WorkoutElementModal

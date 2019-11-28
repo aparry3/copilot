@@ -113,7 +113,6 @@ export const Sidebar = connect(
     const classes = useStyles();
     let {selected_page} = props
     useEffect(() => {
-        console.log("effect")
         let page = window.location.pathname.match(/trainer\/(\w+)/i)[1]
         props.setActivePage(page)
     }, [])

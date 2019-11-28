@@ -77,7 +77,6 @@ export function pushExerciseStatus(success, name, action) {
 
 async function fetchAllExercises(query=null) {
     let token = await auth0_client.getToken()
-    console.log("fetch exercises")
     return fetch(`${API_URI}/exercises${query ? `?search_text=${query}` : ''}`, {
         headers: {
             Accept: 'application/json',
@@ -91,7 +90,6 @@ async function fetchAllExercises(query=null) {
 }
 
 export function fetchExerises(query=null) {
-    console.log("fetch")
     return (dispatch) => {
         dispatch(requestExercises())
         return fetchAllExercises(query).then(json => {

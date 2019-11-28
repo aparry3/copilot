@@ -229,15 +229,12 @@ const Details = (props) => {
     }, [Object.keys(props.details).length])
     function renderDetail(detail, units) {
         function removeDetail(detail) {
-            console.log(detail)
             let new_details = {}
             Object.keys(props.details).forEach(d => {
                 if (d != detail) {
                     new_details[d]= props.details[d]
                 }
             })
-            console.log(new_details)
-
             props.onChange(new_details)
         }
 
@@ -291,8 +288,6 @@ const Details = (props) => {
         setFocus(false)
     }
 
-    console.log(details)
-
     return (
         <div className={classes.detailsContainer}>
             { Object.keys(props.details).map(detail => (
@@ -342,6 +337,7 @@ class WorkoutElementModalView extends React.Component {
         })
     }
     handleChangeDetails(details) {
+        console.log(details)
         this.setState({
             workout_element: update(this.state.workout_element, {
                 details: {$set: details}
