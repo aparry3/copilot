@@ -238,6 +238,7 @@ const ExerciseView = (props) => {
         e.stopPropagation()
         props.editWorkoutElement(props.location)
     }
+    console.log(workout_element)
     return (
         <>
             {merge && (<div className={classes.hoverOverlay}/>)}
@@ -266,12 +267,12 @@ const ExerciseView = (props) => {
                         <div className={classes.exerciseIcons}>
                             {!!workout_element.details.sets && (
                                 <div className={classes.detailIcon}>
-                                    <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets}</span>
+                                    <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets.value}</span>
                                 </div>
                             )}
                             {!!workout_element.details.repetitions && (
                                 <div className={classes.detailIcon}>
-                                    <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions}</span>
+                                    <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions.value}</span>
                                 </div>
                             )}
                         </div>
@@ -326,12 +327,12 @@ const SupersetView = (props) => {
                 <div className={classes.exerciseIcons}>
                     {!!workout_element.details.sets && (
                         <div className={classes.detailIcon}>
-                            <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets}</span>
+                            <AutorenewIcon fontSize="small"/><span>{workout_element.details.sets.value}</span>
                         </div>
                     )}
                     {!!workout_element.details.repetitions && (
                         <div className={classes.detailIcon}>
-                            <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions}</span>
+                            <SwapVertIcon fontSize="small"/><span >{workout_element.details.repetitions.value}</span>
                         </div>
                     )}
                 </div>

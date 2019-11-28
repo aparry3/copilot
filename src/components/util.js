@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import update from 'immutability-helper';
 
@@ -108,9 +108,16 @@ export const CustomSelect = (props) => {
     const input_ref = useRef(null);
     let [selected_elements, setSelectedElements] = useState(props.value ? props.value : multiple ? [] : null)
     let [mouse_down_element, setMouseDownElement] = useState(null)
-    let [focus, setFocus] = useState(false)
+    let [focus, setFocus] = useState(!!props.focus || false)
     let [filter_text, setFilterText] = useState(!multiple && !!props.value && !no_filter ? props.value : '')
     let classes = useStyles()
+
+    useEffect(() => {
+        if (!!props.focus) {
+            input_ref.current.focus()
+        }
+    },[])
+
     function selectElement(el) {
         let new_selected_elements = !!multiple ? update(selected_elements, {
             $push: [el]
@@ -145,6 +152,7 @@ export const CustomSelect = (props) => {
     function handleBlur(e) {
         e.preventDefault()
         e.stopPropagation()
+        console.log("handle blur")
         if (!mouse_down_element) {
             setFocus(false)
         }
@@ -160,6 +168,10 @@ export const CustomSelect = (props) => {
     }
     let input_style = {
         width: focus || !selected_elements ? '100%' : '0%'
+    }
+    let no_input = {
+        width: '0',
+        height: '0'
     }
     let span_style = focus || !selected_elements ? {
         display: 'none'
@@ -178,9 +190,12 @@ export const CustomSelect = (props) => {
             })}
             {
                 !!no_filter && (
-                    <div className={classes.customSelectTextContainer} onClick={() => setFocus(true)}>
-                        <span>{props.placeholder}</span>
-                    </div>
+                    <>
+                        <div className={classes.customSelectTextContainer} onClick={() => setFocus(true)}>
+                            {!selected_elements || multiple ? <span>{props.placeholder}</span> : <span>{selected_elements}</span>}
+                        </div>
+                        <input ref={input_ref} style={no_input} autoComplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/>
+                    </>
                 )
             }
             { (!!multiple && !no_filter) && (

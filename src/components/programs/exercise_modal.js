@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, InputLabel, Input, Select} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
@@ -44,7 +46,43 @@ const styles = theme => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        width: '100%'
+    },
+    detailGroup: {
+        width: '100%',
+        padding: '5px',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    detailLabel: {
+        width: '30%',
+        minWidth: '30%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        fontSize: '14px',
+        textAlign: 'center'
+    },
+    editDetailContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: '5px'
+    },
+    detailInput: {
+        width: '30%',
+        border: 'none',
+        outline: 'none',
+        borderRadius: '5px',
+        textAlign: 'center',
+        background: theme.palette.background.light
+    },
+    detailsContainer: {
+        width: '100%',
+        padding: '5px'
     },
     formLabelContainer: {
         // padding: '5px',
@@ -120,13 +158,39 @@ const styles = theme => ({
         bottom: 0
     },
     nonFormArea: {
-        width: '60%',
+        minWidth: '70%',
         background: theme.palette.background.dark,
         opacity: 0.6
     },
     formArea: {
         flexGrow: 1,
         background: theme.palette.background.main
+    },
+    detailAddContainer: {
+        display: 'flex',
+        cursor: 'pointer',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '5px'
+    },
+    detailInputContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    removeDetailContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: 0,
+        cursor: 'pointer',
+        '&:hover': {
+            opacity: .5
+        }
+    },
+    removeDetail: {
+        height: '20px',
+        width: '20px'
     }
 });
 
@@ -159,45 +223,96 @@ const VerticalLine = () => (<div style={{
 const Details = (props) => {
     let classes = useStyles()
     let [details, setDetails] = useState([...Object.keys(DETAILS)])
-
+    let [focus, setFocus] = useState(false)
     useEffect(() => {
-        setDetails([...details].filter(k => !Object.keys(props.details).includes(k)))
+        setDetails([...Object.keys(DETAILS)].filter(k => !Object.keys(props.details).includes(k)))
     }, [Object.keys(props.details).length])
     function renderDetail(detail, units) {
+        function removeDetail(detail) {
+            console.log(detail)
+            let new_details = {}
+            Object.keys(props.details).forEach(d => {
+                if (d != detail) {
+                    new_details[d]= props.details[d]
+                }
+            })
+            console.log(new_details)
+
+            props.onChange(new_details)
+        }
+
+
         return (
-            <div>
-                <div><span>{detail}</span></div>
-                <div><input /></div>
-                { !!units && (
-                    <div><select></select></div>
-                )}
+            <div className={classes.detailGroup}>
+                <div className={classes.detailLabel}><span>{detail}</span></div>
+                <div className={classes.detailInputContainer}>
+                    <div className={classes.editDetailContainer}>
+                        <input className={classes.detailInput} name={`${detail}-value`} value={props.details[detail].value} onChange={changeDetail}/>
+                        { !!units && (
+                            <div className={classes.detailUnit}>
+                                <CustomSelect
+                                    id="unit"
+                                    no_filter
+                                    value={props.details[detail].unit}
+                                    name={`${detail}-unit`}
+                                    placeholder="Unit..."
+                                    onChange={changeDetail}
+                                    elements={units}>
+                                </CustomSelect>
+                            </div>
+                        )}
+                    </div>
+                    <div className={classes.removeDetailContainer} onClick={() => removeDetail(detail)}>
+                        <span><ClearIcon className={classes.removeDetail} /></span>
+                    </div>
+                </div>
             </div>
         )
     }
+
+    function changeDetail(e) {
+        let items = e.target.name.split('-')
+        let new_details = update(props.details, {
+            [items[0]]: {[items[1]]: {$set: e.target.value}}
+        })
+        props.onChange(new_details)
+
+    }
+
     function addDetail(e) {
         let detail = e.target.value
         let new_details = {...props.details}
-        new_details[detail] = null
+        let new_detail = {value: ''}
+        if (!!DETAILS[detail]) {
+            new_detail.unit = DETAILS[detail][0]
+        }
+        new_details[detail] = new_detail
         props.onChange(new_details)
+        setFocus(false)
     }
-    function removeDetail(detail) {
 
-    }
-    console.log(props.details)
+    console.log(details)
 
     return (
         <div className={classes.detailsContainer}>
             { Object.keys(props.details).map(detail => (
                 renderDetail(detail, DETAILS[detail])
             ))}
-            <CustomSelect
-                id="detail"
-                no_filter
-                name="detail"
-                placeholder="Select detail..."
-                onChange={addDetail}
-                elements={details}>
-            </CustomSelect>
+            {
+                (details.length > 0) && (!!focus ? (
+                    <CustomSelect
+                        id="detail"
+                        no_filter
+                        focus
+                        name="detail"
+                        placeholder="Select detail..."
+                        onChange={addDetail}
+                        elements={details}>
+                    </CustomSelect>
+                ) : (
+                    <div className={classes.detailAddContainer} onClick={() => setFocus(true)}><AddIcon /><span> Detail</span></div>
+                ))
+            }
         </div>
     )
 }
