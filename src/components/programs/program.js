@@ -103,11 +103,8 @@ const styled = withStyles(theme => ({
 
 function ProgramView(props) {
     let classes = props.classes;
-    console.log("program")
 
     let [menu_open, setMenuOpen] = useState(false)
-    let [page, setPage] = useState('program')
-    let [current_week, setCurrentWeek] = useState(null)
 
     async function handleDeleteWeek(index) {
         props.deleteWeek(props.program._id, props.program.weeks[index]._id)
@@ -148,17 +145,16 @@ function ProgramView(props) {
         }
         return content[page]()
     }
-    console.log("current_week")
-    console.log(current_week)
+
     return (
         <div className={classes.programPageContainer}>
-            <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={setPage} addWeek={() => props.addWeek(props.program._id)} setCurrentWeek={setCurrentWeek} program={props.program}/>
+            <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={props.setPage} addWeek={() => props.addWeek(props.program._id)} program={props.program}/>
             <div className={classes.programPage} >
                 <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
-                    <div>{props.program.name}{page == 'week' ? ` - Week: ${current_week.index + 1}` : ''}</div>
+                    <div>{props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}</div>
                 </ProgramHeader>
                 <DndProvider backend={HTML5Backend} >
-                    {renderPageConent(page, current_week)}
+                    {renderPageConent(props.page, props.current_week)}
                 </DndProvider>
             </div>
         </div>
@@ -170,7 +166,8 @@ export const Program = connect(
             return {
                 week_count: !!state.programs.active_program ? state.programs.active_program.weeks.length : null,
                 props_program: state.programs.active_program,
-                user: state.auth.user
+                user: state.auth.user,
+                current_week: state.programs.current_week
             }
         },
         (dispatch) => {
@@ -185,20 +182,20 @@ export const Program = connect(
 )(styled((props) => {
     let {props_program, week_count, ...pass_through_props} = props
     let [program, setProgram] = useState(null)
+    let [page, setPage] = useState('program')
 
     useEffect(() => {
-        console.log("set prog")
         if (!props_program) {
             props.setActiveProgram(props.match.params.program_id)
         } else {
             setProgram(JSON.parse(JSON.stringify(props_program)))
         }
-    }, [week_count])
-
+    }, [week_count, page, props.current_week])
+    console.log(props.current_week)
     return (
         <>
             {!!program ? (
-                <ProgramView program={program} {...pass_through_props} />
+                <ProgramView page={page} current_week={props.current_week} setPage={setPage} program={program} {...pass_through_props} />
             ) : <div>Loading...</div>}
         </>
     )

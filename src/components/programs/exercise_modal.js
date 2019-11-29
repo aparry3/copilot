@@ -73,7 +73,7 @@ const styles = theme => ({
         padding: '5px'
     },
     detailInput: {
-        width: '30%',
+        width: '30px',
         border: 'none',
         outline: 'none',
         borderRadius: '5px',
@@ -171,12 +171,19 @@ const styles = theme => ({
         cursor: 'pointer',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '5px'
+        padding: '5px',
+        borderRadius: '5px',
+        '&:hover': {
+            background: theme.palette.background.light
+        }
     },
     detailInputContainer: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    detailUnit: {
+        cursor: 'pointer'
     },
     removeDetailContainer: {
         display: 'flex',
@@ -294,11 +301,12 @@ const Details = (props) => {
                 renderDetail(detail, DETAILS[detail])
             ))}
             {
-                (details.length > 0) && (!!focus ? (
+                (details.length > 0) && (focus ? (
                     <CustomSelect
                         id="detail"
                         no_filter
                         focus
+                        onBlur={() => setFocus(false)}
                         name="detail"
                         placeholder="Select detail..."
                         onChange={addDetail}

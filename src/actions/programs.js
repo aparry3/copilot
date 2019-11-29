@@ -15,6 +15,7 @@ export const SET_DRAG_ELEMENT = 'SET_DRAG_ELEMENT';
 export const COPY_WORKOUT_ELEMENT = 'COPY_WORKOUT_ELEMENT';
 export const SET_ACTIVE_PROGRAM = 'SELECT_ACTIVE_PROGRAM';
 export const UPDATE_WORKOUT = 'UPDATE_WORKOUT';
+export const SET_CURRENT_WEEK = 'SET_CURRENT_WEEK';
 
 
 export function setActiveProgram(program_id) {
@@ -25,8 +26,15 @@ export function setActiveProgram(program_id) {
 }
 
 export function combineExercises(item, drop_location) {
-    console.log(item)
 
+}
+
+export function setCurrentWeek(index) {
+    console.log("set week")
+    return {
+        type: SET_CURRENT_WEEK,
+        index
+    }
 }
 
 export function copyWorkoutElement(workout_element) {
@@ -37,7 +45,6 @@ export function copyWorkoutElement(workout_element) {
 
 }
 export function moveWorkoutElement(old_week, old_day, old_index, new_week, new_day, new_index) {
-    console.log("moveWorkoutElement")
     return {
         type: REARRANGE_EXERCISE,
         old_week, old_day, old_index, new_week, new_day, new_index

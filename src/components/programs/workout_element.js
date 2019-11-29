@@ -29,7 +29,7 @@ const styles = theme => ({
 
     },
     exerciseBlock: {
-        borderRadius: '10px',
+        borderRadius: '15x',
         minHeight: '70px',
         width: '100%',
         position: 'relative',
@@ -42,7 +42,7 @@ const styles = theme => ({
         justifyContent: 'center',
         width: '100%',
         height: '100%',
-        borderRadius: '10px',
+        borderRadius: '5px',
         opacity: 0,
         flexDirection: 'column'
     },
@@ -54,7 +54,7 @@ const styles = theme => ({
     hoverOverlay: {
         height:'100%',
         width: '100%',
-        borderRadius: '10px',
+        borderRadius: '5px',
         background: '#000000',
         opacity: 0.5,
         position: 'absolute'
@@ -66,7 +66,7 @@ const styles = theme => ({
     supersetContent: {
         width: '100%',
         background: theme.palette.secondary.main,
-        borderRadius: '10px',
+        borderRadius: '5px',
         padding: '0 5%',
         cursor: 'move'
     },
@@ -79,7 +79,7 @@ const styles = theme => ({
     exerciseHeader: {
         height: '40px',
         width: '100%',
-        borderRadius: '10px 10px 0px 0px',
+        borderRadius: '5px 5px 0px 0px',
         background: theme.accents.primary,
         display: 'flex',
         flexDirection: 'row',

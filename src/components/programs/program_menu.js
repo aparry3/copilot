@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-
+import {connect} from 'react-redux'
 import AddIcon from '@material-ui/icons/Add'
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
@@ -7,6 +7,7 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from "react";
+import {setCurrentWeek} from '../../actions'
 
 
 let styles = (theme) => ({
@@ -94,14 +95,19 @@ let styles = (theme) => ({
 
 let useStyles = makeStyles(styles)
 
-export const ProgramMenu = (props) => {
+export const ProgramMenu = connect(
+    null,
+    dispatch => ({
+        setCurrentWeek: i => dispatch(setCurrentWeek(i))
+    })
+)((props) => {
     let classes = useStyles()
     let {program} = props
     let class_group = props.open ? clsx(classes.programMenu, classes.programMenuOpen) : clsx(classes.programMenu, classes.programMenuClosed)
 
-    function selectWeek(week, index) {
+    function selectWeek(index) {
         props.selectPage("week")
-        props.setCurrentWeek({...week, index})
+        props.setCurrentWeek(index)
     }
 
     return (
@@ -132,7 +138,7 @@ export const ProgramMenu = (props) => {
                         <hr className={classes.hr}/>
                         {
                             program.weeks.map((w, i) => (
-                                <div onClick={() => selectWeek(w, i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
+                                <div key={`week-${w._id}`} onClick={() => selectWeek(w, i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
                             ))
                         }
                         <div onClick={props.addWeek} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><AddIcon /><span> Week</span></div>
@@ -150,4 +156,4 @@ export const ProgramMenu = (props) => {
 
         </div>
     )
-}
+})

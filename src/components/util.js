@@ -156,6 +156,9 @@ export const CustomSelect = (props) => {
         if (!mouse_down_element) {
             setFocus(false)
         }
+        if (!!props.onBlur) {
+            props.onBlur()
+        }
     }
     function filteredElements() {
         return props.elements.filter(el => {

@@ -30,7 +30,7 @@ const styles = theme => ({
     dayContainer: {
         height:'100%',
         width: '95%',
-        borderRadius: '10px',
+        borderRadius: '5px',
         background: theme.palette.background.mediumDark,
         overflow: 'auto',
         padding: '5%',
@@ -294,7 +294,6 @@ class DayView extends React.Component {
                 }
 
             }
-            console.log(workout_element)
             let new_workout = update(this.state.workout, {
                 $splice: [updated_workout_elements]
             })
@@ -303,7 +302,6 @@ class DayView extends React.Component {
                 workout_element: null,
                 edit_location: null
             })
-            console.log(new_workout)
             this.save([this.props.day, new_workout])
         }
     }

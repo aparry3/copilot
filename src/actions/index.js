@@ -59,7 +59,9 @@ import {
     persistWeek,
     setDragElement,
     deleteWeekFromProgram,
-    deleteWeekAndPersist
+    deleteWeekAndPersist,
+    SET_CURRENT_WEEK,
+    setCurrentWeek
 } from './programs';
 
 export {
@@ -112,5 +114,7 @@ export {
     setDragElement,
     deleteWeekFromProgram,
     deleteWeekAndPersist,
-    setActivePage
+    setActivePage,
+    SET_CURRENT_WEEK,
+    setCurrentWeek
 };

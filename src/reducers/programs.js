@@ -12,13 +12,14 @@ import {
     DELETE_WEEK,
     COPY_WORKOUT_ELEMENT,
     SET_ACTIVE_PROGRAM,
-    UPDATE_WORKOUT
+    UPDATE_WORKOUT,
+    SET_CURRENT_WEEK
 } from '../actions';
 
 import {WEEK_SKELETON} from '../constants/programs';
 
 
-const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null, clipboard: null}
+const initialState = {all_programs: [], programs_loaded:false, active_program: null, drag_element: null, current_week: null, clipboard: null}
 
 function _newProgram(active_program, week) {
     let new_program = {...active_program};
@@ -173,6 +174,17 @@ const programs = (state = initialState, action) => {
             return {
                 ...state,
                 active_program: state.all_programs.find(x => x._id == action.id)
+            }
+        }
+        case SET_CURRENT_WEEK: {
+            console.log("set_week")
+            let {index} = action
+            return {
+                ...state,
+                current_week: {
+                    ...state.active_program.weeks[index],
+                    index
+                }
             }
         }
         case UPDATE_WORKOUT: {
