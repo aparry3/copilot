@@ -238,7 +238,6 @@ const ExerciseView = (props) => {
         e.stopPropagation()
         props.editWorkoutElement(props.location)
     }
-    console.log(workout_element)
     return (
         <>
             {merge && (<div className={classes.hoverOverlay}/>)}

@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import ClearIcon from '@material-ui/icons/Clear';
 
 export function titleCase(str) {
+    console.log(str)
   return str.replace(/\b[a-zA-Z]/g, function(t) { return t.toUpperCase() });
 }
 
@@ -118,6 +119,11 @@ export const CustomSelect = (props) => {
         }
     },[])
 
+    useEffect(() => {
+        setSelectedElements(props.value)
+    },[props.value])
+
+
     function selectElement(el) {
         let new_selected_elements = !!multiple ? update(selected_elements, {
             $push: [el]
@@ -179,7 +185,7 @@ export const CustomSelect = (props) => {
     let span_style = focus || !selected_elements ? {
         display: 'none'
     } : {}
-    console.log(filter_text)
+    console.log(selected_elements)
     return (
         <div className={classes.customSelectContainer}>
             <div className={classes.customSelect}>

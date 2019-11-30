@@ -91,6 +91,11 @@ class ExerciseFormView extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.all_muscles = allMuscles()
+        this.transform = {
+            primary_muscles: (x) => x.map(y => this.all_muscles.find(m => m.name == y)),
+            primary_muscles: (x) => x.map(y => this.all_muscles.find(m => m.name == y))
+        }
+        console.log(props.exercise)
 
     }
     componentWillReceiveProps(nextProps) {
@@ -99,11 +104,12 @@ class ExerciseFormView extends React.Component {
     handleChange(e) {
         let name = e.target.name;
         let value = e.target.value;
-        console.log(e)
+        let transform = !!this.transform[name] ? this.transform[name] : (x) => x
         this.setState({
             exercise: {
                 ...this.state.exercise,
-                [name]: value
+                [name]: transform(value)
+
             }
         })
     }
@@ -139,13 +145,13 @@ class ExerciseFormView extends React.Component {
                     <div className={classes.formSectionContainer}>
                         <div className={clsx(classes.formSection)}>
                             <div className={classes.formSectionHeader}><span>Primary muscles</span></div>
-                            <CustomSelect multiple placeholder='Add primary muscles...' name='primary_muscles' onChange={this.handleChange} value={this.state.exercise.primary_muscles} elements={this.all_muscles} />
+                            <CustomSelect multiple placeholder='Add primary muscles...' name='primary_muscles' onChange={this.handleChange} value={this.state.exercise.primary_muscles.map(m => m.name)} elements={this.all_muscles.map(m => m.name)} />
                         </div>
                     </div>
                     <div className={classes.formSectionContainer}>
                         <div className={clsx(classes.formSection)}>
                             <div className={classes.formSectionHeader}><span>Secondary muscles</span></div>
-                            <CustomSelect multiple placeholder='Add secondary muscles...' name='secondary_muscles' onChange={this.handleChange} value={this.state.exercise.secondary_muscles} elements={this.all_muscles} />
+                            <CustomSelect multiple placeholder='Add secondary muscles...' name='secondary_muscles' onChange={this.handleChange} value={this.state.exercise.secondary_muscles.map(m => m.name)} elements={this.all_muscles.map(m => m.name)} />
                         </div>
                     </div>
                     <div className={classes.formSectionContainer}>

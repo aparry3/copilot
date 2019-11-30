@@ -177,7 +177,7 @@ const programs = (state = initialState, action) => {
             }
         }
         case SET_CURRENT_WEEK: {
-            console.log("set_week")
+            console.log(action.index)
             let {index} = action
             return {
                 ...state,

@@ -138,7 +138,7 @@ export const ProgramMenu = connect(
                         <hr className={classes.hr}/>
                         {
                             program.weeks.map((w, i) => (
-                                <div key={`week-${w._id}`} onClick={() => selectWeek(w, i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
+                                <div key={`week-${w._id}`} onClick={() => selectWeek(i)} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><span>Week {i + 1}</span></div>
                             ))
                         }
                         <div onClick={props.addWeek} className={clsx(classes.programMenuItem, classes.programMenuSectionListItem)}><AddIcon /><span> Week</span></div>

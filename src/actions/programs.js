@@ -30,7 +30,6 @@ export function combineExercises(item, drop_location) {
 }
 
 export function setCurrentWeek(index) {
-    console.log("set week")
     return {
         type: SET_CURRENT_WEEK,
         index
