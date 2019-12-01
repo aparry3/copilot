@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import {persistExercise} from '../../actions'
 import {ExerciseForm} from './exercise_form';
-import { normalize, titleCase } from '../util';
+import { normalize, titleCase, MuscleGroup } from '../util';
 import {Grid, Paper, List, ListItem, ListItemText, Typography} from '@material-ui/core';
 import {SearchBar} from './search_bar';
 import {MUSCLE_GROUPS} from '../../constants/exercises'
@@ -25,12 +25,14 @@ const styled = withStyles(theme => ({
         minWidth: '65%',
         width: '75%',
         height: '100%',
-        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column'
     },
     exerciseViewContainer: {
         width: '70%',
         height: '100%',
-        paddingLeft: '20px'
+        paddingLeft: '20px',
+        padding: '5px'
     },
     exerciseListItem: {
         background: theme.palette.background.light,
@@ -47,7 +49,21 @@ const styled = withStyles(theme => ({
 
     },
     exerciseListRow: {
-        height: '40px'
+        width: '100%',
+        display: 'flex',
+        minHeight: '60px',
+        cursor: 'pointer',
+        alignItems: 'center',
+        '&:hover': {
+            background: theme.palette.background.light
+        }
+    },
+    exerciseListBody: {
+        width: '100%',
+        height: '100%',
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column'
     },
     exerciseListItemContent: {
         height: '100%',
@@ -67,22 +83,35 @@ const styled = withStyles(theme => ({
         margin: 0,
         padding: 0
     },
-    exercisesListHeader: {
+    exerciseListHeader: {
         height: '50px',
         textAlign: 'left',
+        width: '100%',
         fontSize: '14px',
         fontWeight: 100,
         color: theme.text.dark,
-        opacity: 0.3
+        opacity: 0.3,
+        display: 'flex',
+        alignItems: 'flex-end',
+        padding: '0px 0px 5px 0px'
     },
     exerciseRowName: {
-        width: '50%'
+        width: '50%',
+        fontSize: '16px',
+        fontWeight: 600,
+        padding: '10px'
+
     },
     exerciseRowCategories: {
-        width: '25%'
+        width: '25%',
+        fontWeight: 200,
+        fontSize: '14px',
+        padding: '10px'
+
     },
     exerciseRowMuscleGroups: {
-        width: '25%'
+        width: '25%',
+        padding: '10px'
 
     },
     exerciseName: {
@@ -105,7 +134,26 @@ const styled = withStyles(theme => ({
     },
     headerText: {
         fontWeight: 200
-    }
+    },
+    categoriesColumn: {
+        width: '25%'
+    },
+    muscleGroupsColumn: {
+        width: '30%'
+    },
+    nameColumn: {
+        flexGrow: 2,
+        width: '45%'
+    },
+    hr: {
+        width: '100%',
+        background: theme.palette.background.dark,
+        opacity: 0.1,
+        margin: '0',
+        border: 0,
+        borderTop: '2px solid rgba(0,0,0,.1)'
+    },
+
 
 }))
 
@@ -136,16 +184,17 @@ class ViewExercisesView extends React.Component {
                 <SearchBar onNewExercise={this.props.onNewExercise} />
                 <div className={classes.viewExercisesContainer} >
                     <div className={classes.exercisesListContainer} >
-                        <table className={classes.exercisesList}>
-                            <tr className={classes.exercisesListHeader}>
-                                <th><span className={classes.headerText}>Name</span></th>
-                                <th><span className={classes.headerText}>Muscle Group</span></th>
-                                <th><span className={classes.headerText}>Category</span></th>
-                            </tr>
-                        {this.props.exercises.map((exercise, index) => {
-                            return <ExerciseListItem selected={index==this.state.selected_exercise_index} index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                        })}
-                        </table>
+                        <div className={classes.exerciseListHeader} >
+                            <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
+                            <div className={classes.muscleGroupsColumn}><span className={classes.headerText}>Muscle Group</span></div>
+                            <div className={classes.categoriesColumn}><span className={classes.headerText}>Category</span></div>
+                        </div>
+                        <hr className={classes.hr} />
+                        <div className={classes.exerciseListBody}>
+                            {this.props.exercises.map((exercise, index) => {
+                                return <ExerciseListItem selected={index==this.state.selected_exercise_index} index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                            })}
+                        </div>
                     </div>
                     <div className={classes.exerciseViewContainer}>
                             { this.state.selected_exercise_index != null && (
@@ -158,49 +207,11 @@ class ViewExercisesView extends React.Component {
     }
 }
 
-let muscle_group_styles = (theme) => ({
-    muscleGroups: {
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    muscleGroupContainer: {
-        padding: '3px'
-    },
-    muscleGroup: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        borderRadius: '10px',
-        width: '65px'
-    }
-})
-let useMGStyles = makeStyles(muscle_group_styles)
-
-function MuscleGroup(props) {
-    let classes = useMGStyles()
-    return (
-        <div className={classes.muscleGroups}>
-            {props.muscle_groups.map(m => {
-                let mg_style = {
-                    background: MUSCLE_GROUPS[m].color
-                }
-                return (
-                    <div className={classes.muscleGroupContainer}>
-                        <div style={mg_style} className={classes.muscleGroup}><span>{m}</span></div>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
 
 function Categories(props) {
     return (
         <div>
-            {props.categories}
+            {props.categories.join(', ')}
         </div>
     )
 }
@@ -212,11 +223,11 @@ const ExerciseListItem = styled((props) => {
     }
     let css_class = props.selected ? clsx(classes.exerciseListItem, classes.selected) : clsx(classes.exerciseListItem)
     return (
-        <tr className={classes.exerciseListRow} onClick={handleSelect}>
-            <td className={classes.exerciseRowName}>{props.exercise.name}</td>
-            <td className={classes.exerciseRowMuscleGroups}><MuscleGroup muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></td>
-            <td className={classes.exerciseRowCategories}><Categories categories={props.exercise.categories} /></td>
-        </tr>
+        <div className={classes.exerciseListRow} onClick={handleSelect}>
+            <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
+            <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroup muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
+            <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.categories} /></div>
+        </div>
     )
 
 })

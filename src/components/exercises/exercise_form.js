@@ -20,7 +20,7 @@ const styled = withStyles(theme => ({
         justifyContent: 'flex-start',
         color: theme.text.primary,
         padding: '10px',
-        background: theme.palette.background.mediumDark,
+        background: theme.palette.background.main,
         overflow: 'auto'
     },
     formSection: {

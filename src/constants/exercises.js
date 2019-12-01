@@ -38,7 +38,7 @@ export const MUSCLE_GROUPS = {
             'rectus abdominus',
             'transversus abdominus'
         ],
-        color: 'orange'
+        color: '#ffbd3f'
     },
     legs: {
         muscles: [
@@ -46,20 +46,20 @@ export const MUSCLE_GROUPS = {
             'hamstrings',
             'calves'
         ],
-        color: 'blue'
+        color: '#7ae5ff'
     },
     shoulders: {
         muscles:[
             'deltoids'
         ],
-        color: 'yellow'
+        color: '#f7f76a'
     },
     arms: {
         muscles: [
             'biceps',
             'triceps'
         ],
-        color: 'pink'
+        color: '#ffc0cb'
     }
 }
 export const allMuscles = () => {
