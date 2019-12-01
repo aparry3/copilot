@@ -11,7 +11,6 @@ const styled = withStyles(theme => ({
         height: '100vh',
         width: '100%',
         display: 'flex',
-        padding: '20px',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
