@@ -51,12 +51,13 @@ let useStyles = makeStyles(styles)
 
 export function ProgramHeader(props) {
     let classes = useStyles()
-    console.log(props.children)
+
+    let children = props.children instanceof Array ? props.children : [props.children]
     return (
         <div className={classes.programListHeader}>
             <div className={classes.programHeaderContent}>
                 { !!props.show_menu && (<div onClick={props.onMenuClick} className={classes.programHeaderMenuIcon}><DehazeIcon /></div>) }
-                { props.children.map(c => (
+                { children.map(c => (
                     <div className={classes.headerItem}>
                         {c}
                     </div>
