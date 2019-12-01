@@ -37,7 +37,8 @@ const styled = withStyles(theme => ({
         height: '100%',
         paddingLeft: '20px',
         padding: '5px',
-        minWidth: '30%'
+        minWidth: '30%',
+        width: '30%'
     },
     exerciseListItem: {
         background: theme.palette.background.light,

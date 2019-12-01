@@ -1,7 +1,7 @@
 import ClearIcon from '@material-ui/icons/Clear';
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles';
-import {MuscleGroup} from '../util'
+import {MuscleGroup, titleCase} from '../util'
 let styles = theme => ({
     viewExerciseContainer: {
         height: '100%',
@@ -40,6 +40,18 @@ let styles = theme => ({
         padding: '10px',
         display: 'flex',
         alignItems: 'flex-start'
+    },
+    exerciseName: {
+        fontSize: '20px',
+        fontWeight: 600
+    },
+    exerciseSectionList: {
+        fontWeight: 300
+    },
+    noSectionElementText: {
+        fontSize: '14px',
+        fontWeight: 200,
+        opacity: 0.5
     }
 })
 
@@ -54,7 +66,9 @@ function ViewExerciseSection(props) {
                 <span>{props.name}</span>
             </div>
             <div className={classes.viewExerciseSectionContent}>
-                {props.children}
+                {!!props.children ? props.children : (
+                    <span className={classes.noSectionElementText}>Edit exercise to add {props.name.toLowerCase()}...</span>
+                )}
             </div>
         </div>
     )
@@ -74,9 +88,11 @@ export const ViewExercise = (props) => {
                     </div>
                 </ViewExerciseSection>
                 <ViewExerciseSection  name="Description">
-                    <div className={classes.exerciseDescription}>
-                        {props.exercise.description}
-                    </div>
+                    {!!props.exercise.description && (
+                        <div className={classes.exerciseDescription}>
+                            {props.exercise.description}
+                        </div>
+                    )}
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Muscle Groups">
                     <div className={classes.exerciseRowMuscleGroups}>
@@ -84,27 +100,37 @@ export const ViewExercise = (props) => {
                     </div>
                 </ViewExerciseSection>
                 <ViewExerciseSection  name="Primary Muscles">
-                    <div className={classes.exercisePrimaryMuscles}>
-                    {props.exercise.primary_muscles.map(m => m.name)}
+                {!!props.exercise.primary_muscles && props.exercise.primary_muscles.length > 0 && (
+                    <div className={classes.exerciseSectionList}>
+                    {props.exercise.primary_muscles.map(m => titleCase(m.name)).join(', ')}
                     </div>
+                )}
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Secondary Muscles">
-                    <div className={classes.exerciseSecondaryMuscles}>
-                    {props.exercise.secondary_muscles.map(m => m.name)}
+                {!!props.exercise.secondary_muscles && props.exercise.secondary_muscles.length > 0 && (
+                    <div className={classes.exerciseSectionList}>
+                    {props.exercise.secondary_muscles.map(m => titleCase(m.name)).join(', ')}
                     </div>
+                )}
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Categories">
-                    <div className={classes.exerciseCategories}>
-                        {props.exercise.categories}
+                {!!props.exercise.categories && props.exercise.categories.length > 0 && (
+                    <div className={classes.exerciseSectionList}>
+                        {props.exercise.categories.join(', ')}
                     </div>
+                )}
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Images">
+                {!!props.exercise.images && props.exercise.images.length > 0 && (
                     <div className={classes.exerciseImages}>
                     </div>
+                )}
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Videos">
+                {!!props.exercise.videos && props.exercise.videos.length > 0 && (
                     <div className={classes.exerciseVideo}>
                     </div>
+                )}
                 </ViewExerciseSection>
             </div>
         </div>
