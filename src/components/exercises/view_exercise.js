@@ -2,6 +2,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import {MuscleGroup, titleCase} from '../util'
+
 let styles = theme => ({
     viewExerciseContainer: {
         height: '100%',

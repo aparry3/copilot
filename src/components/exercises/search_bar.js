@@ -11,43 +11,33 @@ const useStyles = makeStyles(theme => ({
     searchBar: {
         width: `100%`,
         display: 'flex',
+        height: '100%',
         justifyContent: 'space-around',
-        padding: '20px',
-        height: '15%',
+        borderRadius: '5px',
+        fontSize: '14px',
         background: theme.palette.background.light
     },
     search: {
-        width: '80%',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         justifyContent:'flex-start',
         alignItems: 'center',
-        fontSize: '35px',
+        padding: '5px',
         color: theme.text.secondary
     },
     icon: {
-        width: '60px',
-        height: '60px'
+        width: '30px',
+        height: '30px'
     },
-    newExercise: {
-        width: '20%',
+    searchIconContainer: {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '10px',
-        textAlign: 'center',
-        fontSize: '20px',
-        background: theme.palette.background.light,
-        color: theme.text.secondary,
-        opacity:0.1,
-        cursor: 'pointer',
-        '&:hover': {
-            background: theme.palette.background.main,
-            opacity: 0.5
-        }
+        alignItems: 'center'
     },
     searchInput: {
         background: theme.palette.background.light,
         border: 'none',
+        borderRadius: '0px 5px 5px 0px',
         flexGrow:1,
         outline: 'none',
         color: theme.text.primary,
@@ -63,18 +53,14 @@ const SearchBarView = (props) => {
     return (
         <div className={classes.searchBar} >
             <div className={classes.search}>
-                <div >
+                <div className={classes.searchIconContainer} >
                     <SearchIcon className={classes.icon} />
                 </div>
                 <input
                 className={classes.searchInput}
-                placeholder="Search Exercises…"
                 value={props.filter}
                 onChange={(e) => props.setFilter(e.target.value)}
                 />
-            </div>
-            <div className={classes.newExercise} onClick={props.onNewExercise}>
-                <span><AddIcon className={classes.icon}/> Add Exercise</span>
             </div>
         </div>
     )

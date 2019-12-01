@@ -32,6 +32,11 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    headerItem: {
+        padding: '10px',
+        display: 'flex',
+        alignItems: 'center'
+    },
     hr: {
         width: '100%',
         background: theme.palette.background.dark,
@@ -46,11 +51,17 @@ let useStyles = makeStyles(styles)
 
 export function ProgramHeader(props) {
     let classes = useStyles()
-    return(
+    console.log(props.children)
+    return (
         <div className={classes.programListHeader}>
             <div className={classes.programHeaderContent}>
                 { !!props.show_menu && (<div onClick={props.onMenuClick} className={classes.programHeaderMenuIcon}><DehazeIcon /></div>) }
-                { props.children }
+                { props.children.map(c => (
+                    <div className={classes.headerItem}>
+                        {c}
+                    </div>
+                ))
+                }
             </div>
             <div className={classes.programHeaderAction}></div>
         </div>

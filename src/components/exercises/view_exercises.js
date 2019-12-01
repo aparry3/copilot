@@ -197,6 +197,7 @@ class ViewExercisesView extends React.Component {
                     <div className={classes.exercisesListContainer} >
                         <ProgramHeader>
                             <span>Exercises</span>
+                            <SearchBar />
                         </ProgramHeader>
                         <div className={classes.exerciseListHeader} >
                             <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
