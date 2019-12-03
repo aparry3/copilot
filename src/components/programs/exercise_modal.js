@@ -204,10 +204,15 @@ const styles = theme => ({
     },
     modalBody: {
         display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'space-between',
         flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
-        padding: '20px'
+        padding: '10px'
+    },
+    modal: {
+        height: '100%'
     }
 });
 
@@ -420,53 +425,56 @@ class WorkoutElementModalView extends React.Component {
                     <div className={classes.nonFormArea} onClick={this.handleClose}></div>
                     <div className={classes.formArea}>
                         <form style={{height: '100%'}} onSubmit={this.handleSubmit}>
-                            <div className={classes.modalHeader}>
-                                <span>{!!this.state.edit_workout_element ? 'Edit' : 'Add'} {this.state.is_exercise ? 'Exercise' : 'Superset'}</span>
-                            </div>
-                            <div className={classes.modalBody}>
-                                <div className={classes.modalContent}>
-                                    {this.state.is_exercise && (
+                            <div className={classes.modal}>
+                                <div className={classes.modalHeader}>
+                                    <span>{!!this.state.edit_workout_element ? 'Edit' : 'Add'} {this.state.is_exercise ? 'Exercise' : 'Superset'}</span>
+                                </div>
+                                <div className={classes.modalBody}>
+                                    <div className={classes.modalContent}>
+                                        {this.state.is_exercise && (
+                                            <div className={classes.modalContentSection}>
+                                                <FormGroup
+                                                    className={classes.formControl}
+                                                    label="Exercise">
+                                                        <CustomSelect
+                                                            id="exercise_name"
+                                                            name="exercise_name"
+                                                            placeholder="Select Exercise..."
+                                                            onChange={this.handleSelectExercise}
+                                                            value={this.state.workout_element.exercise_name}
+                                                            elements={this.props.exercises.map(e => e.name)}>
+                                                        </CustomSelect>
+                                                </FormGroup>
+                                            </div>
+                                        )}
                                         <div className={classes.modalContentSection}>
                                             <FormGroup
                                                 className={classes.formControl}
-                                                label="Exercise">
-                                                    <CustomSelect
-                                                        id="exercise_name"
-                                                        name="exercise_name"
-                                                        placeholder="Select Exercise..."
-                                                        onChange={this.handleSelectExercise}
-                                                        value={this.state.workout_element.exercise_name}
-                                                        elements={this.props.exercises.map(e => e.name)}>
-                                                    </CustomSelect>
+                                                label="Details">
+                                                    <Details
+                                                        id="details"
+                                                        name="details"
+                                                        onChange={this.handleChangeDetails}
+                                                        details={this.state.workout_element.details}
+                                                    />
+                                            </FormGroup>
+                                            <FormGroup
+                                                className={classes.formControl}
+                                                label="Notes">
+                                                    <textarea
+                                                        className={classes.textareaInput}
+                                                        rows='5'
+                                                        id="workout_element-notes"
+                                                        name='notes'
+                                                        onChange={this.handleChange}
+                                                        value={this.state.workout_element.notes} />
                                             </FormGroup>
                                         </div>
-                                    )}
-                                    <div className={classes.modalContentSection}>
-                                        <FormGroup
-                                            className={classes.formControl}
-                                            label="Details">
-                                                <Details
-                                                    id="details"
-                                                    name="details"
-                                                    onChange={this.handleChangeDetails}
-                                                    details={this.state.workout_element.details}
-                                                />
-                                        </FormGroup>
-                                        <FormGroup
-                                            className={classes.formControl}
-                                            label="Notes">
-                                                <textarea
-                                                    className={classes.textareaInput}
-                                                    rows='5'
-                                                    id="workout_element-notes"
-                                                    name='notes'
-                                                    onChange={this.handleChange}
-                                                    value={this.state.workout_element.notes} />
-                                        </FormGroup>
                                     </div>
-                                </div>
-                                <div className={classes.modalFooter}>
-                                    <ClearIcon />
+                                    <div className={classes.modalFooter}>
+                                        <CheckIcon />
+                                        <ClearIcon />
+                                    </div>
                                 </div>
                             </div>
                         </form>
