@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import React from 'react';
+import AddIcon from '@material-ui/icons/Add'
 import { connect } from 'react-redux';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import {persistExercise} from '../../actions'
@@ -23,14 +24,21 @@ const styled = withStyles(theme => ({
         height: '85%',
         overflow: 'hidden'
     },
-    exercisesListContainer: {
+    exercisesListPageContainer: {
         minWidth: '65%',
         width: '75%',
         flexGrow: 1,
         height: '100%',
         display: 'flex',
-        flexDirection: 'column',
-        padding: '20px'
+        flexDirection: 'column'
+    },
+    exercisesListContainer: {
+        width: '100%',
+        flexGrow: 1,
+        padding: '20px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
     },
     exerciseViewContainer: {
         background: theme.palette.background.light,
@@ -164,6 +172,24 @@ const styled = withStyles(theme => ({
         border: 0,
         borderTop: '2px solid rgba(0,0,0,.1)'
     },
+    exercisesHeaderAction: {
+        display: 'flex',
+        alignItems: 'center',
+        jusitfyContent: 'center',
+        height: '100%',
+        padding: '20px',
+    },
+    addIconContainer: {
+        cursor: 'pointer',
+        '&:hover': {
+            background: theme.palette.background.light
+        },
+        borderRadius: '5px',
+        display: 'flex',
+        alignItems:'center',
+        justifyContent: 'center'
+
+    }
 
 
 }))
@@ -194,22 +220,24 @@ class ViewExercisesView extends React.Component {
         return (
             <>
                 <div className={classes.viewExercisesContainer} >
-                    <div className={classes.exercisesListContainer} >
-                        <ProgramHeader>
+                    <div className={classes.exercisesListPageContainer} >
+                        <ProgramHeader action={<div className={classes.exercisesHeaderAction}><div onClick={this.props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>}>
                             <span>Exercises</span>
                             <SearchBar />
                         </ProgramHeader>
-                        <div className={classes.exerciseListHeader} >
-                            <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
-                            <div className={classes.muscleGroupsColumn}><span className={classes.headerText}>Muscle Group</span></div>
-                            <div className={classes.categoriesColumn}><span className={classes.headerText}>Category</span></div>
-                            <div className={classes.actionColumn}><span className={classes.headerText}>Action</span></div>
-                        </div>
-                        <hr className={classes.hr} />
-                        <div className={classes.exerciseListBody}>
-                            {this.props.exercises.map((exercise, index) => {
-                                return <ExerciseListItem selected={index==this.state.selected_exercise_index} index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
-                            })}
+                        <div className={classes.exercisesListContainer} >
+                            <div className={classes.exerciseListHeader} >
+                                <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
+                                <div className={classes.muscleGroupsColumn}><span className={classes.headerText}>Muscle Group</span></div>
+                                <div className={classes.categoriesColumn}><span className={classes.headerText}>Category</span></div>
+                                <div className={classes.actionColumn}><span className={classes.headerText}>Action</span></div>
+                            </div>
+                            <hr className={classes.hr} />
+                            <div className={classes.exerciseListBody}>
+                                {this.props.exercises.map((exercise, index) => {
+                                    return <ExerciseListItem selected={index==this.state.selected_exercise_index} index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                                })}
+                            </div>
                         </div>
                     </div>
                     { this.state.selected_exercise_index != null && (

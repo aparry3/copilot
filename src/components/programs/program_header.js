@@ -25,6 +25,12 @@ const styles = theme => ({
         fontSize: '30px',
         fontWeight: 400
     },
+    programHeaderAction: {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     programHeaderMenuIcon: {
         padding: '10px 20px 10px 0px',
         cursor: 'pointer',
@@ -64,7 +70,9 @@ export function ProgramHeader(props) {
                 ))
                 }
             </div>
-            <div className={classes.programHeaderAction}></div>
+            <div className={classes.programHeaderAction}>
+                {!!props.action ? props.action : null}
+            </div>
         </div>
     )
 
