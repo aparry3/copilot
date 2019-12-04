@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
 import {ViewExercises} from './view_exercises';
 import {NewExercise} from './new_exercise';
-import {setFilter} from '../../actions'
+import {addNewExercise, tFilter} from '../../actions'
 import {SIDEBAR_WIDTH} from '../styles'
 
 const styled = withStyles(theme => ({
@@ -57,6 +57,7 @@ class ExercisesPageView extends React.Component {
     }
 
     render() {
+        console.log(this.props.is_adding)
         let classes = this.props.classes;
         return (
             <div className={classes.exercisesPageContainer}>

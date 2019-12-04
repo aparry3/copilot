@@ -51,7 +51,8 @@ export function saveExercise(exercise, is_new=false) {
     }
 }
 
-export function addNewExercise(previous_page='exercises', is_adding=true) {
+export function addNewExercise(is_adding=true, previous_page='exercises') {
+    console.log(is_adding)
     return {
         type: ADD_NEW_EXERCISE,
         is_adding,
