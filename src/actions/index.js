@@ -4,6 +4,7 @@ import {
     REQUEST_EXERCISES,
     SET_FILTER,
     PUSH_EXERCISE_STATUS,
+    ADD_NEW_EXERCISE,
     saveExercise,
     fetchExerises,
     setFilter,
@@ -66,6 +67,7 @@ import {
 } from './programs';
 
 export {
+    ADD_NEW_EXERCISE,
     ADD_WEEK,
     EDIT_WEEK,
     ADD_PROGRAM,
@@ -91,6 +93,7 @@ export {
     COPY_WORKOUT_ELEMENT,
     SET_ACTIVE_PROGRAM,
     UPDATE_WORKOUT,
+    SET_CURRENT_WEEK,
     setActiveProgram,
     login,
     logout,
@@ -116,6 +119,6 @@ export {
     deleteWeekFromProgram,
     deleteWeekAndPersist,
     setActivePage,
-    SET_CURRENT_WEEK,
-    setCurrentWeek
+    setCurrentWeek,
+    addNewExercise
 };

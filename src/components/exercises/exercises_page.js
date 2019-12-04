@@ -47,23 +47,20 @@ class ExercisesPageView extends React.Component {
         }
     }
     handleEditOver() {
-        this.setState({
-            is_adding: false,
-        })
+        this.props.finishAddingExercise()
+
     }
 
     handleNewExercise(e) {
         e.preventDefault()
-        this.setState({
-            is_adding: true
-        })
+        this.props.addNewExercise()
     }
 
     render() {
         let classes = this.props.classes;
         return (
             <div className={classes.exercisesPageContainer}>
-                    {this.state.is_adding ? (
+                    {this.props.is_adding ? (
                         <NewExercise onEditOver={this.handleEditOver}/> ) : (
                         <ViewExercises onNewExercise={this.handleNewExercise}/> )
                     }
@@ -74,6 +71,11 @@ class ExercisesPageView extends React.Component {
 
 export const ExercisesPage = connect(
         (state) => ({
+            is_adding: state.exercises.is_adding,
             statuses: state.exercises.statuses
+        }),
+        (dispatch) => ({
+            addNewExercise: () => dispatch(addNewExercise(true)),
+            finishAddingExercise: () => dispatch(addNewExercise(false))
         })
 )(styled(ExercisesPageView))
