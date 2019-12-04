@@ -41,11 +41,18 @@ export function persistExercise(exercise) {
 
     }
 }
+
 export function saveExercise(exercise, is_new=false) {
     return {
         type: SAVE_EXERCISE,
         exercise: exercise,
         is_new: is_new
+    }
+}
+
+export function addNewExercise() {
+    return {
+        type: ADD_NEW_EXERCISE
     }
 }
 export function setFilter(filter) {

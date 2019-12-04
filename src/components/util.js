@@ -60,7 +60,9 @@ const styles = theme => ({
     customSelectContainer: {
         display: 'flex',
         flexDirection: 'column',
-        width: '100%'
+        width: '100%',
+        background: theme.palette.background.light,
+        borderRadius: '5px'
     },
     customSelect: {
         padding: '5px',
@@ -83,7 +85,8 @@ const styles = theme => ({
     customSelectDropdown: {
         width: '100%',
         maxHeight: '200px',
-        overflow: 'auto'
+        overflow: 'auto',
+        padding: '5px'
     },
     customSelectChip: {
         height: '30px',
@@ -109,7 +112,7 @@ const styles = theme => ({
     },
     customSelectListItem: {
         padding: '10px',
-        borderBottom: `1px solid ${theme.palette.background.dark}`,
+        borderBottom: `1px solid ${theme.palette.background.light}`,
         background: 'white',
         color: theme.text.dark,
         cursor: 'pointer',
@@ -185,9 +188,13 @@ export const CustomSelect = (props) => {
     }
     function endSelect(el) {
         if (el == mouse_down_element) {
-            selectElement(el)
-            if (!multiple) {
-                setFocus(false)
+            if (el == 'action') {
+                props.listAction()
+            } else {
+                selectElement(el)
+                if (!multiple) {
+                    setFocus(false)
+                }
             }
         }
         setMouseDownElement(null)
@@ -269,6 +276,11 @@ export const CustomSelect = (props) => {
                             </li>
                         )
                     })}
+                    { !!props.listAction && (
+                        <li className={classes.customSelectListItem} key="list-action" onMouseDown={(e) => beginSelect(e, "action")} onMouseUp={() => endSelect("action")}>
+                            {props.listActionText}
+                        </li>
+                    )}
                     </ul>
                 </div>
             )}

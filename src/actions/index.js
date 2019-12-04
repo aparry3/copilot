@@ -7,7 +7,8 @@ import {
     saveExercise,
     fetchExerises,
     setFilter,
-    persistExercise
+    persistExercise,
+    addNewExercise
 } from './exercises';
 
 import {

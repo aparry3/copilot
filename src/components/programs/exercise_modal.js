@@ -1,4 +1,6 @@
+import clsx from 'clsx'
 import React, {useEffect, useState} from 'react';
+import { withRouter } from "react-router";
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
@@ -6,9 +8,14 @@ import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, InputLabel, Input, Select} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
-import {setFilter} from '../../actions'
+import {addNewExercise, tFilter} from '../../actions'
 import {WORKOUT_SCHEMES, DETAILS} from '../../constants/workout_elements'
-import {CustomSelect} from '../util'
+import {CustomSelect, MuscleGroup} from '../util'
+
+import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
+import FontDownloadIcon from '@material-ui/icons/FontDownload';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
 let top, left = [50, 50]
 
 const styles = theme => ({
@@ -63,7 +70,7 @@ const styles = theme => ({
         width: '30%',
         minWidth: '30%',
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         fontSize: '14px',
         textAlign: 'center'
@@ -103,6 +110,7 @@ const styles = theme => ({
         padding: '5px',
         width: '100%',
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'flex-start'
 
     },
@@ -130,6 +138,7 @@ const styles = theme => ({
     textareaInput: {
         outline: 'none',
         padding: '10px',
+        width: '100%',
         borderRadius: '10px',
         border: 'none',
         color: theme.text.primary,
@@ -212,7 +221,53 @@ const styles = theme => ({
         padding: '10px'
     },
     modal: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    formRow: {
+        display: 'flex',
+        flexGrow: 1,
+        padding: '5px',
+        alignItems: 'center',
         height: '100%'
+    },
+    formRowIcon: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+    },
+    formRowIconContainer: {
+        width: '10%',
+        display: 'flex',
+        height: '100%'
+    },
+    defaultIconContainer: {
+        alignItems: 'center'
+    },
+    notesIconContainer: {
+        alignItems: 'flex-start'
+    },
+    formRowContent: {
+        flexGrow: 1
+    },
+    modalFooter: {
+        width: '100%',
+        padding: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    modalButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '10px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        '&:hover': {
+            background: theme.palette.background.light
+        }
     }
 });
 
@@ -246,9 +301,11 @@ const Details = (props) => {
     let classes = useStyles()
     let [details, setDetails] = useState([...Object.keys(DETAILS)])
     let [focus, setFocus] = useState(false)
+
     useEffect(() => {
         setDetails([...Object.keys(DETAILS)].filter(k => !Object.keys(props.details).includes(k)))
     }, [Object.keys(props.details).length])
+
     function renderDetail(detail, units) {
         function removeDetail(detail) {
             let new_details = {}
@@ -313,7 +370,16 @@ const Details = (props) => {
     return (
         <div className={classes.detailsContainer}>
             { Object.keys(props.details).map(detail => (
-                renderDetail(detail, DETAILS[detail])
+                <div className={classes.formRow}>
+                    <div className={clsx(classes.formRowIconContainer, classes.defaultIconContainer)}>
+                        <div className={classes.formRowIcon}>
+                            {DETAILS[detail].icon}
+                        </div>
+                    </div>
+                    <div className={classes.formRowContent}>
+                        {renderDetail(detail, DETAILS[detail].units)}
+                    </div>
+                </div>
             ))}
             {
                 (details.length > 0) && (focus ? (
@@ -334,6 +400,17 @@ const Details = (props) => {
         </div>
     )
 }
+
+
+function ModalMuscleGroups(props) {
+    let exercise = props.exercises.find(e => e._id = props.exercise)
+
+    return (
+        <MuscleGroup muscle_groups={[...new Set(exercise.primary_muscles.map(m => m.muscle_group))]} />
+    )
+}
+
+
 class WorkoutElementModalView extends React.Component {
     constructor(props) {
         super(props);
@@ -346,6 +423,7 @@ class WorkoutElementModalView extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.addNewExercise = this.addNewExercise.bind(this);
         this.handleSelectExercise = this.handleSelectExercise.bind(this);
         this.handleChangeDetails = this.handleChangeDetails.bind(this);
 
@@ -404,6 +482,11 @@ class WorkoutElementModalView extends React.Component {
         this.props.onClose();
     }
 
+    addNewExercise() {
+        this.props.addNewExercise()
+        this.props.history.push('/trainer/exercises')
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.handleClose()
@@ -434,22 +517,43 @@ class WorkoutElementModalView extends React.Component {
                                         {this.state.is_exercise && (
                                             <div className={classes.modalContentSection}>
                                                 <FormGroup
-                                                    className={classes.formControl}
                                                     label="Exercise">
-                                                        <CustomSelect
-                                                            id="exercise_name"
-                                                            name="exercise_name"
-                                                            placeholder="Select Exercise..."
-                                                            onChange={this.handleSelectExercise}
-                                                            value={this.state.workout_element.exercise_name}
-                                                            elements={this.props.exercises.map(e => e.name)}>
-                                                        </CustomSelect>
+                                                        <div className={classes.formRow}>
+                                                            <div className={clsx(classes.formRowIconContainer, classes.defaultIconContainer)}>
+                                                                <div className={classes.formRowIcon}>
+                                                                    <FontDownloadIcon />
+                                                                </div>
+                                                            </div>
+                                                            <div className={classes.formRowContent}>
+                                                                <CustomSelect
+                                                                    id="exercise_name"
+                                                                    name="exercise_name"
+                                                                    placeholder="Select Exercise..."
+                                                                    listActionText={(<span><AddIcon /> Add New Exercise...</span>)}
+                                                                    listAction={this.addNewExercise}
+                                                                    onChange={this.handleSelectExercise}
+                                                                    value={this.state.workout_element.exercise_name}
+                                                                    elements={this.props.exercises.map(e => e.name)}>
+                                                                </CustomSelect>
+                                                            </div>
+                                                        </div>
+                                                        { !!this.state.workout_element.exercise_name && (
+                                                            <div className={classes.formRow}>
+                                                                <div className={clsx(classes.formRowIconContainer, classes.defaultIconContainer)}>
+                                                                    <div className={classes.formRowIcon}>
+                                                                        <FitnessCenterIcon />
+                                                                    </div>
+                                                                </div>
+                                                                <div className={classes.formRowContent}>
+                                                                    <ModalMuscleGroups exercises={this.props.exercises} exercise={this.state.workout_element.exercise_id} />
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                 </FormGroup>
                                             </div>
                                         )}
                                         <div className={classes.modalContentSection}>
                                             <FormGroup
-                                                className={classes.formControl}
                                                 label="Details">
                                                     <Details
                                                         id="details"
@@ -458,22 +562,36 @@ class WorkoutElementModalView extends React.Component {
                                                         details={this.state.workout_element.details}
                                                     />
                                             </FormGroup>
+                                        </div>
+                                        <div className={classes.modalContentSection}>
                                             <FormGroup
-                                                className={classes.formControl}
                                                 label="Notes">
-                                                    <textarea
-                                                        className={classes.textareaInput}
-                                                        rows='5'
-                                                        id="workout_element-notes"
-                                                        name='notes'
-                                                        onChange={this.handleChange}
-                                                        value={this.state.workout_element.notes} />
+                                                <div className={classes.formRow}>
+                                                    <div className={clsx(classes.formRowIconContainer, classes.notesIconContainer)}>
+                                                        <div className={classes.formRowIcon}>
+                                                            <AssignmentIcon />
+                                                        </div>
+                                                    </div>
+                                                    <div className={classes.formRowContent}>
+                                                        <textarea
+                                                            className={classes.textareaInput}
+                                                            rows='5'
+                                                            id="workout_element-notes"
+                                                            name='notes'
+                                                            onChange={this.handleChange}
+                                                            value={this.state.workout_element.notes} />
+                                                    </div>
+                                                </div>
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className={classes.modalFooter}>
-                                        <CheckIcon />
-                                        <ClearIcon />
+                                        <div onClick={this.handleClose} className={classes.modalButton}>
+                                            <CheckIcon />
+                                        </div>
+                                        <div onClick={this.handleCancel} className={classes.modalButton}>
+                                            <ClearIcon />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -516,7 +634,8 @@ export const WorkoutElementModal = connect(
     },
     (dispatch) => {
         return {
+            addNewExercise: () => dispatch(addNewExercise()),
             setFilter: (text) => dispatch(setFilter(text))
         }
     }
-)(styled(WorkoutElementModalView));
+)(styled(withRouter(WorkoutElementModalView)));
