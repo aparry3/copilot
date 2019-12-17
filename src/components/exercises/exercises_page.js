@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {fade, withStyles} from '@material-ui/core/styles';
 import {ViewExercises} from './view_exercises';
 import {NewExercise} from './new_exercise';
-import {addNewExercise, tFilter} from '../../actions'
+import {showExerciseForm, tFilter} from '../../actions'
 import {SIDEBAR_WIDTH} from '../styles'
 
 const styled = withStyles(theme => ({
@@ -24,7 +24,6 @@ class ExercisesPageView extends React.Component {
         super(props)
         this.state = {
             loading: true,
-            is_adding: false,
             filter_text: ''
         };
         this.props = props
@@ -56,14 +55,20 @@ class ExercisesPageView extends React.Component {
         this.props.addNewExercise()
     }
 
+    handleEditExercise(e, exercise) {
+        e.preventDefault()
+        this.props.editExercise(exercise)
+    }
+
+
     render() {
-        console.log(this.props.is_adding)
+        console.log(this.props.show_exercise_form)
         let classes = this.props.classes;
         return (
             <div className={classes.exercisesPageContainer}>
-                    {this.props.is_adding ? (
-                        <NewExercise onEditOver={this.handleEditOver}/> ) : (
-                        <ViewExercises onNewExercise={this.handleNewExercise}/> )
+                    {this.props.show_exercise_form ? (
+                        <NewExercise /> ) : (
+                        <ViewExercises /> )
                     }
             </div>
         );
@@ -72,11 +77,7 @@ class ExercisesPageView extends React.Component {
 
 export const ExercisesPage = connect(
         (state) => ({
-            is_adding: state.exercises.is_adding,
+            show_exercise_form: state.exercises.show_exercise_form,
             statuses: state.exercises.statuses
-        }),
-        (dispatch) => ({
-            addNewExercise: () => dispatch(addNewExercise(true)),
-            finishAddingExercise: () => dispatch(addNewExercise(false))
         })
 )(styled(ExercisesPageView))

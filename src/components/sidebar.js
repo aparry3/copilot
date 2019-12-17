@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import {Logo} from './util';
 import {makeStyles} from '@material-ui/core/styles'
 import {SIDEBAR_WIDTH} from './styles'
-import {logout, setActivePage} from '../actions'
+import {logout, setActivePage, showExerciseForm} from '../actions'
 import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
@@ -107,15 +107,22 @@ export const Sidebar = connect(
         selected_page: state.app.active_page
     }),
     dispatch => ({
-        setActivePage: (page) => dispatch(setActivePage(page))
+        setActivePage: (page) => dispatch(setActivePage(page)),
+        showExerciseForm: () => dispatch(showExerciseForm(false))
     })
 )((props) => {
     const classes = useStyles();
     let {selected_page} = props
+
     useEffect(() => {
         let page = window.location.pathname.match(/trainer\/(\w+)/i)[1]
         props.setActivePage(page)
     }, [])
+
+    function setExercisePage() {
+        props.setActivePage('exercises')
+        props.showExerciseForm()
+    }
     return (
         <div className={classes.drawer}>
             <div className={classes.sidebarHeader} >
@@ -126,7 +133,7 @@ export const Sidebar = connect(
             <div className={classes.sidebarContent}>
                 <div className={classes.menuItemList}>
                     <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                        <div onClick={() => props.setActivePage('exercises')}
+                        <div onClick={() => setExercisePage()}
                             className={selected_page == 'exercises' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
                             <div className={classes.sidebarIcon}><ViewListIcon /></div>
                             <div><span>Exercises</span></div>

@@ -1,10 +1,11 @@
-import {ADD_NEW_EXERCISE, SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER, PUSH_EXERCISE_STATUS} from '../actions'
+import {SHOW_EXERCISE_FORM, SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER, PUSH_EXERCISE_STATUS} from '../actions'
 
 const initialState = {
     items: [],
     filter: '',
     statuses: [],
-    is_adding: false
+    show_exercise_form: false,
+    current_exercise: null
 }
 
 function saveExercise(items, exercise, is_new) {
@@ -25,10 +26,11 @@ function buildStatus({type, success, name, action}) {
 }
 const exercises = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_NEW_EXERCISE: {
+        case SHOW_EXERCISE_FORM: {
             return {
                 ...state,
-                is_adding: action.is_adding
+                show_exercise_form: action.show_exercise_form,
+                current_exercise: action.current_exercise
             }
         }
         case SET_FILTER:

@@ -1,50 +1,59 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import {persistExercise} from '../../actions';
+import {ProgramHeader} from '../programs/program_header'
+import {withStyles} from '@material-ui/styles'
+import {showExerciseForm, persistExercise} from '../../actions';
 import {ExerciseForm} from './exercise_form';
-import { EXERCISE } from '../../constants/exercises';
 
+const styles = theme => ({
+    exerciseFormPage: {
+        width: '100%',
+        height: '100%',
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column'
+    }
+})
+
+let styled = withStyles(styles)
 
 class NewExerciseView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            new_exercise: {...EXERCISE}
-        };
         this.handleSave = this.handleSave.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
 
     }
     handleSave(exercise) {
         this.props.onSave(exercise).then(exercise => {
-            this.setState({
-                new_exercise: {...EXERCISE}
-            });
-            this.props.onEditOver()
+            this.props.finishAddingExercise()
         });
     }
 
     handleCancel(){
-        this.setState({
-            new_exercise: {...EXERCISE}
-        })
-        this.props.onEditOver()
+        this.props.finishAddingExercise()
     }
-    render() {        return (
-            <div className="container">
-                <h2>New Exercise</h2>
-                <ExerciseForm onSave={this.handleSave} exercise={this.state.new_exercise} onCancel={this.handleCancel}/>
+    render() {
+        let {classes} = this.props
+        return (
+            <div className={classes.exerciseFormPage}>
+                <ProgramHeader >
+                    <span>New Exercises</span>
+                </ProgramHeader>
+                <ExerciseForm onSave={this.handleSave} exercise={this.props.exercise} onCancel={this.handleCancel}/>
             </div>
         )
     }
 }
 
 export const NewExercise = connect(
-    null,
+    (state) => ({
+        exercise: state.exercises.current_exercise
+    }),
     (dispatch) => {
         return {
-            onSave: (exercise) => dispatch(persistExercise(exercise))
+            onSave: (exercise) => dispatch(persistExercise(exercise)),
+            finishAddingExercise: () => dispatch(showExerciseForm(false, null))
         }
     }
-)(NewExerciseView)
+)(styled(NewExerciseView))

@@ -1,9 +1,10 @@
 import clsx from 'clsx'
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add'
+import CreateIcon from '@material-ui/icons/Create';
 import { connect } from 'react-redux';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
-import {persistExercise} from '../../actions'
+import {persistExercise, showExerciseForm} from '../../actions'
 import {ExerciseForm} from './exercise_form';
 import {ProgramHeader} from '../programs/program_header'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -127,7 +128,8 @@ const styled = withStyles(theme => ({
 
     },
     exerciseRowAction: {
-        padding: '10px'
+        padding: '10px',
+        cursor: 'pointer'
 
     },
     exerciseName: {
@@ -189,6 +191,11 @@ const styled = withStyles(theme => ({
         alignItems:'center',
         justifyContent: 'center'
 
+    },
+    rowActionIconContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 
 
@@ -198,15 +205,35 @@ class ViewExercisesView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected_exercise_index: null
+            selected_exercise_index: null,
+            action_selected_index: null
         };
         this.handleSelect = this.handleSelect.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleActionClick = this.handleActionClick.bind(this)
+        this.handleEditClick = this.handleEditClick.bind(this)
 
     }
 
+    handleEditClick(e, index) {
+        e.stopPropagation()
+        e.preventDefault()
+        this.props.onEditExercise(this.props.exercises[index])
+    }
+
+    handleActionClick(e, index) {
+        e.stopPropagation()
+        e.preventDefault()
+        this.setState({
+            action_selected_index: index
+        })
+    }
+
     handleSelect(index) {
-        this.setState({selected_exercise_index: index});
+        this.setState({
+            selected_exercise_index: index,
+            action_selected_index: null
+        });
     }
     handleCancel(){
         this.setState({
@@ -235,14 +262,23 @@ class ViewExercisesView extends React.Component {
                             <hr className={classes.hr} />
                             <div className={classes.exerciseListBody}>
                                 {this.props.exercises.map((exercise, index) => {
-                                    return <ExerciseListItem selected={index==this.state.selected_exercise_index} index={index} handleExerciseSelect={this.handleSelect} key={exercise._id} exercise={exercise}/>;
+                                    return (<ExerciseListItem
+                                        onEditClick={(e) => this.handleEditClick(e, index)}
+                                        onActionClick={(e) => this.handleActionClick(e, index)}
+                                        action_selected={this.state.action_selected_index == index}
+                                        selected={index==this.state.selected_exercise_index}
+                                        index={index}
+                                        handleExerciseSelect={this.handleSelect}
+                                        key={exercise._id}
+                                        exercise={exercise}/>
+                                    );
                                 })}
                             </div>
                         </div>
                     </div>
                     { this.state.selected_exercise_index != null && (
                         <div className={classes.exerciseViewContainer}>
-                            <ViewExercise exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
+                            <ViewExercise onEditClick={(e) => this.handleEditClick(e, this.state.selected_exercise_index)} exercise={this.props.exercises[this.state.selected_exercise_index]} onCancel={this.handleCancel}/>
                         </div>
                     )}
 
@@ -272,7 +308,9 @@ const ExerciseListItem = styled((props) => {
             <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
             <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroup muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
             <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.categories} /></div>
-            <div className={clsx(classes.exerciseRowAction, classes.actionColumn)}><MoreHorizIcon /></div>
+            <div className={clsx(classes.exerciseRowAction, classes.actionColumn)}>
+                { props.action_selected  ? (<div onClick={props.onEditClick} className={classes.rowActionIconContainer}><CreateIcon /></div>) : (<div onClick={props.onActionClick} className={classes.rowActionIconContainer}><MoreHorizIcon /></div>)}
+            </div>
         </div>
     )
 
@@ -295,6 +333,8 @@ export const ViewExercises = connect(
     (dispatch) => {
         return {
             onSave: (exercise) => dispatch(persistExercise(exercise)),
+            onNewExercise: () => dispatch(showExerciseForm(true)),
+            onEditExercise: (exercise) => dispatch(showExerciseForm(true, exercise))
         }
     }
 )(styled(ViewExercisesView))

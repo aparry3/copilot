@@ -8,7 +8,7 @@ import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, InputLabel, Input, Select} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
-import {addNewExercise, tFilter} from '../../actions'
+import {showExerciseForm, tFilter} from '../../actions'
 import {WORKOUT_SCHEMES, DETAILS} from '../../constants/workout_elements'
 import {CustomSelect, MuscleGroup} from '../util'
 
@@ -423,7 +423,7 @@ class WorkoutElementModalView extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.addNewExercise = this.addNewExercise.bind(this);
+        this.showExerciseForm = this.showExerciseForm.bind(this);
         this.handleSelectExercise = this.handleSelectExercise.bind(this);
         this.handleChangeDetails = this.handleChangeDetails.bind(this);
 
@@ -482,8 +482,8 @@ class WorkoutElementModalView extends React.Component {
         this.props.onClose();
     }
 
-    addNewExercise() {
-        this.props.addNewExercise()
+    showExerciseForm() {
+        this.props.showExerciseForm()
         this.props.history.push('/trainer/exercises')
     }
 
@@ -529,8 +529,8 @@ class WorkoutElementModalView extends React.Component {
                                                                     id="exercise_name"
                                                                     name="exercise_name"
                                                                     placeholder="Select Exercise..."
-                                                                    listActionText={(<span><AddIcon /> Add New Exercise...</span>)}
-                                                                    listAction={this.addNewExercise}
+                                                                    listActionText={(<span><AddIcon /> Create New Exercise...</span>)}
+                                                                    listAction={this.showExerciseForm}
                                                                     onChange={this.handleSelectExercise}
                                                                     value={this.state.workout_element.exercise_name}
                                                                     elements={this.props.exercises.map(e => e.name)}>
@@ -603,25 +603,6 @@ class WorkoutElementModalView extends React.Component {
         )
     }
 }
-// <div className={classes.modalContentSection}>
-//     <DetailGroup
-//         className={classes.formControl}
-//         label="Scheme"
-//         input_component={
-//             <Select
-//                 id="workout_element-details-scheme"
-//                 name='scheme'
-//                 onChange={this.handleChange}
-//                 value={this.state.workout_element.details.scheme}>
-//                 {WORKOUT_SCHEMES.map((scheme, index)=> {
-//                     return <MenuItem key={scheme} value={scheme}>{scheme}</MenuItem>
-//                 })}
-//             </Select>
-//         }
-//         name="scheme"
-//         />
-// </div>
-// <hr className={classes.hr}/>
 
 
 export const WorkoutElementModal = connect(
@@ -634,7 +615,7 @@ export const WorkoutElementModal = connect(
     },
     (dispatch) => {
         return {
-            addNewExercise: () => dispatch(addNewExercise()),
+            showExerciseForm: () => dispatch(showExerciseForm()),
             setFilter: (text) => dispatch(setFilter(text))
         }
     }

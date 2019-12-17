@@ -1,4 +1,5 @@
 import ClearIcon from '@material-ui/icons/Clear';
+import CreateIcon from '@material-ui/icons/Create';
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import {MuscleGroup, titleCase} from '../util'
@@ -80,6 +81,7 @@ export const ViewExercise = (props) => {
     return (
         <div className={classes.viewExerciseContainer}>
             <div className={classes.closeHeader}>
+                <div className={classes.closeIconContainer} onClick={props.onCancel}><CreateIcon /></div>
                 <div className={classes.closeIconContainer} onClick={props.onCancel}><ClearIcon /></div>
             </div>
             <div className={classes.exerciseContent}>

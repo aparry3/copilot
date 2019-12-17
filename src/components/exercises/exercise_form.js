@@ -5,7 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import { normalize, titleCase, CustomSelect } from '../util';
-import { allMuscles, CATEGORIES } from '../../constants/exercises';
+import { allMuscles, CATEGORIES, EXERCISE } from '../../constants/exercises';
 import MenuItem from '@material-ui/core/MenuItem';
 import {withStyles} from '@material-ui/core/styles';
 import update from 'immutability-helper';
@@ -78,6 +78,9 @@ const styled = withStyles(theme => ({
     }
 }));
 
+function initializeExercise(exercise) {
+    return !!exercise ? {...exercise} : {...EXERCISE}
+}
 
 class ExerciseFormView extends React.Component {
 
@@ -85,7 +88,7 @@ class ExerciseFormView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            exercise: props.exercise ? {...props.exercise} : null
+            exercise: initializeExercise(props.exercise)
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -99,7 +102,7 @@ class ExerciseFormView extends React.Component {
 
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({exercise: nextProps.exercise})
+        this.setState({exercise: initializeExercise(nextProps.exercise)})
     }
     handleChange(e) {
         let name = e.target.name;
@@ -117,10 +120,12 @@ class ExerciseFormView extends React.Component {
         e.preventDefault();
         this.props.onSave(this.state.exercise)
     }
+
     handleCancel(e) {
         e.preventDefault()
         this.props.onCancel()
     }
+
     render() {
         const classes = this.props.classes;
         return (

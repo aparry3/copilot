@@ -4,12 +4,12 @@ import {
     REQUEST_EXERCISES,
     SET_FILTER,
     PUSH_EXERCISE_STATUS,
-    ADD_NEW_EXERCISE,
+    SHOW_EXERCISE_FORM,
     saveExercise,
     fetchExerises,
     setFilter,
     persistExercise,
-    addNewExercise
+    showExerciseForm
 } from './exercises';
 
 import {
@@ -67,7 +67,7 @@ import {
 } from './programs';
 
 export {
-    ADD_NEW_EXERCISE,
+    SHOW_EXERCISE_FORM,
     ADD_WEEK,
     EDIT_WEEK,
     ADD_PROGRAM,
@@ -120,5 +120,5 @@ export {
     deleteWeekAndPersist,
     setActivePage,
     setCurrentWeek,
-    addNewExercise
+    showExerciseForm
 };

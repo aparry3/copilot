@@ -1,7 +1,7 @@
 import {auth0_client} from '../auth'
 import {API_URI} from '../config'
 
-export const ADD_NEW_EXERCISE = 'ADD_NEW_EXERCISE';
+export const SHOW_EXERCISE_FORM = 'SHOW_EXERCISE_FORM';
 export const SAVE_EXERCISE = 'SAVE_EXERCISE';
 export const REQUEST_EXERCISES = 'REQUEST_EXERCISES';
 export const RECIEVE_EXERCISES = 'RECIEVE_EXERCISES';
@@ -51,12 +51,13 @@ export function saveExercise(exercise, is_new=false) {
     }
 }
 
-export function addNewExercise(is_adding=true, previous_page='exercises') {
-    console.log(is_adding)
+export function showExerciseForm(show_exercise_form=true, current_exercise=null, previous_page='exercises') {
+    console.log(show_exercise_form)
     return {
-        type: ADD_NEW_EXERCISE,
-        is_adding,
-        previous_page
+        type: SHOW_EXERCISE_FORM,
+        show_exercise_form,
+        previous_page,
+        current_exercise
     }
 }
 export function setFilter(filter) {
