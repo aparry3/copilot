@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {ProgramHeader} from '../programs/program_header'
+import { withRouter } from "react-router";
 import {withStyles} from '@material-ui/styles'
-import {showExerciseForm, persistExercise} from '../../actions';
+import {showExerciseForm, persistExercise, setActivePage} from '../../actions';
 import {ExerciseForm} from './exercise_form';
 
 const styles = theme => ({
@@ -22,16 +23,26 @@ class NewExerciseView extends React.Component {
         super(props);
         this.handleSave = this.handleSave.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.finishAddingExercise = this.finishAddingExercise.bind(this);
 
     }
+
+    finishAddingExercise() {
+        this.props.finishAddingExercise()
+        this.props.setActivePage(this.props.previous_page)
+        if (this.props.previous_page != 'exercises') {
+            this.props.history.goBack()
+        }
+    }
+
     handleSave(exercise) {
         this.props.onSave(exercise).then(exercise => {
-            this.props.finishAddingExercise()
+            this.finishAddingExercise()
         });
     }
 
     handleCancel(){
-        this.props.finishAddingExercise()
+        this.finishAddingExercise()
     }
     render() {
         let {classes} = this.props
@@ -48,12 +59,14 @@ class NewExerciseView extends React.Component {
 
 export const NewExercise = connect(
     (state) => ({
-        exercise: state.exercises.current_exercise
+        exercise: state.exercises.current_exercise,
+        previous_page: state.exercises.previous_page
     }),
     (dispatch) => {
         return {
             onSave: (exercise) => dispatch(persistExercise(exercise)),
+            setActivePage: (previous_page) => dispatch(setActivePage(previous_page)),
             finishAddingExercise: () => dispatch(showExerciseForm(false, null))
         }
     }
-)(styled(NewExerciseView))
+)(withRouter(styled(NewExerciseView)))

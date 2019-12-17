@@ -3,7 +3,8 @@ import {
 } from '../actions'
 
 const initialState = {
-    active_page: null
+    active_page: null,
+    page_state: null
 }
 
 const app = (state = initialState, action) => {
@@ -12,7 +13,8 @@ const app = (state = initialState, action) => {
             console.log(action.page)
             return {
                 ...state,
-                active_page: action.page
+                active_page: action.page,
+                page_state: action.page_state
             }
         }
         default:

@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import update from 'immutability-helper';
+import { withRouter } from "react-router";
 import React, {useRef, useState, useEffect} from 'react';
 import {useDrop, useDrag} from 'react-dnd';
 import {connect} from 'react-redux'
@@ -7,7 +8,7 @@ import {Grid, MenuItem, Button, List, ListItem, Typography, Divider, Card, CardA
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add'
 import FilterIcon from '@material-ui/icons/Filter'
-import {persistDay, moveWorkoutElement, setDragElement} from '../../actions';
+import {persistDay, moveWorkoutElement, setDragElement, showExerciseForm, setActivePage} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {WorkoutElement} from './workout_element';
 import {WorkoutElementModal} from './exercise_modal';
@@ -214,6 +215,7 @@ class DayView extends React.Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.handleModalSubmit = this.handleModalSubmit.bind(this)
         this.getWorkoutState = this.getWorkoutState.bind(this)
+        this.handleNewExercise = this.handleNewExercise.bind(this)
 
     }
 
@@ -330,6 +332,12 @@ class DayView extends React.Component {
         this.props.save(updates)
     }
 
+    handleNewExercise() {
+        this.props.showExerciseForm(this.props.program_id)
+        this.props.setActivePage()
+        this.props.history.push('/trainer/exercises')
+    }
+
     getWorkoutState() {
         return this.state.workout
     }
@@ -342,7 +350,9 @@ class DayView extends React.Component {
                     workout_element={this.state.workout_element}
                     open={this.state.modal_is_open}
                     onSubmit={this.handleModalSubmit}
-                    onClose={this.toggleModal} />
+                    onClose={this.toggleModal}
+                    onNewExercise={this.handleNewExercise}
+                     />
                 <Workout
                     editWorkoutElement={this.toggleModal}
                     workout={this.state.workout}
@@ -360,4 +370,12 @@ class DayView extends React.Component {
     }
 }
 
-export const Day = styled(DayView)
+export const Day = connect(
+    state => ({
+        program_id: state.programs.active_program._id
+    }),
+    dispatch => ({
+        showExerciseForm: () => dispatch(showExerciseForm(true, null, 'programs')),
+        setActivePage: () => dispatch(setActivePage('exercises'))
+    })
+)(withRouter(styled(DayView)))

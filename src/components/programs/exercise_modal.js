@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import React, {useEffect, useState} from 'react';
-import { withRouter } from "react-router";
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
@@ -8,7 +7,7 @@ import update from 'immutability-helper';
 import {Modal, Paper, MenuItem, InputLabel, Input, Select} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
-import {showExerciseForm, tFilter} from '../../actions'
+import {setFilter} from '../../actions'
 import {WORKOUT_SCHEMES, DETAILS} from '../../constants/workout_elements'
 import {CustomSelect, MuscleGroup} from '../util'
 
@@ -423,7 +422,6 @@ class WorkoutElementModalView extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.showExerciseForm = this.showExerciseForm.bind(this);
         this.handleSelectExercise = this.handleSelectExercise.bind(this);
         this.handleChangeDetails = this.handleChangeDetails.bind(this);
 
@@ -482,11 +480,6 @@ class WorkoutElementModalView extends React.Component {
         this.props.onClose();
     }
 
-    showExerciseForm() {
-        this.props.showExerciseForm()
-        this.props.history.push('/trainer/exercises')
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         this.handleClose()
@@ -530,7 +523,7 @@ class WorkoutElementModalView extends React.Component {
                                                                     name="exercise_name"
                                                                     placeholder="Select Exercise..."
                                                                     listActionText={(<span><AddIcon /> Create New Exercise...</span>)}
-                                                                    listAction={this.showExerciseForm}
+                                                                    listAction={this.props.onNewExercise}
                                                                     onChange={this.handleSelectExercise}
                                                                     value={this.state.workout_element.exercise_name}
                                                                     elements={this.props.exercises.map(e => e.name)}>
@@ -615,8 +608,7 @@ export const WorkoutElementModal = connect(
     },
     (dispatch) => {
         return {
-            showExerciseForm: () => dispatch(showExerciseForm()),
             setFilter: (text) => dispatch(setFilter(text))
         }
     }
-)(styled(withRouter(WorkoutElementModalView)));
+)(styled(WorkoutElementModalView));

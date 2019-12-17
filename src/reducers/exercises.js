@@ -5,7 +5,9 @@ const initialState = {
     filter: '',
     statuses: [],
     show_exercise_form: false,
-    current_exercise: null
+    current_exercise: null,
+    previous_page: 'exercises',
+    options: {}
 }
 
 function saveExercise(items, exercise, is_new) {
@@ -30,7 +32,9 @@ const exercises = (state = initialState, action) => {
             return {
                 ...state,
                 show_exercise_form: action.show_exercise_form,
-                current_exercise: action.current_exercise
+                current_exercise: action.current_exercise,
+                previous_page: action.previous_page,
+                options: action.options
             }
         }
         case SET_FILTER:
