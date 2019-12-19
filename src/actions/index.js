@@ -63,7 +63,9 @@ import {
     deleteWeekFromProgram,
     deleteWeekAndPersist,
     SET_CURRENT_WEEK,
-    setCurrentWeek
+    setCurrentWeek,
+    deleteProgramAndPersist,
+    DELETE_PROGRAM
 } from './programs';
 
 export {
@@ -120,5 +122,7 @@ export {
     deleteWeekAndPersist,
     setActivePage,
     setCurrentWeek,
-    showExerciseForm
+    showExerciseForm,
+    deleteProgramAndPersist,
+    DELETE_PROGRAM
 };

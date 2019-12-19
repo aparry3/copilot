@@ -16,6 +16,7 @@ export const COPY_WORKOUT_ELEMENT = 'COPY_WORKOUT_ELEMENT';
 export const SET_ACTIVE_PROGRAM = 'SELECT_ACTIVE_PROGRAM';
 export const UPDATE_WORKOUT = 'UPDATE_WORKOUT';
 export const SET_CURRENT_WEEK = 'SET_CURRENT_WEEK';
+export const DELETE_PROGRAM = 'DELETE_PROGRAM'
 
 
 export function setActiveProgram(program_id) {
@@ -127,7 +128,32 @@ export function editWeek(week_id, week) {
         week
     }
 }
+export function deleteProgramAndPersist(program_id) {
+    return async (dispatch) => {
+        let token = await auth0_client.getToken()
+        return fetch(`${API_URI}/programs/${program_id}`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            let data = res.json();
+            return data
+        }).then(delete_response => {
+            dispatch(deleteProgram(program_id))
+            return delete_response
+        });
+    }
+}
 
+function deleteProgram(program_id) {
+    return {
+        type: DELETE_PROGRAM,
+        program_id
+    }
+}
 export function getProgram(program_id) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()

@@ -1,11 +1,11 @@
 import clsx from 'clsx'
 import AddIcon from '@material-ui/icons/Add'
-import CreateIcon from '@material-ui/icons/Create'
+import DeleteIcon from '@material-ui/icons/Delete'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {addProgramAndPersist, setActiveProgram} from '../../actions';
+import {addProgramAndPersist, setActiveProgram, deleteProgramAndPersist} from '../../actions';
 import { Link } from "react-router-dom";
 import {history} from '../../util'
 import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
@@ -45,7 +45,8 @@ let styles = (theme) => ({
         alignItems: 'flex-start',
         padding: '20px',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        overflow: 'auto'
     },
     programListContainer: {
         width: '100%',
@@ -212,10 +213,10 @@ const ProgramListItem = styled((props) => {
     return (
         <div className={classes.programListRow} onClick={props.handleSelect}>
             <div className={clsx(classes.programRowName, classes.nameColumn)}>{props.program.name}</div>
-            <div className={clsx(classes.lengthColumn, classes.programRowLength)}>{props.program.weeks.length}</div>
+            <div className={clsx(classes.lengthColumn, classes.programRowLength)}>{`${props.program.weeks.length} weeks`}</div>
             <div className={clsx(classes.programRowLastModified, classes.lastModifiedColumn)}>{new Date(props.program.modified).toLocaleDateString()}</div>
             <div className={clsx(classes.programRowAction, classes.actionColumn)}>
-                { props.action_selected  ? (<div onClick={props.onEditClick} className={classes.rowActionIconContainer}><CreateIcon /></div>) : (<div onClick={props.onActionClick} className={classes.rowActionIconContainer}><MoreHorizIcon /></div>)}
+                { props.action_selected  ? (<div onClick={props.onEditClick} className={classes.rowActionIconContainer}><DeleteIcon /></div>) : (<div onClick={props.onActionClick} className={classes.rowActionIconContainer}><MoreHorizIcon /></div>)}
             </div>
         </div>
     )
@@ -249,12 +250,17 @@ export function ProgramsListView(props) {
         props.history.push(`${props.location.pathname}/${program._id}`)
     }
 
-    function handleEditClick(e, index) {
-
+    async function handleEditClick(e, program) {
+        e.stopPropagation()
+        e.preventDefault()
+        await props.deleteProgram(program._id)
+        setActionSelectedIndex(null)
     }
 
     function handleActionClick(e, index) {
-
+        e.stopPropagation()
+        e.preventDefault()
+        setActionSelectedIndex(index)
     }
 
     return (
@@ -274,7 +280,7 @@ export function ProgramsListView(props) {
                     <div className={classes.programListBody}>
                         {programs.map((program, index) => {
                             return (<ProgramListItem
-                                onEditClick={(e) => handleEditClick(e, index)}
+                                onEditClick={(e) => handleEditClick(e, program)}
                                 onActionClick={(e) => handleActionClick(e, index)}
                                 action_selected={action_selected_index == index}
                                 selected={index == selected_program_index}
@@ -361,6 +367,7 @@ export const ProgramsList = connect(
     dispatch => {
         return {
             addProgram: (name) => dispatch(addProgramAndPersist(name)),
+            deleteProgram: (program_id) => dispatch(deleteProgramAndPersist(program_id)),
             setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
         }
     }

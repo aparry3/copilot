@@ -9,6 +9,7 @@ import {
     ADD_PROGRAM,
     EDIT_WEEK,
     SET_DRAG_ELEMENT,
+    DELETE_PROGRAM,
     DELETE_WEEK,
     COPY_WORKOUT_ELEMENT,
     SET_ACTIVE_PROGRAM,
@@ -28,6 +29,11 @@ function _newProgram(active_program, week) {
     new_program.weeks = new_weeks;
     return new_program
 }
+
+function _deleteProgram(programs, program_id) {
+    return programs.filter(x => x._id != program_id)
+}
+
 function _addWeekToProgram(all_programs, program_id, week_id) {
     let new_programs = [...all_programs];
     return new_programs.map(p => {
@@ -186,6 +192,14 @@ const programs = (state = initialState, action) => {
                     index
                 }
             }
+        }
+        case DELETE_PROGRAM: {
+            let {program_id} = action
+            let new_state = {
+                ...state,
+                all_programs: _deleteProgram(state.all_programs, program_id)
+            }
+            return new_state
         }
         case UPDATE_WORKOUT: {
             let {week_id, day, workout} = action

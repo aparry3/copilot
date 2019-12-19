@@ -132,18 +132,18 @@ export const Sidebar = connect(
             <Divider variant="middle"/>
             <div className={classes.sidebarContent}>
                 <div className={classes.menuItemList}>
-                    <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
-                        <div onClick={() => setExercisePage()}
-                            className={selected_page == 'exercises' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
-                            <div className={classes.sidebarIcon}><ViewListIcon /></div>
-                            <div><span>Exercises</span></div>
-                        </div>
-                    </Link>
                     <Link className={classes.link}  color="inherit" list_key="programs" to={`${props.path}/programs`}>
                         <div onClick={() => props.setActivePage('programs')}
                             className={selected_page == 'programs' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
                             <div className={classes.sidebarIcon}><span><TableChartIcon /></span></div>
                             <div><span>Programs</span></div>
+                        </div>
+                    </Link>
+                    <Link className={classes.link} color="inherit" list_key="exercises" to={`${props.path}/exercises`}>
+                        <div onClick={() => setExercisePage()}
+                            className={selected_page == 'exercises' ? clsx(classes.menuItem, classes.selected) : clsx(classes.menuItem)}>
+                            <div className={classes.sidebarIcon}><ViewListIcon /></div>
+                            <div><span>Exercises</span></div>
                         </div>
                     </Link>
                 </div>
