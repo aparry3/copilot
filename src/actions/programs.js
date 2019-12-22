@@ -244,7 +244,7 @@ export function addWeekAndPersist(program_id) {
         })
     }
 }
-export function addProgramAndPersist(name) {
+export function addProgramAndPersist(name, length) {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
         return fetch(`${API_URI}/programs`, {
@@ -255,13 +255,15 @@ export function addProgramAndPersist(name) {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                name: name
+                name: name,
+                length: length
             })
         }).then(res => {
             let data = res.json()
             return data;
         }).then(program => {
             dispatch(addProgram(program))
+            return program
         }, err => {
             console.error(err);
         })

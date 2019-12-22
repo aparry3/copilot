@@ -169,10 +169,11 @@ export function ProgramsListView(props) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        let new_program = await props.addProgram(program_name);
+        let new_program = await props.addProgram(program_name, program_length);
         setAddingNewProgram(false)
         setProgramName(''),
         setProgramLength(0)
+        handleSelect(new_program)
     }
 
     function handleCancel(e) {
@@ -259,65 +260,6 @@ export function ProgramsListView(props) {
     )
 }
 
-// <div className={clsx(classes.programItem)}>
-//     {adding_new_exercise ? (
-//         <form className={classes.programListItem} onSubmit={handleSubmit}>
-//             <div className={clsx(classes.left, classes.programDetailContainer)}>
-//                 <div className={classes.programDetailHeader}>
-//                     <span>Name</span>
-//                 </div>
-//                 <div className={classes.programDetail}>
-//                     <input
-//                         autocomplete="off"
-//                         className={clsx(classes.programDetail, classes.programNameInput)}
-//                         id="program_name"
-//                         name='program_name' onChange={(e) => setName(e.target.value)}
-//                         placeholder="Program name..." value={name}
-//                     />
-//                 </div>
-//             </div>
-//             <div className={clsx(classes.programDetailContainer, classes.right)}>
-//                 <div className={classes.programDetailHeader}>
-//                     <span>save</span>
-//                 </div>
-//                 <div className={clsx(classes.programDetail, classes.detailButtons)}>
-//                     <div className={clsx(classes.detailButton, classes.save)} onClick={handleSubmit}></div>
-//                     <div className={clsx(classes.detailButton, classes.cancel)} onClick={handleCancel}></div>
-//                 </div>
-//             </div>
-//         </form>
-//     ) : (
-//         <div className={classes.newProgram} onClick={() => setAddingNewExercise(true)}>
-//             <AddIcon className={classes.newProgramIcon}/><span>Add Program...</span>
-//         </div>
-//     )}
-// </div>
-//
-// <div className={classes.programList}>
-// {programs.length > 0 && programs.map(program => {
-//     return (
-//         <div key={program._id} className={clsx(classes.programItem, classes.programListItem)} onClick={() => handleSelect(program)}>
-//             <div className={classes.programDetailContainer}>
-//                 <div className={classes.programDetailHeader}>
-//                     <span>Name</span>
-//                 </div>
-//                 <div className={classes.programDetail}>
-//                     <span>{program.name}</span>
-//                 </div>
-//             </div>
-//             <div className={clsx(classes.programDetailContainer, classes.right)}>
-//                 <div className={classes.programDetailHeader}>
-//                     <span>Last Modified</span>
-//                 </div>
-//                 <div className={classes.programDetail}>
-//                     <span>{new Date(program.modified).toLocaleDateString()}</span>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// })}
-// </div>
-
 export const ProgramsList = connect(
     (state, ownProps) => {
         return {
@@ -328,7 +270,7 @@ export const ProgramsList = connect(
     },
     dispatch => {
         return {
-            addProgram: (name) => dispatch(addProgramAndPersist(name)),
+            addProgram: (name, length) => dispatch(addProgramAndPersist(name, length)),
             deleteProgram: (program_id) => dispatch(deleteProgramAndPersist(program_id)),
             setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
         }
