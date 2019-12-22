@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 import AddIcon from '@material-ui/icons/Add'
+import ClearIcon from '@material-ui/icons/Clear';
+import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
@@ -43,7 +45,6 @@ let styles = (theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: '20px',
         width: '100%',
         height: '100%',
         overflow: 'auto'
@@ -56,18 +57,6 @@ let styles = (theme) => ({
         display: 'flex',
         flexDirection: 'column'
     },
-    // programItem: {
-    //     height: '80px',
-    //     padding: '10px',
-    //     margin: '1px',
-    //     width: '100%',
-    //     background: theme.palette.background.light,
-    //     boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
-    //     cursor: 'pointer',
-    //     '&:hover': {
-    //         background: theme.palette.background.mediumDark
-    //     }
-    // },
     programListBody: {
         width: '100%',
         height: '100%',
@@ -75,83 +64,6 @@ let styles = (theme) => ({
         display: 'flex',
         flexDirection: 'column'
     },
-    // programListItem: {
-    //     display: 'flex',
-    //     justifyContent: 'space-between'
-    // },
-    // programDetailContainer: {
-    //     display: 'flex',
-    //     flexDirection: 'column'
-    // },
-    // left: {
-    //     alignItems: 'flex-start',
-    //     flexGrow: 1
-    // },
-    // right: {
-    //     alignItems: 'flex-end'
-    // },
-    // programDetail: {
-    //     fontSize: '20px',
-    //     fontWeight: 100,
-    //     color: theme.text.primary,
-    //     width: '100%'
-    // },
-    // programDetailHeader: {
-    //     fontSize: '12px',
-    //     fontWeight: 200,
-    //     color: theme.text.secondary
-    // },
-    // programListForm: {
-    //     height: '100%',
-    //     weight: '100%'
-    // },
-    // newProgram: {
-    //     width: '100%',
-    //     height: '100%',
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     fontSize: '25px',
-    //     fontWeight: 300,
-    //     color: theme.text.secondary,
-    //     textAlign: 'center'
-    // },
-    // newProgramIcon: {
-    //     height: '30px',
-    //     width: '30px'
-    // },
-    // programNameInput: {
-    //     background: 'transparent',
-    //     outline: 'none',
-    //     border: 'none',
-    //     width: '100%'
-    // },
-    // detailButton: {
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     height: '30px',
-    //     width: '30px',
-    //     borderRadius: '10px',
-    //     margin: '5px'
-    // },
-    // detailButtons: {
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center'
-    // },
-    // save: {
-    //     background: theme.accents.primary,
-    //     '&:hover': {
-    //         background: theme.accents.primaryHover
-    //     }
-    // },
-    // cancel: {
-    //     background: theme.accents.secondary,
-    //     '&:hover': {
-    //         background: theme.accents.secondaryHover
-    //     }
-    // },
     programListRow: {
         width: '100%',
         display: 'flex',
@@ -201,6 +113,28 @@ let styles = (theme) => ({
         flexGrow: 2,
         width: '40%'
     },
+    programHeaderAction: {
+        display: 'flex',
+        alignItems: 'center',
+        jusitfyContent: 'center',
+        height: '100%',
+        padding: '20px',
+    },
+    addIconContainer: {
+        cursor: 'pointer',
+        '&:hover': {
+            background: theme.palette.background.light
+        },
+        borderRadius: '5px',
+        display: 'flex',
+        alignItems:'center',
+        justifyContent: 'center'
+
+    },
+    programLengthInputGroup: {
+        display: 'flex',
+        alignItems: 'center'
+    }
 
 })
 
@@ -226,23 +160,26 @@ const ProgramListItem = styled((props) => {
 
 export function ProgramsListView(props) {
     let {programs} = props
-    let [adding_new_exercise, setAddingNewExercise] = useState(false)
-    let [name, setName] = useState('');
+    let [adding_new_program, setAddingNewProgram] = useState(false)
+    let [program_name, setProgramName] = useState('');
+    let [program_length, setProgramLength] = useState(0);
     let [action_selected_index, setActionSelectedIndex] = useState(null)
     let [selected_program_index, setSelectedProgramIndex] = useState(null)
     let classes = useStyles()
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        props.addProgram(name);
-        setAddingNewExercise(false)
-        setName('')
+        let new_program = await props.addProgram(program_name);
+        setAddingNewProgram(false)
+        setProgramName(''),
+        setProgramLength(0)
     }
 
     function handleCancel(e) {
         e.preventDefault();
-        setName(''),
-        setAddingNewExercise(false)
+        setProgramName(''),
+        setProgramLength(0)
+        setAddingNewProgram(false)
     }
 
     function handleSelect(program) {
@@ -263,9 +200,15 @@ export function ProgramsListView(props) {
         setActionSelectedIndex(index)
     }
 
+    function handleChangeProgramLength(e) {
+        let length = !!e.target.value ? e.target.value : 0
+        length = parseInt(length)
+        setProgramLength(length)
+    }
+
     return (
         <div className={classes.programListPageContainer}>
-            <ProgramHeader>
+            <ProgramHeader action={<div className={classes.programHeaderAction}><div onClick={() => setAddingNewProgram(true)} className={classes.addIconContainer}><AddIcon /></div></div>}>
                 <span>Programs</span>
             </ProgramHeader>
             <div className={classes.programListPageContent}>
@@ -278,6 +221,25 @@ export function ProgramsListView(props) {
                     </div>
                     <hr className={classes.hr} />
                     <div className={classes.programListBody}>
+                        {!!adding_new_program && (
+                        <div className={classes.programListRow}>
+                            <div className={clsx(classes.programRowName, classes.nameColumn)}>
+                                <input name="program-name" value={program_name} placeholder='Name...' onChange={(e) => setProgramName(e.target.value)} />
+                            </div>
+                            <div className={clsx(classes.lengthColumn, classes.programRowLength)}>
+                                <div className={classes.programLengthInputGroup}>
+                                    <input name="program-length" value={program_length} onChange={handleChangeProgramLength} /><span> weeks</span>
+                                </div>
+                            </div>
+                            <div className={clsx(classes.programRowLastModified, classes.lastModifiedColumn)} />
+                            <div className={clsx(classes.programRowAction, classes.actionColumn)}>
+                                <div>
+                                    <div onClick={handleSubmit}><CheckIcon /></div>
+                                    <div onClick={handleCancel}><ClearIcon /></div>
+                                </div>
+                            </div>
+                        </div>
+                        )}
                         {programs.map((program, index) => {
                             return (<ProgramListItem
                                 onEditClick={(e) => handleEditClick(e, program)}
