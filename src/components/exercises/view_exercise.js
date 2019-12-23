@@ -81,7 +81,7 @@ export const ViewExercise = (props) => {
     return (
         <div className={classes.viewExerciseContainer}>
             <div className={classes.closeHeader}>
-                <div className={classes.closeIconContainer} onClick={props.onCancel}><CreateIcon /></div>
+                <div className={classes.closeIconContainer} onClick={props.onEditClick}><CreateIcon /></div>
                 <div className={classes.closeIconContainer} onClick={props.onCancel}><ClearIcon /></div>
             </div>
             <div className={classes.exerciseContent}>

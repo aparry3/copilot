@@ -74,6 +74,12 @@ let styles = (theme) => ({
             background: theme.palette.background.light
         }
     },
+    programInputRow: {
+        width: '100%',
+        display: 'flex',
+        minHeight: '60px',
+        alignItems: 'center',
+    },
     programRowName: {
         width: '50%',
         fontSize: '16px',
@@ -134,6 +140,31 @@ let styles = (theme) => ({
     programLengthInputGroup: {
         display: 'flex',
         alignItems: 'center'
+    },
+    programInputActions: {
+        display: 'flex',
+        flexGrow: 1,
+        alignItems: 'center'
+    },
+    programInputAction: {
+        display: 'flex',
+        alignItems: 'center',
+        jusitfyContent: 'center',
+        padding: '5px'
+    },
+    programInputField: {
+        borderRadius: '5px',
+        border: `1px solid ${theme.palette.background.light}`,
+        padding: '8px',
+    },
+    programLengthInputField: {
+        width: '30px',
+        textAlign: 'center',
+    },
+    programLengthInputLabel: {
+        padding: '5px',
+        display: 'flex',
+        alignItems:'center'
     }
 
 })
@@ -223,20 +254,21 @@ export function ProgramsListView(props) {
                     <hr className={classes.hr} />
                     <div className={classes.programListBody}>
                         {!!adding_new_program && (
-                        <div className={classes.programListRow}>
+                        <div className={classes.programInputRow}>
                             <div className={clsx(classes.programRowName, classes.nameColumn)}>
-                                <input name="program-name" value={program_name} placeholder='Name...' onChange={(e) => setProgramName(e.target.value)} />
+                                <input autocomplete="off" className={classes.programInputField} name="program-name" value={program_name} placeholder='Name...' onChange={(e) => setProgramName(e.target.value)} />
                             </div>
                             <div className={clsx(classes.lengthColumn, classes.programRowLength)}>
                                 <div className={classes.programLengthInputGroup}>
-                                    <input name="program-length" value={program_length} onChange={handleChangeProgramLength} /><span> weeks</span>
+                                    <input className={clsx(classes.programLengthInputField, classes.programInputField)} name="program-length" value={program_length} onChange={handleChangeProgramLength} />
+                                    <div className={classes.programLengthInputLabel}><span>weeks</span></div>
                                 </div>
                             </div>
                             <div className={clsx(classes.programRowLastModified, classes.lastModifiedColumn)} />
                             <div className={clsx(classes.programRowAction, classes.actionColumn)}>
-                                <div>
-                                    <div onClick={handleSubmit}><CheckIcon /></div>
-                                    <div onClick={handleCancel}><ClearIcon /></div>
+                                <div className={classes.programInputActions}>
+                                    <div onClick={handleSubmit} className={classes.programInputAction}><CheckIcon /></div>
+                                    <div onClick={handleCancel} className={classes.programInputAction}><ClearIcon /></div>
                                 </div>
                             </div>
                         </div>

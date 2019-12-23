@@ -37,6 +37,7 @@ const styled = withStyles(theme => ({
         width: '100%',
         flexGrow: 1,
         padding: '20px',
+        overflow: 'auto',
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
