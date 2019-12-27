@@ -10,7 +10,7 @@ import {fade, withStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState} from "react";
 import update from 'immutability-helper';
-import {addWeekAndPersist, deleteWeekAndPersist, getProgram, setActiveProgram} from '../../actions';
+import {addWeekAndPersist, deleteWeekAndPersist, getProgram, setActiveProgram, saveProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
 import {ProgramHeader} from './program_header'
@@ -151,7 +151,12 @@ function ProgramView(props) {
             <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={props.setPage} addWeek={() => props.addWeek(props.program._id)} program={props.program}/>
             <div className={classes.programPage} >
                 <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
-                    <div>{props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}</div>
+                    {props.page != 'week' && (<ProgramName onSave={(name) => props.saveProgram(prop.program._id, {name: name})} program={props.program} />)}
+                    {props.page == 'week' && (
+                        <div>
+                            {props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}
+                        </div>
+                    )}
                 </ProgramHeader>
                 <DndProvider backend={HTML5Backend} >
                     {renderPageConent(props.page, props.current_week)}
@@ -159,6 +164,47 @@ function ProgramView(props) {
             </div>
         </div>
     );
+}
+
+function ProgramName(props) {
+    let classes = useStyles()
+    let [name, setName] = useState(props.program.name)
+    let [is_focused, setIsFocused] = useState(false)
+
+    let ref = useRef(null)
+
+    useEffect(() => {
+        if (is_focused) {
+            ref.current.focus()
+        }
+    }, [is_focused])
+
+    function handleChange(e) {
+        setName(e.target.value)
+    }
+
+    function handleFocus() {
+        setIsFocused(true)
+    }
+
+    function handleBlur() {
+        setIsFocused(false)
+        props.onSave(name)
+    }
+
+    return (
+        <div>
+        {!!is_focused ? (
+            <input ref={ref} value={name} onBlur={handleBlur} onChange={handleChange} name='name' />
+            ) : (
+            <div onClick={handleFocus}>
+                <span>
+                    {name}
+                </span>
+            </div>
+        )}
+        </div>
+    )
 }
 
 export const Program = connect(
@@ -175,8 +221,8 @@ export const Program = connect(
                 addWeek: (program_id) => dispatch(addWeekAndPersist(program_id)),
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
                 deleteWeek: (program_id, week_id) => dispatch(deleteWeekAndPersist(program_id, week_id)),
-                setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
-
+                setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id)),
+                saveProgram: (program_id, options) => dispatch(saveProgram(program_id, options))
             }
         }
 )(styled((props) => {

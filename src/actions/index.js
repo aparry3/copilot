@@ -65,7 +65,8 @@ import {
     SET_CURRENT_WEEK,
     setCurrentWeek,
     deleteProgramAndPersist,
-    DELETE_PROGRAM
+    DELETE_PROGRAM,
+    saveProgram
 } from './programs';
 
 export {
@@ -124,5 +125,6 @@ export {
     setCurrentWeek,
     showExerciseForm,
     deleteProgramAndPersist,
-    DELETE_PROGRAM
+    DELETE_PROGRAM,
+    saveProgram
 };

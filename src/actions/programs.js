@@ -275,6 +275,28 @@ export function recievePrograms(programs) {
         programs: programs
     }
 }
+
+export function saveProgram(program_id, options={}) {
+    return async (dispatch) => {
+        let token = await auth0_client.getToken()
+        return fetch(`${API_URI}/programs/${program_id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(options)
+        }).then(res => {
+            let data = res.json();
+            return data
+        }).then(program => {
+            dispatch(recieveProgram(program))
+            return program
+        });
+    }
+}
+
 export function getAllPrograms() {
     return async (dispatch) => {
         let token = await auth0_client.getToken()
