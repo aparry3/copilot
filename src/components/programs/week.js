@@ -28,6 +28,16 @@ const styles = {
 }
 let useStyles = makeStyles(theme => styles)
 
+
+const AddDay = (props) => {
+
+    return (
+        <div>
+        Add day
+        </div>
+    )
+}
+
 export const Week = connect(
     null,
     (dispatch) => {
@@ -61,6 +71,7 @@ export const Week = connect(
                                 workout={week.days[day]} />
                         )
                     })}
+                    <AddDay />
                 </List>
             )}
         </Grid>

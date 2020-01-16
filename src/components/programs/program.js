@@ -6,9 +6,9 @@ import AddIcon from '@material-ui/icons/Add'
 import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
 import { DndProvider, } from 'react-dnd';
-import {fade, withStyles} from '@material-ui/core/styles';
+import {fade, withStyles, makeStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import update from 'immutability-helper';
 import {addWeekAndPersist, deleteWeekAndPersist, getProgram, setActiveProgram, saveProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
@@ -16,7 +16,7 @@ import {Week} from './week'
 import {ProgramHeader} from './program_header'
 import {ProgramMenu} from './program_menu'
 
-const styled = withStyles(theme => ({
+const styles = theme => ({
     programPageContainer: {
         height: '100vh',
         width: '100%',
@@ -99,7 +99,9 @@ const styled = withStyles(theme => ({
         height: '100%'
     }
 
-}));
+});
+let styled = withStyles(styles)
+let useStyles = makeStyles(styles)
 
 function ProgramView(props) {
     let classes = props.classes;
@@ -151,7 +153,7 @@ function ProgramView(props) {
             <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={props.setPage} addWeek={() => props.addWeek(props.program._id)} program={props.program}/>
             <div className={classes.programPage} >
                 <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
-                    {props.page != 'week' && (<ProgramName onSave={(name) => props.saveProgram(prop.program._id, {name: name})} program={props.program} />)}
+                    {props.page != 'week' && (<ProgramName onSave={(name) => props.saveProgram(props.program._id, {name: name})} program={props.program} />)}
                     {props.page == 'week' && (
                         <div>
                             {props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}
@@ -237,7 +239,6 @@ export const Program = connect(
             setProgram(JSON.parse(JSON.stringify(props_program)))
         }
     }, [week_count, page, props.current_week])
-    console.log(props.current_week)
     return (
         <>
             {!!program ? (

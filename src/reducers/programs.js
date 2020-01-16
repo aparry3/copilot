@@ -30,6 +30,17 @@ function _newProgram(active_program, week) {
     return new_program
 }
 
+function _updateProgram(program, all_programs) {
+    console.log(program._id)
+    return all_programs.map(p => {
+        if (p._id == program._id) {
+            console.log(program)
+            return program
+        }
+        return p
+    })
+}
+
 function _deleteProgram(programs, program_id) {
     return programs.filter(x => x._id != program_id)
 }
@@ -104,10 +115,13 @@ const programs = (state = initialState, action) => {
             }
         }
         case RECIEVE_PROGRAM: {
-            return {
+            let new_state = {
                 ...state,
+                all_programs: JSON.parse(JSON.stringify(_updateProgram(action.program, state.all_programs))),
                 active_program: action.program
             }
+            console.log(new_state.all_programs)
+            return new_state
         }
         case ADD_WEEK: {
             let {week, program_id} = action;
