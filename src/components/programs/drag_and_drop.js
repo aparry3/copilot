@@ -5,7 +5,67 @@ import {dnd_types} from '../../constants/programs'
 import {setDragElement} from '../../actions'
 
 
+export const DragAndDrop = (props) => {
+    let {accept, insert, element, remove, index, location} = props
+    let ref = useRef(null)
 
+    function sameLocation(other_item) {
+        return (
+            index == other_item.index &&
+            location() == other_item.location()
+        )
+    }
+
+    const [{isOver}, drop] = useDrop({
+        accept,
+        hover(item, monitor) {
+            console.log(sameLocation(item))
+            if (!ref.current) {
+              return
+            }
+            if (monitor.isOver({shallow: true})) {
+                if (!sameLocation(item)) {
+                    item.index = insert(item)
+                    item.location = location
+                    item.remove = remove
+                }
+            }
+        },
+        drop: async (item, monitor) => {
+            if (monitor.didDrop()) {
+                return
+            }
+        },
+        collect: monitor => ({
+            isOver: !!monitor.isOver({shallow: true})
+        })
+    })
+
+    const [{ isDragging }, drag] = useDrag({
+        item: {
+            type: accept,
+            remove,
+            location,
+            index,
+            element
+        },
+        isDragging: monitor => {
+            return sameLocation(monitor.getItem())
+        },
+        collect: monitor => ({
+            isDragging: monitor.isDragging()
+        }),
+    })
+
+    drag(drop(ref))
+    let opacity = isOver ? 0.5 : 1
+
+    return (
+        <div className={props.classes.dragAndDrop} ref={ref} style={{opacity}}>
+            {props.children}
+        </div>
+    )
+}
 
 export const  dragAndDrop = (draggable = true, droppable = true, mergeable = true, options = null) => {
     return (WrappedComponent) => {
@@ -21,14 +81,6 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
             let [merge, setMerge] = useState(false)
             let can_merge = !!variant && variant == 'mergeable'
             let ref = useRef(null)
-            function sameLocation(old_l, new_l) {
-                return (
-                    old_l.superset_index == new_l.superset_index &&
-                    old_l.workout_element_index == new_l.workout_element_index &&
-                    old_l.day == new_l.day &&
-                    old_l.week_id == new_l.week_id
-                )
-            }
             const [{isOver}, drop] = useDrop({
                 accept,
                 hover(item, monitor) {
@@ -75,7 +127,7 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                         setMerge(false)
                     }
                     if (item.original_location.week_id == props.location.week_id) {
-                        props.save([item.original_location.day, item.originalState()])
+                        props.save([item.original_location.day_index, item.originNewState()])
                     } else {
                         await item.saveCallback()
                         await props.save()
@@ -97,7 +149,7 @@ export const  dragAndDrop = (draggable = true, droppable = true, mergeable = tru
                     moveCallback:props.removeItem,
                     saveCallback:props.save,
                     original_location: props.location,
-                    originalState: props.getWorkoutState
+                    originNewState: props.getWorkoutState
                 },
                 isDragging: monitor => {
                     return sameLocation(monitor.getItem().location, props.location)

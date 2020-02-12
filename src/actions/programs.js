@@ -6,7 +6,7 @@ export const EDIT_WORKOUT = 'EDIT_WORKOUT';
 export const REARRANGE_WORKOUT = 'REARRANGE_WORKOUT';
 export const REARRANGE_EXERCISE = 'REARRANGE_EXERCISE';
 export const ADD_WEEK = 'ADD_WEEK';
-export const EDIT_WEEK = 'EDIT_WEEK';
+export const UPDATE_WEEK = 'UPDATE_WEEK';
 export const DELETE_WEEK = 'DELETE_WEEK';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const RECIEVE_PROGRAMS = 'RECIEVE_PROGRAMS';
@@ -16,7 +16,9 @@ export const COPY_WORKOUT_ELEMENT = 'COPY_WORKOUT_ELEMENT';
 export const SET_ACTIVE_PROGRAM = 'SELECT_ACTIVE_PROGRAM';
 export const UPDATE_WORKOUT = 'UPDATE_WORKOUT';
 export const SET_CURRENT_WEEK = 'SET_CURRENT_WEEK';
-export const DELETE_PROGRAM = 'DELETE_PROGRAM'
+export const DELETE_PROGRAM = 'DELETE_PROGRAM';
+export const DID_REFRESH = 'DID_REFRESH';
+
 
 
 export function setActiveProgram(program_id) {
@@ -28,6 +30,32 @@ export function setActiveProgram(program_id) {
 
 export function combineExercises(item, drop_location) {
 
+}
+
+export function didRefreshProgram() {
+    return {type: DID_REFRESH};
+}
+
+export function addDay(week_id, week, name) {
+    return async dispatch => {
+        let token = await auth0_client.getToken()
+        fetch(`${API_URI}/weeks/${week_id}/days`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            let data = res.json()
+            return data
+        }).then(data => {
+            console.log("Add day")
+            dispatch(updateWeek(week_id, data.week))
+            return data.week
+        })
+
+    }
 }
 
 export function setCurrentWeek(index) {
@@ -121,9 +149,10 @@ export function persistWorkout(week_id, day, workout) {
 
 }
 
-export function editWeek(week_id, week) {
+export function updateWeek(week_id, week) {
+    console.log("Update week")
     return {
-        type: EDIT_WEEK,
+        type: UPDATE_WEEK,
         week_id,
         week
     }
@@ -238,9 +267,9 @@ export function addWeekAndPersist(program_id) {
         }).then(res => {
             let data = res.json();
             return data;
-        }).then(week => {
-            dispatch(addWeekToProgram(program_id, week.week))
-            return week.week
+        }).then(data => {
+            dispatch(addWeekToProgram(program_id, data.week))
+            return data.week
         })
     }
 }

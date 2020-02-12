@@ -40,12 +40,13 @@ import {
     RECIEVE_PROGRAMS,
     REARRANGE_WORKOUT,
     REARRANGE_EXERCISE,
-    EDIT_WEEK,
+    UPDATE_WEEK,
     DELETE_WEEK,
     SET_DRAG_ELEMENT,
     COPY_WORKOUT_ELEMENT,
     SET_ACTIVE_PROGRAM,
     UPDATE_WORKOUT,
+    DID_REFRESH,
     setActiveProgram,
     copyWorkoutElement,
     getAllPrograms,
@@ -66,13 +67,15 @@ import {
     setCurrentWeek,
     deleteProgramAndPersist,
     DELETE_PROGRAM,
-    saveProgram
+    saveProgram,
+    addDay,
+    didRefreshProgram
 } from './programs';
 
 export {
     SHOW_EXERCISE_FORM,
     ADD_WEEK,
-    EDIT_WEEK,
+    UPDATE_WEEK,
     ADD_PROGRAM,
     SAVE_EXERCISE,
     RECIEVE_PROGRAM,
@@ -89,6 +92,7 @@ export {
     LOGGING_IN,
     LOGGED_IN,
     LOGGING_OUT,
+    DID_REFRESH,
     AUTH_CLIENT_DID_LOAD,
     ADD_CLIENT,
     SET_DRAG_ELEMENT,
@@ -126,5 +130,7 @@ export {
     showExerciseForm,
     deleteProgramAndPersist,
     DELETE_PROGRAM,
-    saveProgram
+    saveProgram,
+    addDay,
+    didRefreshProgram
 };

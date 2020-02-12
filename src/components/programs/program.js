@@ -10,9 +10,10 @@ import {fade, withStyles, makeStyles} from '@material-ui/core/styles';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React, {useEffect, useState, useRef} from "react";
 import update from 'immutability-helper';
-import {addWeekAndPersist, deleteWeekAndPersist, getProgram, setActiveProgram, saveProgram} from '../../actions';
+import {addWeekAndPersist, didRefreshProgram, deleteWeekAndPersist, getProgram, setActiveProgram, saveProgram} from '../../actions';
 import {dnd_types} from '../../constants/programs';
 import {Week} from './week'
+import {InputTitle} from '../util'
 import {ProgramHeader} from './program_header'
 import {ProgramMenu} from './program_menu'
 
@@ -45,7 +46,7 @@ const styles = theme => ({
     },
     weekContainer: {
         width: '100%',
-        height: '80%',
+        height: '90%',
         display: 'flex',
         flexDirection: 'column'
     },
@@ -129,7 +130,7 @@ function ProgramView(props) {
                         return (
                             <div className={classes.weekContainer} key={`${week._id}`}>
                                 <div className={classes.weekHeader}>
-                                    <span className={classes.weekNumber}>week {index + 1}</span>
+                                    <span className={classes.weekNumber}>Week {index + 1}</span>
                                     <div className={classes.deleteWeek} onClick={() => handleDeleteWeek(index)}>
                                         <ClearIcon className={classes.deleteIcon} />
                                     </div>
@@ -153,7 +154,7 @@ function ProgramView(props) {
             <ProgramMenu open={menu_open} back={props.history.goBack} selectPage={props.setPage} addWeek={() => props.addWeek(props.program._id)} program={props.program}/>
             <div className={classes.programPage} >
                 <ProgramHeader show_menu onMenuClick={toggleMenuOpen} program={props.program} >
-                    {props.page != 'week' && (<ProgramName onSave={(name) => props.saveProgram(props.program._id, {name: name})} program={props.program} />)}
+                    {props.page != 'week' && (<InputTitle onSave={(name) => props.saveProgram(props.program._id, {name: name})} value={props.program.name} />)}
                     {props.page == 'week' && (
                         <div>
                             {props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}
@@ -168,51 +169,11 @@ function ProgramView(props) {
     );
 }
 
-function ProgramName(props) {
-    let classes = useStyles()
-    let [name, setName] = useState(props.program.name)
-    let [is_focused, setIsFocused] = useState(false)
-
-    let ref = useRef(null)
-
-    useEffect(() => {
-        if (is_focused) {
-            ref.current.focus()
-        }
-    }, [is_focused])
-
-    function handleChange(e) {
-        setName(e.target.value)
-    }
-
-    function handleFocus() {
-        setIsFocused(true)
-    }
-
-    function handleBlur() {
-        setIsFocused(false)
-        props.onSave(name)
-    }
-
-    return (
-        <div>
-        {!!is_focused ? (
-            <input ref={ref} value={name} onBlur={handleBlur} onChange={handleChange} name='name' />
-            ) : (
-            <div onClick={handleFocus}>
-                <span>
-                    {name}
-                </span>
-            </div>
-        )}
-        </div>
-    )
-}
 
 export const Program = connect(
         (state, ownProps) => {
             return {
-                week_count: !!state.programs.active_program ? state.programs.active_program.weeks.length : null,
+                requires_refresh: !!state.programs.requires_refresh,
                 props_program: state.programs.active_program,
                 user: state.auth.user,
                 current_week: state.programs.current_week
@@ -224,21 +185,27 @@ export const Program = connect(
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
                 deleteWeek: (program_id, week_id) => dispatch(deleteWeekAndPersist(program_id, week_id)),
                 setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id)),
-                saveProgram: (program_id, options) => dispatch(saveProgram(program_id, options))
+                saveProgram: (program_id, options) => dispatch(saveProgram(program_id, options)),
+                didRefreshProgram: () => dispatch(didRefreshProgram())
             }
         }
 )(styled((props) => {
-    let {props_program, week_count, ...pass_through_props} = props
+    let {props_program, requires_refresh, ...pass_through_props} = props
     let [program, setProgram] = useState(null)
     let [page, setPage] = useState('program')
-
+    console.log(props_program)
     useEffect(() => {
         if (!props_program) {
             props.setActiveProgram(props.match.params.program_id)
         } else {
-            setProgram(JSON.parse(JSON.stringify(props_program)))
+            if (requires_refresh) {
+                setProgram(JSON.parse(JSON.stringify(props_program)))
+                props.didRefreshProgram()
+            }
         }
-    }, [week_count, page, props.current_week])
+    }, [page, requires_refresh])
+
+
     return (
         <>
             {!!program ? (

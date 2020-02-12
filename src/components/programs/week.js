@@ -1,11 +1,12 @@
 import {connect} from 'react-redux'
-import {Day} from './day'
+import {Day, AddDay} from './day'
 import {Grid, List} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState, useEffect} from 'react'
 import update from 'immutability-helper';
+import AddIcon from '@material-ui/icons/Add'
 
-import {fetchWeek, persistWorkout} from '../../actions'
+import {addDay, fetchWeek, persistWorkout} from '../../actions'
 
 
 const styles = {
@@ -24,25 +25,26 @@ const styles = {
     },
     weekNumber: {
         fontSize: '20px'
+    },
+    addDay: {
+        display: 'flex',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'blue'
     }
 }
 let useStyles = makeStyles(theme => styles)
 
 
-const AddDay = (props) => {
 
-    return (
-        <div>
-        Add day
-        </div>
-    )
-}
 
 export const Week = connect(
     null,
     (dispatch) => {
         return {
-            persistWorkout: (week_id, day, workout) => dispatch(persistWorkout(week_id, day, workout))
+            persistWorkout: (week_id, day, workout) => dispatch(persistWorkout(week_id, day, workout)),
+            addDay: (week_id, name) => dispatch(addDay(week_id, name))
         }
 })((props) => {
     let {week} = props
@@ -60,10 +62,11 @@ export const Week = connect(
     return (
         <Grid item xs={12} className={classes.week}>
             {!!week && (
-                <List className={classes.list} >
-                    {Object.keys(week.days).map((day) => {
+                <div className={classes.list} >
+                    {week.days.map((day, index) => {
                         return (
                             <Day
+                                index={index}
                                 key={`${week._id}-${day}`}
                                 week_id={week._id}
                                 save={(workouts) => save(workouts)}
@@ -71,8 +74,8 @@ export const Week = connect(
                                 workout={week.days[day]} />
                         )
                     })}
-                    <AddDay />
-                </List>
+                    <AddDay onAddDay={() => props.addDay(week._id, week)} />
+                </div>
             )}
         </Grid>
     )
