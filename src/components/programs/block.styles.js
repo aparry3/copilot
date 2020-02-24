@@ -21,5 +21,12 @@ export const styles = theme => ({
 });
 
 export const dnd_styles = theme => ({
+    container: {
+        padding: '5px'
+    },
+    dragAndDrop: {
+        borderRadius: '5px',
+        background: theme.palette.secondary.main
 
+    }
 })

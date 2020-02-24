@@ -3,7 +3,9 @@ export const dnd_styles = theme => ({
         padding: '5px'
     },
     dragAndDrop: {
-        borderRadius: '5px'
+        borderRadius: '5px',
+        background: theme.palette.background.main
+
     }
 })
 export const styles = theme => ({

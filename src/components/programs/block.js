@@ -18,10 +18,10 @@ class Block extends React.Component {
     constructor(props) {
         super(props)
         this.updated_state = props.workout_block
-
         this.state = {
             workout_block: props.workout_block
         }
+
         this.location = this.location.bind(this)
         this.addExercise = this.addExercise.bind(this)
         this.renderWorkoutElement = this.renderWorkoutElement.bind(this)
@@ -34,14 +34,6 @@ class Block extends React.Component {
         return `${this.props.location()}-${this.props.index}`
     }
 
-    renderWorkoutElement(element, index) {
-        return (<WorkoutElement
-            persist={(workout_element) => this.updateWorkoutElement(index, workout_element)}
-            workout_element={element}
-            location={location}
-            index={index} />)
-    }
-
     componentWillReceiveProps(next_props) {
         this.setState({
             workout_block: JSON.parse(JSON.stringify(next_props.workout_block)),
@@ -51,10 +43,11 @@ class Block extends React.Component {
 
 
     addExercise() {
+        console.log(this.updated_state)
         let new_workout_block = update(this.updated_state, {
             workout_elements: {
                 $push: [{
-                    _id: Math.random().toString(36).substring(7)
+                    exercises: [{_id: Math.random().toString(36).substring(7)}]
                 }]
             }
         })
@@ -79,8 +72,18 @@ class Block extends React.Component {
         return this.updated_state.workout_elements
     }
 
+    renderWorkoutElement(element, index) {
+        console.log(element)
+        return (<WorkoutElement
+            persist={(workout_element) => this.updateWorkoutElement(index, workout_element)}
+            workout_element={element}
+            location={this.location}
+            index={index} />)
+    }
+
     render() {
         let {classes} = this.props
+        console.log(classes)
         return (
             <div className={classes.block}>
                 <span>{this.state.workout_block.name}</span>

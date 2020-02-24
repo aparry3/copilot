@@ -4,9 +4,10 @@ import {useDrag, useDrop} from 'react-dnd'
 import {dnd_types} from '../../constants/programs'
 import {setDragElement} from '../../actions'
 
+const _canDrop = (element) => true
 
 export const DragAndDrop = (props) => {
-    let {accept, insert, element, remove, index, location} = props
+    let {accept, insert, element, remove, index, location, canDrop = _canDrop} = props
     let ref = useRef(null)
 
     function sameLocation(other_item) {
@@ -19,12 +20,11 @@ export const DragAndDrop = (props) => {
     const [{isOver}, drop] = useDrop({
         accept,
         hover(item, monitor) {
-            console.log(sameLocation(item))
             if (!ref.current) {
               return
             }
             if (monitor.isOver({shallow: true})) {
-                if (!sameLocation(item)) {
+                if (!sameLocation(item) && canDrop(item.element)) {
                     item.index = insert(item)
                     item.location = location
                     item.remove = remove
@@ -59,7 +59,7 @@ export const DragAndDrop = (props) => {
 
     drag(drop(ref))
     let opacity = isOver ? 0.5 : 1
-
+    console.log(props.children)
     return (
         <div className={props.classes.dragAndDrop} ref={ref} style={{opacity}}>
             {props.children}

@@ -1,38 +1,133 @@
 import AutorenewIcon from '@material-ui/icons/Autorenew'
+import update from 'immutability-helper';
 import {Card, Divider, List, ListItem, Typography} from '@material-ui/core'
 import clsx from 'clsx'
 import {connect} from 'react-redux'
 import FilterNoneIcon from '@material-ui/icons/FilterNone'
 import {dragAndDrop} from './drag_and_drop'
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import React, {useRef, useState, useEffect} from 'react';
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import {useDrop} from 'react-dnd'
-import {styles} from './workout_element.styles'
+import {dnd_styles, styles} from './workout_element.styles'
 import {dnd_types} from '../../constants/programs'
 import {copyWorkoutElement} from '../../actions';
+import {DragAndDropManager} from './drag_and_drop_manager'
+import {Exercise} from './exercise'
+import AddIcon from '@material-ui/icons/Add'
 
-const TOOLTIP_WIDTH = 100
-const TOOLTIP_HEIGHT = 80
-const ARROW_SIZE = 15
+
 
 let useStyles = makeStyles(styles)
+let DnDManager = withStyles(dnd_styles)(DragAndDropManager)
 
-export const WorkoutElement = props => {
-    let [workout_element, setWorkoutElement] = useState(props.workout_element)
-    let classes = useStyles
 
-    useEffect(() => {
-        setWorkoutElement(props.workout_element)
-    }, [props.workout_element])
+class ExerciseGroup extends React.Component {
 
-    return (
-        <div className={classes.workoutElement}>
-            {workout_element._id}
-        </div>
-    )
+    constructor(props) {
+        super(props)
+        this.updated_state = JSON.parse(JSON.stringify(props.workout_element))
+        this.state = {
+            workout_element: JSON.parse(JSON.stringify(props.workout_element))
+        }
+
+        this.location = this.location.bind(this)
+        this.addExercise = this.addExercise.bind(this)
+        this.renderExercise = this.renderExercise.bind(this)
+        this.getState = this.getState.bind(this)
+        this.updateExercise = this.updateExercise.bind(this)
+        this.updateExercises = this.updateExercises.bind(this)
+        this.canDrop = this.canDrop.bind(this)
+
+
+    }
+
+    componentWillReceiveProps(next_props) {
+        this.setState({
+            workout_element: JSON.parse(JSON.stringify(next_props.workout_element)),
+        })
+        this.updated_state = JSON.parse(JSON.stringify(next_props.workout_element))
+    }
+
+
+    location() {
+        return `${this.props.location()}-${this.props.index}`
+    }
+
+    addExercise() {
+        console.log(this.updated_state)
+        let new_workout_element = update(this.updated_state, {
+            exercises: {
+                $push: [{
+                    _id: Math.random().toString(36).substring(7)
+                }]
+            }
+        })
+        this.setState({
+            workout_element: new_workout_element
+        })
+        this.updated_state = new_workout_element
+        this.props.persist(this.updated_state)
+    }
+
+
+    updateExercises(exercises) {
+        console.log("updated")
+        console.log(exercises)
+        this.updated_state.exercises = exercises.map(we => we.exercises[0])
+        console.log(this.updated_state)
+        this.props.persist(this.updated_state)
+    }
+
+    updateExercise(index, exercise) {
+        this.updated_state.exercises[index] = exercise
+        this.props.persist(this.updated_state)
+    }
+
+    getState() {
+        return this.updated_state.exercises.map(e => ({exercises: [e]}))
+    }
+
+    renderExercise(element, index) {
+        console.log(element)
+        return (<Exercise
+                exercise={element.exercises[0]}
+                persist={(exercise) => this.updateExercise(index, exercise)}
+                />)
+    }
+
+    canDrop(element) {
+        return element.exercises.length == 1
+    }
+
+    render() {
+        console.log(this.state.workout_element.exercises)
+        let {classes} = this.props
+        return (
+            <div className={classes.workoutElement}>
+            {this.location()}
+                <DnDManager
+                    location={this.location}
+                    accept={dnd_types.WORKOUT_ELEMENT}
+                    items={this.state.workout_element.exercises.map(e => ({exercises: [e]}))}
+                    render={this.renderExercise}
+                    persist={this.updateExercises}
+                    refresh={this.getState}
+                    canDrop={this.canDrop}
+                    />
+                <div className={classes.addExerciseContainer}>
+                    <div className={classes.addExerciseButton} onClick={this.addExercise}>
+                        <span><AddIcon /> Add Exercise</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
+
+export const WorkoutElement = withStyles(styles)(ExerciseGroup)
+
 
 //
 //

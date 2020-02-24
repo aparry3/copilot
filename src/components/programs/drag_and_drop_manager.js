@@ -1,14 +1,30 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import update from 'immutability-helper'
 import {DragAndDrop} from './drag_and_drop'
+import {useDrop} from 'react-dnd'
 
 export const DragAndDropManager = (props) => {
-
     let [dnd_items, setDndItems] = useState(JSON.parse(JSON.stringify(props.items)))
+    let ref = useRef(null)
 
     useEffect(() => {
         setDndItems(JSON.parse(JSON.stringify(props.items)))
     }, [props.items])
+
+    const [{isOver}, drop] = useDrop({
+        accept: props.accept,
+        hover(item, monitor) {
+            return
+        },
+        drop: async (item, monitor) => {
+            if (monitor.didDrop()) {
+                return
+            }
+        },
+        collect: monitor => ({
+            isOver: !!monitor.isOver({shallow: true})
+        })
+    })
 
     function insert(index, item) {
         let updated_dnd_items = props.refresh()
@@ -26,6 +42,7 @@ export const DragAndDropManager = (props) => {
         })
         setDndItems(new_dnd_items)
         props.persist(new_dnd_items)
+
         return index
     }
 
@@ -35,13 +52,12 @@ export const DragAndDropManager = (props) => {
             $splice: [[index, 1]]
         })
         setDndItems(new_dnd_items)
-        console.log(new_dnd_items)
         props.persist(new_dnd_items)
         return new_dnd_items
     }
 
     return (
-        <>
+        <div ref={drop}>
         {
             dnd_items.map((e,i) => (
                 <div className={props.classes.container}>
@@ -53,13 +69,14 @@ export const DragAndDropManager = (props) => {
                         remove={() => remove(i)}
                         index={i}
                         element={e}
-                        classes={props.classes}>
+                        classes={props.classes}
+                        canDrop={props.canDrop}>
                         {props.render(e, i)}
                     </DragAndDrop>
                 </div>
             ))
         }
-        </>
+        </div>
     )
 }
 

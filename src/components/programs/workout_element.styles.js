@@ -1,4 +1,21 @@
-const styles = theme => ({
+const TOOLTIP_WIDTH = 100
+const TOOLTIP_HEIGHT = 80
+const ARROW_SIZE = 15
+
+
+export const dnd_styles = theme => ({
+    container: {
+        padding: '5px'
+    },
+    dragAndDrop: {
+        borderRadius: '5px',
+        background: theme.palette.primary.main
+
+    }
+})
+
+
+export const styles = theme => ({
     exerciseContent: {
         display: 'flex',
         height:' 100%',
@@ -31,7 +48,8 @@ const styles = theme => ({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems:'center'
+        alignItems:'stretch',
+        padding: '5px'
     },
     hoverOverlay: {
         height:'100%',
