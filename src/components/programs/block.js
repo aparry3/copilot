@@ -8,7 +8,7 @@ import {WorkoutElement} from './workout_element';
 import {WorkoutElementModal} from './exercise_modal';
 import {dnd_styles, styles} from './block.styles'
 import {DragAndDropManager} from './drag_and_drop_manager'
-import {dnd_types} from '../../constants/programs';
+import {dnd_types, dnd_subtypes} from '../../constants/programs';
 
 let styled = withStyles(styles)
 let useStyles = makeStyles(styles)
@@ -59,11 +59,13 @@ class Block extends React.Component {
     }
 
     updateWorkoutElements(workout_elements) {
+        console.log("update block")
         this.updated_state.workout_elements = workout_elements
         this.props.persist(this.updated_state)
     }
 
     updateWorkoutElement(index, workout_element) {
+        console.log("update block - persist workout_element")
         this.updated_state.workout_elements[index] = workout_element
         this.props.persist(this.updated_state)
     }
@@ -73,12 +75,18 @@ class Block extends React.Component {
     }
 
     renderWorkoutElement(element, index) {
-        console.log(element)
         return (<WorkoutElement
             persist={(workout_element) => this.updateWorkoutElement(index, workout_element)}
             workout_element={element}
             location={this.location}
             index={index} />)
+    }
+
+    nest(item) {
+        if (item.element.exercises.length == 1) {
+            return dnd_subtypes.EXERCISE
+        }
+        return item.subtype
     }
 
     render() {
@@ -90,10 +98,13 @@ class Block extends React.Component {
                 <DnDManager
                     location={this.location}
                     accept={dnd_types.WORKOUT_ELEMENT}
+                    reject={(item) => item.subtype == dnd_subtypes.EXERCISE}
                     items={this.state.workout_block.workout_elements}
                     render={this.renderWorkoutElement}
                     persist={this.updateWorkoutElements}
                     refresh={this.getState}
+                    nest={this.nest}
+                    nestable={true}
                     />
                 <div className={classes.addExerciseContainer}>
                     <div className={classes.addExerciseButton} onClick={this.addExercise}>

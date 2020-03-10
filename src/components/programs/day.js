@@ -60,10 +60,12 @@ class DayView extends React.Component {
     }
 
     updateBlocks(workout_blocks) {
+        console.log("update day")
         this.updated_state.workout_blocks = JSON.parse(JSON.stringify(workout_blocks))
     }
 
     updateBlock(index, workout_block) {
+        console.log("update day - persist block")
         this.updated_state.workout_blocks[index] = workout_block
     }
 

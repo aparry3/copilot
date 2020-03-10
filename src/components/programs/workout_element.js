@@ -11,7 +11,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 import {useDrop} from 'react-dnd'
 import {dnd_styles, styles} from './workout_element.styles'
-import {dnd_types} from '../../constants/programs'
+import {dnd_types, dnd_subtypes} from '../../constants/programs'
 import {copyWorkoutElement} from '../../actions';
 import {DragAndDropManager} from './drag_and_drop_manager'
 import {Exercise} from './exercise'
@@ -40,7 +40,6 @@ class ExerciseGroup extends React.Component {
         this.updateExercises = this.updateExercises.bind(this)
         this.canDrop = this.canDrop.bind(this)
 
-
     }
 
     componentWillReceiveProps(next_props) {
@@ -56,7 +55,6 @@ class ExerciseGroup extends React.Component {
     }
 
     addExercise() {
-        console.log(this.updated_state)
         let new_workout_element = update(this.updated_state, {
             exercises: {
                 $push: [{
@@ -73,14 +71,14 @@ class ExerciseGroup extends React.Component {
 
 
     updateExercises(exercises) {
-        console.log("updated")
+        console.log("update workout_element")
         console.log(exercises)
         this.updated_state.exercises = exercises.map(we => we.exercises[0])
-        console.log(this.updated_state)
         this.props.persist(this.updated_state)
     }
 
     updateExercise(index, exercise) {
+        console.log("update workout_element - persist exercise")
         this.updated_state.exercises[index] = exercise
         this.props.persist(this.updated_state)
     }
@@ -90,7 +88,6 @@ class ExerciseGroup extends React.Component {
     }
 
     renderExercise(element, index) {
-        console.log(element)
         return (<Exercise
                 exercise={element.exercises[0]}
                 persist={(exercise) => this.updateExercise(index, exercise)}
@@ -101,8 +98,11 @@ class ExerciseGroup extends React.Component {
         return element.exercises.length == 1
     }
 
+    reject(item) {
+        return item.subtype != dnd_subtypes.EXERCISE
+    }
+
     render() {
-        console.log(this.state.workout_element.exercises)
         let {classes} = this.props
         return (
             <div className={classes.workoutElement}>
@@ -110,6 +110,8 @@ class ExerciseGroup extends React.Component {
                 <DnDManager
                     location={this.location}
                     accept={dnd_types.WORKOUT_ELEMENT}
+                    subtype={dnd_subtypes.EXERCISE}
+                    reject={this.reject}
                     items={this.state.workout_element.exercises.map(e => ({exercises: [e]}))}
                     render={this.renderExercise}
                     persist={this.updateExercises}
