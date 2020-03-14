@@ -240,8 +240,9 @@ export function ProgramsListView(props) {
 
     return (
         <div className={classes.programListPageContainer}>
-            <ProgramHeader action={<div className={classes.programHeaderAction}><div onClick={() => setAddingNewProgram(true)} className={classes.addIconContainer}><AddIcon /></div></div>}>
-                <span>Programs</span>
+            <ProgramHeader
+                content={<span>Programs</span>}
+                action={<div className={classes.programHeaderAction}><div onClick={() => setAddingNewProgram(true)} className={classes.addIconContainer}><AddIcon /></div></div>}>
             </ProgramHeader>
             <div className={classes.programListPageContent}>
                 <div className={classes.programListContainer}>

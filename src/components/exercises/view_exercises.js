@@ -249,9 +249,14 @@ class ViewExercisesView extends React.Component {
             <>
                 <div className={classes.viewExercisesContainer} >
                     <div className={classes.exercisesListPageContainer} >
-                        <ProgramHeader action={<div className={classes.exercisesHeaderAction}><div onClick={this.props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>}>
-                            <span>Exercises</span>
-                            <SearchBar />
+                        <ProgramHeader
+                            content={(
+                                <>
+                                    <span>Exercises</span>
+                                    <SearchBar />
+                                </>
+                            )}
+                            action={<div className={classes.exercisesHeaderAction}><div onClick={this.props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>}>
                         </ProgramHeader>
                         <div className={classes.exercisesListContainer} >
                             <div className={classes.exerciseListHeader} >

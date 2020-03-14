@@ -29,7 +29,6 @@ export const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         borderRadius: '5px',
-        background: theme.palette.background.light,
         alignItems: 'stretch',
         padding: '5px',
         cursor: 'pointer',

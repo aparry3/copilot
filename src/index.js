@@ -60,8 +60,8 @@ const light_theme = createMuiTheme({
         background: {
             dark: '#121212',
             mediumDark: '#f1f7ff',
-            main: '#ffffff',
-            light: '#e9ecef',
+            main: '#f0f4f7',
+            light: '#ffffff',
             tooltip: '#cbcdd0'
         }
     },
