@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {ProgramHeader} from '../programs/program_header'
+import {PageHeader} from '../utils'
 import { withRouter } from "react-router";
 import {withStyles} from '@material-ui/styles'
 import {showExerciseForm, persistExercise, setActivePage} from '../../actions';

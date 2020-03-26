@@ -58,13 +58,25 @@ export const DragAndDropManager = (props) => {
         return index
     }
 
+    function merge(index, item) {
+        let updated_dnd_items = props.refresh()
+        let updates = {[index]: {exercises: {$push: item.element.exercises}}}
+
+        if (item.location() != props.location()) {
+            item.remove()
+        } else {
+            updates.$splice = [[item.index, 1]]
+        }
+        let new_dnd_items = update(updated_dnd_items, updates)
+        setDndItems(new_dnd_items)
+        props.persist(new_dnd_items)
+    }
+
     function remove(index) {
-        console.log('remove')
         let updated_dnd_items = props.refresh()
         let new_dnd_items = update(updated_dnd_items, {
             $splice: [[index, 1]]
         })
-        console.log(new_dnd_items)
         setDndItems(new_dnd_items)
         props.persist(new_dnd_items)
         return new_dnd_items
@@ -87,11 +99,29 @@ export const DragAndDropManager = (props) => {
                         classes={props.classes}
                         canDrop={props.canDrop}
                         nest={props.nest}
-                        nestable={props.nestable}>
+                        nestable={props.nestable}
+                        merge={(elem) => merge(i, elem)}
+                        shouldMerge={props.shouldMerge}>
                         {props.render(e, i)}
                     </DragAndDrop>
                 </div>
             ))
+        }
+        {!!props.renderAdd && (
+            <div>
+                <DragAndDrop
+                    key={`${props.location()}-${dnd_items.length}`}
+                    location={props.location}
+                    accept={props.accept}
+                    insert={(elem) => insert(dnd_items.length, elem)}
+                    remove={() => dnd_items}
+                    index={dnd_items.length}
+                    classes={props.classes}
+                    draggable={false}>
+                    {props.renderAdd()}
+                </DragAndDrop>
+
+            </div>)
         }
         </div>
     )

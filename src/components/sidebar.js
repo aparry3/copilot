@@ -9,7 +9,7 @@ import {ExitToApp} from '@material-ui/icons'
 import TableChartIcon from '@material-ui/icons/TableChart'
 import ViewListIcon from '@material-ui/icons/ViewList'
 import { Link } from "react-router-dom";
-import {Logo} from './util';
+import {Logo} from './utils';
 import {makeStyles} from '@material-ui/core/styles'
 import {SIDEBAR_WIDTH} from './styles'
 import {logout, setActivePage, showExerciseForm} from '../actions'

@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import clsx from 'clsx'
+
 import DehazeIcon from '@material-ui/icons/Dehaze';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 
@@ -67,9 +68,11 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'flex-end',
         fontSize: '14px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        color: theme.text.light
     },
     selected: {
+        color: theme.text.dark,
         borderBottom: `1px solid ${theme.accents.primary}`
     },
     tabsContainer: {
@@ -79,7 +82,7 @@ const styles = theme => ({
 
 let useStyles = makeStyles(styles)
 
-export function ProgramHeader(props) {
+export const PageHeader = (props) => {
     let classes = useStyles()
     let [selected, setSelected] = useState(0)
     let children = props.children instanceof Array ? props.children : [props.children]
@@ -93,7 +96,6 @@ export function ProgramHeader(props) {
         return (
             <div className={classes.tabsContainer}>
                 { props.tabs.map((o, i) => {
-                    console.log(selected)
                     var style_class = selected == i ? clsx(classes.selected, classes.tab) : classes.tab
 
                     return (

@@ -6,7 +6,7 @@ import {ProgramPage} from './programs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {Sidebar, SidebarList} from './sidebar';
-import {Logo} from './util';
+import {Logo} from './utils';
 import {history} from '../util'
 import {login} from '../actions'
 import {Dashboard} from './dashboard'
@@ -19,7 +19,8 @@ const styles = (theme) => {
         app: {
           display: 'flex',
           background: theme.palette.background.main,
-          color: theme.text.primary
+          color: theme.text.primary,
+          letterSpacing: theme.text.letterSpacing
         },
         content: {
             flexGrow: 1,

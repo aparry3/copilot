@@ -5,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { fetchExerises, getAllPrograms, fetchUser } from './actions'
+import { fetchExerises, fetchUser } from './actions'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import {API_URI} from './config'
@@ -74,7 +74,9 @@ const light_theme = createMuiTheme({
         errorHover: '#b34949'
     },
     text: {
+        letterSpacing: '1px',
         white: '#ffffff',
+        light: '#a9b0bd',
         primary: '#112540',
         dark: '#000000',
         secondary: '#707275',

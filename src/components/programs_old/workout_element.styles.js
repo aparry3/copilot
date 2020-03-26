@@ -5,7 +5,7 @@ const ARROW_SIZE = 15
 
 export const dnd_styles = theme => ({
     container: {
-        padding: '5px'
+        padding: '10px'
     },
     dragAndDrop: {
         borderRadius: '5px',

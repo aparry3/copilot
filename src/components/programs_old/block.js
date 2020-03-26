@@ -3,13 +3,13 @@ import update from 'immutability-helper';
 import React, {useRef, useState, useEffect} from 'react';
 import {connect} from 'react-redux'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add'
+import {Exercise} from './exercise'
 import {WorkoutElement} from './workout_element';
 import {WorkoutElementModal} from './exercise_modal';
 import {dnd_styles, styles} from './block.styles'
 import {DragAndDropManager} from './drag_and_drop_manager'
 import {dnd_types, dnd_subtypes} from '../../constants/programs';
-
+import AddIcon from '@material-ui/icons/Add'
 let styled = withStyles(styles)
 let useStyles = makeStyles(styles)
 let DnDManager = withStyles(dnd_styles)(DragAndDropManager)
@@ -25,6 +25,7 @@ class Block extends React.Component {
         this.location = this.location.bind(this)
         this.addExercise = this.addExercise.bind(this)
         this.renderWorkoutElement = this.renderWorkoutElement.bind(this)
+        this.renderAdd = this.renderAdd.bind(this)
         this.getState = this.getState.bind(this)
         this.updateWorkoutElement = this.updateWorkoutElement.bind(this)
         this.updateWorkoutElements = this.updateWorkoutElements.bind(this)
@@ -43,7 +44,6 @@ class Block extends React.Component {
 
 
     addExercise() {
-        console.log(this.updated_state)
         let new_workout_block = update(this.updated_state, {
             workout_elements: {
                 $push: [{
@@ -59,14 +59,16 @@ class Block extends React.Component {
     }
 
     updateWorkoutElements(workout_elements) {
-        console.log("update block")
         this.updated_state.workout_elements = workout_elements
         this.props.persist(this.updated_state)
     }
 
     updateWorkoutElement(index, workout_element) {
-        console.log("update block - persist workout_element")
-        this.updated_state.workout_elements[index] = workout_element
+        if (workout_element.exercises.length == 0) {
+            this.updated_state.workout_elements.splice(index, 1)
+        } else {
+            this.updated_state.workout_elements[index] = workout_element
+        }
         this.props.persist(this.updated_state)
     }
 
@@ -75,11 +77,32 @@ class Block extends React.Component {
     }
 
     renderWorkoutElement(element, index) {
-        return (<WorkoutElement
-            persist={(workout_element) => this.updateWorkoutElement(index, workout_element)}
-            workout_element={element}
-            location={this.location}
-            index={index} />)
+        return (
+        <>
+            { element.exercises.length == 1 ? (
+            <Exercise
+                exercise={element.exercises[0]}
+                persist={(exercise) => this.updateExercise(index, exercise)}
+                />
+            ) : (
+            <WorkoutElement
+                persist={(workout_element) => this.updateWorkoutElement(index, workout_element)}
+                workout_element={element}
+                location={this.location}
+                index={index} />
+            )}
+        </>
+        )
+    }
+
+    renderAdd() {
+        let {classes} = this.props
+        return (
+            <div className={classes.add} onClick={this.addExercise}>
+                <span><AddIcon /> Add Exercise</span>
+            </div>
+        )
+
     }
 
     nest(item) {
@@ -89,9 +112,13 @@ class Block extends React.Component {
         return item.subtype
     }
 
+    shouldMerge(drag, drop) {
+        console.log("should merge")
+        return drag.exercises.length == 1 && drop.exercises.length == 1
+    }
+
     render() {
         let {classes} = this.props
-        console.log(classes)
         return (
             <div className={classes.block}>
                 <span>{this.state.workout_block.name}</span>
@@ -105,12 +132,9 @@ class Block extends React.Component {
                     refresh={this.getState}
                     nest={this.nest}
                     nestable={true}
+                    renderAdd={this.renderAdd}
+                    shouldMerge={this.shouldMerge}
                     />
-                <div className={classes.addExerciseContainer}>
-                    <div className={classes.addExerciseButton} onClick={this.addExercise}>
-                        <span><AddIcon /> Add Exercise</span>
-                    </div>
-                </div>
             </div>
         )
 

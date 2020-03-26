@@ -9,3 +9,8 @@ export const dnd_types = {
 export const dnd_subtypes = {
     EXERCISE: 'EXERCISE'
 }
+
+export const pages = {
+    WEEK: 'WEEK',
+    OVERVIEW: 'OVERVIEW'
+}

@@ -14,12 +14,17 @@ export const DragAndDrop = (props) => {
         remove,
         index,
         location,
+        merge,
         nestable = false,
         nest = (item) => item.subtype,
         unnest = (item) => null,
         subtype = null,
         reject = (item) => false,
-        canDrop = _canDrop
+        canDrop = _canDrop,
+        draggable = true,
+        droppable = true,
+        shouldMerge = () => false
+
     } = props
     let ref = useRef(null)
 
@@ -44,21 +49,26 @@ export const DragAndDrop = (props) => {
               return
             }
             if (monitor.isOver({shallow: true})) {
+                console.log(nestable)
                 if (nestable) {
                     if (shouldNest()) {
                         item.subtype = nest(item)
                     } else {
+                        console.log("unnest")
                         item.subtype = unnest(item)
                     }
                 }
                 if (
-                    !sameLocation(item) &&
-                    canDrop(item.element) &&
-                    !reject(item)
+                    !sameLocation(item)
+                    // canDrop(item.element) &&
                 ) {
-                    item.index = insert(item)
-                    item.location = location
-                    item.remove = remove
+                    if (!reject(item)) {
+                        item.index = insert(item)
+                        item.location = location
+                        item.remove = remove
+                    } else if (shouldMerge(item.element, element)) {
+                        merge(item)
+                    }
                 }
             }
         },
@@ -88,8 +98,12 @@ export const DragAndDrop = (props) => {
             isDragging: monitor.isDragging()
         }),
     })
-
-    drag(drop(ref))
+    if (droppable) {
+        drop(ref)
+    }
+    if (draggable) {
+        drag(ref)
+    }
     let opacity = isOver ? 0.5 : 1
     return (
         <div className={props.classes.dragAndDrop} ref={ref} style={{opacity}}>

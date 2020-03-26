@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux';
 import exercises from './exercises';
-import dnd_program from './dnd_program';
 import programs from './programs';
+import active_program from './active_program';
 import app from './app'
 import auth from './auth'
+
 
 export default combineReducers({
     exercises: exercises,
     programs: programs,
-    dnd_program: dnd_program,
+    active_program: active_program,
     auth: auth,
     app: app
 })
