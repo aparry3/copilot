@@ -93,6 +93,7 @@ export const ProgramsList = (props) => {
                         <div className={classes.actionColumn}><span className={classes.headerText}>Action</span></div>
                     </div>
                     <hr className={classes.hr} />
+                    { programs.length > 0 || !!adding_new_program ? (
                     <div className={classes.programListBody}>
                         {!!adding_new_program && (
                         <div className={classes.programInputRow}>
@@ -127,6 +128,13 @@ export const ProgramsList = (props) => {
                             );
                         })}
                     </div>
+                ) : (
+                    <div className={classes.emptyProgramsList}>
+                        <span>
+                            You have a no programs. Add a Program to get started.
+                        </span>
+                    </div>
+                )}
                 </div>
             </div>
         </div>

@@ -150,6 +150,15 @@ export const styles = (theme) => ({
         padding: '5px',
         display: 'flex',
         alignItems:'center'
+    },
+    emptyProgramsList: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontWeight: 400,
+        fontSize: '25px',
+        flexGrow: 1
     }
+
 
 })
