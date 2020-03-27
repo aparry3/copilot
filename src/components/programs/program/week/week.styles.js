@@ -29,9 +29,26 @@ export const styles = theme => ({
         alignItems: 'center',
         fontSize: '25px',
         fontWeight: '400',
-        cursor: 'pointer',
-        '&:hover': {
-            background: theme.palette.background.light
-        }
+    },
+    emptyWeekMessage: {
+        width: '40%',
+        background: theme.palette.background.light,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        height: '70%'
+    },
+    emptyWeekMessageText: {
+        height: '70%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+
+    },
+    addDayButtonContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

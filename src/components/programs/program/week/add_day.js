@@ -1,14 +1,12 @@
 import React, {useState} from 'react'
 
+import Day from './day'
 
 export const AddDay = (props) => {
-    let [name, setName] = useState(`Day ${props.index + 1}`)
+    let [day, setDay] = useState({name: null})
 
-    
+
     return (
-        <div>
-            <input name='day_name' value={name} onChange={(e) => setName(e.target.value)} />
-            <button onClick={() => props.onSubmit(name)} >Save </button>
-        </div>
+        <Day new index={props.index} day={day} addDay={props.onSubmit}/>
     )
 }

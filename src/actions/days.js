@@ -9,7 +9,8 @@ function _getUrl(week_id) {
 }
 
 const day = {
-    add: (week, name) => dispatched(updateWeek, makeRequest(_getUrl(week._id), 'POST', {name})),
+    add: (week, day) => dispatched(updateWeek, makeRequest(_getUrl(week._id), 'POST', day)),
+    save: (week, day) => dispatched(updateWeek, makeRequest_getUrl(week._id, day.index), 'PUT', day)
 }
 
 export const addDay = day.add
