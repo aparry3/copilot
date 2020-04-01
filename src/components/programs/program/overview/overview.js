@@ -7,10 +7,9 @@ import ClearIcon from '@material-ui/icons/Clear'
 import {Divider} from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import {makeStyles} from '@material-ui/core/styles';
-
 import Week from '../week'
 
+import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './overview.styles'
 const useStyles = makeStyles(styles)
 

@@ -17,7 +17,8 @@ const ProgramContainer = connect(
             return {
                 program: state.active_program,
                 user: state.auth.user,
-                current_week: state.active_program.current_week
+                current_week: state.active_program.current_week,
+                edit_workout_element: !!state.workout_element.current_workout_element
             }
         },
         (dispatch) => {
@@ -30,7 +31,7 @@ const ProgramContainer = connect(
     let {...pass_through_props} = props
     let [page, setPage] = useState(pages.OVERVIEW)
     let [program, setProgram] = useState(props.program)
-
+    console.log(props)
 
     useEffect(() => {
         if (!props.program._id) {

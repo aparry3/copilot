@@ -16,11 +16,11 @@ export const styles = theme => ({
     },
     week: {
         flexGrow: 1,
-        overflow: 'auto'
     },
     weekContent: {
         display: 'flex',
-        flexGrow: 1
+        flexGrow: 1,
+        overflow: 'auto'
     },
     emptyWeek: {
         display: 'flex',
@@ -50,5 +50,10 @@ export const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    days: {
+        display: 'flex',
+        alignItems: 'stretch',
+        padding: '20px 30px 0px 30px'
     }
 })

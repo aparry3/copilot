@@ -29,7 +29,6 @@ export const styles = theme => ({
     programContent: {
         flexGrow: 1,
         display: 'flex',
-        padding: '10px 10px 0px 10px'
     },
     week: {
         flexGrow: 1,

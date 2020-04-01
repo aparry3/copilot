@@ -6,6 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import {pages} from '../../../constants/programs';
 import Overview from './overview'
+import ViewEditWorkoutElement from './view_edit_workout_element'
 import Week from './week'
 import {InputTitle} from '../../utils'
 import {PageHeader} from '../../utils'
@@ -76,6 +77,7 @@ export const Program = (props) => {
                 <DndProvider backend={HTML5Backend} >
                     <div className={classes.programContent}>
                         {renderPageConent(props.page, props.current_week)}
+                        {props.edit_workout_element && <ViewEditWorkoutElement /> }
                     </div>
                 </DndProvider>
             </div>

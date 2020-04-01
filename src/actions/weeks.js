@@ -23,6 +23,7 @@ function _addWeek(res) {
 }
 
 function _deleteWeek(res) {
+    console.log(res)
     return {
         type: actions.DELETE_WEEK,
         program_id: res.program_id,

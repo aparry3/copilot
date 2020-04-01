@@ -1,7 +1,8 @@
 export const styles = theme => ({
     overview: {
         flexGrow: 1,
-        overflow: 'auto'
+        overflow: 'auto',
+        padding: '10px'
     },
     weekContainer: {
         width: '100%',

@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 
 import Day from './day'
 
-export const AddDay = (props) => {
-    let [day, setDay] = useState({name: null})
+export const NewDay = (props) => {
+    let [day, setDay] = useState({name: null, workout_blocks: []})
 
 
     return (

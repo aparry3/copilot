@@ -3,7 +3,7 @@ import {withStyles, makeStyles} from '@material-ui/core/styles';
 import update from 'immutability-helper';
 
 import ClearIcon from '@material-ui/icons/Clear';
-
+const height = 50
 
 const styles = theme => ({
     customSelectContainer: {
@@ -11,15 +11,19 @@ const styles = theme => ({
         flexDirection: 'column',
         width: '100%',
         background: theme.palette.background.light,
-        borderRadius: '5px'
+        borderRadius: '5px',
+        height: `${height}px`,
+        position: 'relative'
     },
     customSelect: {
         padding: '5px',
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        overflow: 'auto',
         alignItems: 'center',
         width: '100%',
+        flexGrow: 1,
         '&:hover': {
             background: theme.palette.background.main
         }
@@ -32,15 +36,21 @@ const styles = theme => ({
         width: '100%',
     },
     customSelectDropdown: {
-        width: '100%',
+        position: 'absolute',
+        background: theme.palette.background.light,
+        zIndex: 10,
+        boxShadow: `${theme.palette.background.dark} 0px 2px 6px -5px`,
         maxHeight: '200px',
         overflow: 'auto',
-        padding: '5px'
+        padding: '5px',
+        top: `${height}px`,
+        left: 0,
+        right: 0
     },
     customSelectChip: {
         height: '30px',
         width: '100px',
-        border: `1px solid ${theme.accents.primary}`,
+        border: `1px solid ${theme.accents.primary.main}`,
         borderRadius: '15px',
         margin: '5px',
         display: 'flex',
@@ -57,7 +67,7 @@ const styles = theme => ({
     },
     customSelectTextContainer: {
         flexGrow: 1,
-        marginLeft: '5px'
+        marginLeft: '5px',
     },
     customSelectListItem: {
         padding: '10px',
@@ -66,7 +76,7 @@ const styles = theme => ({
         color: theme.text.dark,
         cursor: 'pointer',
         '&:hover': {
-            background: theme.palette.background.light,
+            background: theme.palette.background.main,
             color: theme.text.primary
         }
     },

@@ -48,9 +48,9 @@ class NewExerciseView extends React.Component {
         let {classes} = this.props
         return (
             <div className={classes.exerciseFormPage}>
-                <ProgramHeader >
+                <PageHeader >
                     <span>New Exercises</span>
-                </ProgramHeader>
+                </PageHeader>
                 <ExerciseForm onSave={this.handleSave} exercise={this.props.exercise} onCancel={this.handleCancel}/>
             </div>
         )

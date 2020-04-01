@@ -18,7 +18,8 @@ const styles = theme => ({
         fontWeight: 100,
         textAlign: 'center',
         background: theme.palette.background.light,
-        boxShadow: 'black 0px -2px 2px 1px'
+        boxShadow: 'black -2px -2px 2px 1px',
+        zIndex: 10
     },
     programHeaderStart: {
 

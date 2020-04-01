@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 
-import {AddDay} from './add_day'
+import {NewDay} from './new_day'
 import AddIcon from '@material-ui/icons/Add'
-import Day from './day'
+import Day, {AddDay} from './day'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './week.styles'
@@ -13,8 +13,8 @@ export const Week = (props) => {
     let [over, setOver] = useState(false)
     let [adding_day, setAddingDay] = useState(false)
 
-    async function addDay(name) {
-        let new_day = await props.addDay(props.week, name)
+    async function addDay(day) {
+        let new_day = await props.addDay(props.week, day)
         setAddingDay(false)
     }
 
@@ -23,9 +23,13 @@ export const Week = (props) => {
             { props.week.days.length > 0 || adding_day ? (
                 <div className={classes.days}>
                 {props.week.days.map((d,i) => (
-                    <Day day={d} index={i} week_id={week._id}/>
+                    <Day day={d} index={i} week_id={props.week._id}/>
                 ))}
-                    <AddDay index={props.week.days.length} onSubmit={addDay} />
+                {   !!adding_day ? (
+                    <NewDay index={props.week.days.length} onSubmit={addDay} />
+                ) : (
+                    <AddDay handleClick={() => setAddingDay(true)}/>
+                )}
                 </div>
             ) : (
                 <div className={classes.emptyWeek}>
