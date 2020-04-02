@@ -1,8 +1,9 @@
 import clsx from 'clsx'
+import {copyState} from '../../../../../../reducers/utils'
 import React, {useEffect, useState} from  'react'
-import update from 'immutability-helper'
 
 import {AddDetail} from './add_detail'
+import {InputTitle} from '../../../../../utils'
 
 import {all_details} from './all_details'
 
@@ -18,26 +19,42 @@ export const Details = props => {
     let [add_detail, setAddDetail] = useState(false)
     let [hover, setHover] = useState(false)
 
-    useEffect(() => {
-        setAddDetail(false)
-        if (!!details) {
-            let new_remaining_details = Object.keys(all_details).filter(d => Object.keys(details).indexOf(d) == -1)
-            setRemainingDetails(new_remaining_details)
-        }
-    }, [details])
+
+    function remainingDetails() {
+        return Object.keys(all_details).filter(d => Object.keys(details).indexOf(d) == -1)
+    }
 
     function addDetails() {
         setDetails({})
     }
 
     function addDetail(detail) {
+        setAddDetail(false)
         setDetails(update(details, {
             [detail]: {$set: null}
         }))
     }
-    console.log(hover)
+
+    function updateDetail(detail, value) {
+        let new_details = copyState(details)
+        if (!value) {
+            delete new_details[detail]
+        } else {
+            new_details[detail] = value
+        }
+        setDetails(new_details)
+    }
+
+    function handleAdd() {
+        console.log("handle add")
+        setAddDetail(true)
+    }
+
+    function handleClose(e) {
+        e.stopPropagation()
+        setAddDetail(false)
+    }
     console.log(add_detail)
-    console.log(remaining_details)
     return (
         <div className={classes.formFieldContainer}>
             { !!details ? (
@@ -53,13 +70,14 @@ export const Details = props => {
                                         {all_details[d].title()}
                                     </div>
                                     <div className={classes.detailRowInput}>
+                                        <InputTitle value={details[d]} focus name={d} onSave={(value) => updateDetail(d, value)}/>
                                     </div>
                                 </div>
                             ))}
-                            { (Object.keys(details).length == 0 || add_detail || remaining_details.length > 0 && hover) && (
-                                <div className={classes.addDetail} onClick={() => setAddDetail(true)}>
-                                    <div><span>Add detail...</span></div>
-                                    { !!add_detail && (<AddDetail options={remaining_details} onSelect={addDetail}/>)}
+                            { (Object.keys(details).length == 0 || add_detail || remainingDetails().length > 0 && hover) && (
+                                <div className={classes.addDetail} onClick={handleAdd}>
+                                    <div className={classes.addDetailText}><span>Add detail...</span></div>
+                                    { !!add_detail && (<AddDetail options={remainingDetails()} onSelect={addDetail} onClose={handleClose}/>)}
                                 </div>
                             )}
                         </div>

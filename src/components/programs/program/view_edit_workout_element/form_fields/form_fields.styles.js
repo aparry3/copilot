@@ -20,7 +20,10 @@ export const styles = theme => ({
     },
     emptyForm: {
         cursor: 'pointer',
-        padding: '5px'
+        padding: '5px',
+        '&:hover': {
+            background: theme.palette.background.main
+        }
     }
 
 })

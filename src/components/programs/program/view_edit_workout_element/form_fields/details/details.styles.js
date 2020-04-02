@@ -13,10 +13,19 @@ export const styles = theme => ({
     addDetail: {
         position: 'relative',
         padding: '5px',
+        display: 'flex',
+        alignItems: 'stretch'
+    },
+    addDetailText: {
         cursor: 'pointer',
+        flexGrow: 1,
         '&:hover': {
             background: theme.palette.background.main
         }
-
+    },
+    detailRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'stretch'
     }
 })
