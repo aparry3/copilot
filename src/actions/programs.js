@@ -1,4 +1,3 @@
-import {auth0_client} from '../auth'
 import {API_URI} from '../config'
 import {dispatched, makeRequest} from './utils'
 

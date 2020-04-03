@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import {copyState} from '../../../../../../reducers/utils'
 import React, {useEffect, useState} from  'react'
+import update from 'immutability-helper'
 
 import {AddDetail} from './add_detail'
 import {InputTitle} from '../../../../../utils'
@@ -13,7 +14,7 @@ const useStyles = makeStyles(styles)
 
 export const Details = props => {
     let classes = useStyles()
-    let [details, setDetails] = useState(props.details)
+    let [details, setDetails] = useState(props.value)
     let _remaining_details = !!details ? Object.keys(all_details).filter(d => Object.keys(details).indexOf(d) == -1) : Object.keys(all_details)
     let [remaining_details, setRemainingDetails] = useState(_remaining_details)
     let [add_detail, setAddDetail] = useState(false)

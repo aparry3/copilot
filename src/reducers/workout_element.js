@@ -1,35 +1,46 @@
 import {copyState} from './utils'
 import {actions as workout_element_actions} from '../actions/workout_elements'
 
-const WORKOUT_ELEMENT_TYPES = {
+export const WORKOUT_ELEMENT_TYPES = {
     exercise: {
         template: {
-            exercise_id: null,
-            details: {}
+            type: 'exercise',
+            exercise: {
+                id: null,
+                name: null
+            },
+            details: {},
+            placeholder: true
         },
         name: 'Exercise',
     },
     superset: {
         template: {
-            exercise_id: null,
-            details: {}
+            type: 'superset',
+            exercises: [],
+            details: {},
+            placeholder: true
         },
         name: 'Superset',
     }
 
 }
 
-const initial_state = {types: WORKOUT_ELEMENT_TYPES, current_workout_element: null}
+const initial_state = {types: WORKOUT_ELEMENT_TYPES, location: null, type: null}
 
 const workout_element = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
-        case workout_element_actions.ADD_WORKOUT_ELEMENT: {
-            new_state.current_workout_element = state.types[action.workout_element_type].template
+        case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
+            new_state = {
+                ...new_state,
+                location: action.location,
+                type: action.workout_element_type
+            }
             return new_state
         }
-        case workout_element_actions.EDIT_WORKOUT_ELEMENT: {
-            new_state.current_workout_element = action.workout_element
+        case workout_element_actions.CANCEL_EDIT_WORKOUT_ELEMENT: {
+            new_state = {...new_state, type: null, location: null}
             return new_state
         }
         default:

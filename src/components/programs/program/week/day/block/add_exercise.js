@@ -19,12 +19,14 @@ export const AddExercise = props => {
             { active && (
                 <div className={classes.addExercisePopup}>
                     <div className={classes.addExerciseTypeContainer}>
-                        <div className={clsx(classes.addExerciseType, classes.exercise)} onClick={() => props.addWorkoutElement('exercise')}>
+                        <div className={clsx(classes.addExerciseType, classes.exercise)}
+                            onClick={() => props.addWorkoutElement('exercise', props.week_id, props.day_index, props.block_index)}>
                             <span>Execercise</span>
                         </div>
                     </div>
                     <div className={classes.addExerciseTypeContainer}>
-                        <div className={clsx(classes.addExerciseType, classes.superset)} onClick={() => props.addWorkoutElement('superset')}>
+                        <div className={clsx(classes.addExerciseType, classes.superset)}
+                            onClick={() => props.addWorkoutElement('superset', props.week_id, props.day_index, props.block_index)}>
                             <span>Superset</span>
                         </div>
                     </div>

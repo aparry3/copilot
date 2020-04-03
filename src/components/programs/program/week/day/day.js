@@ -9,15 +9,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './day.styles'
 const useStyles = makeStyles(styles)
 
-const EmptyDay = props => {
-    let classes = useStyles()
-    return (
-        <div className={classes.emptyDayContainer}>
-            <AddExercise />
-            <div className={classes.emptyDay} />
-        </div>
-    )
-}
 
 export const Day = (props) => {
     let classes = useStyles()
@@ -33,10 +24,9 @@ export const Day = (props) => {
         props.saveDay(day)
     }
 
-    console.log(props)
     return (
-        <div className={classes.day}>
-            <div className={classes.dayContent} >
+        <div className={classes.dayContainer}>
+            <div className={classes.day} >
                 <div className={classes.dayHeader}>
                     <InputTitle
                         placeholder='i.e. Chest, Monday, Day 1...'
@@ -44,15 +34,13 @@ export const Day = (props) => {
                         focus={!!props.new}
                         onSave={saveName}/>
                 </div>
-            {
-                !!props.day.workout_blocks && props.day.workout_blocks.length > 0 ? (
-                    props.day.workout_blocks.map(b => (
+                <div className={classes.dayContent}>
+                {
+                    props.day.workout_blocks.map((b,i) => (
                         <Block index={i} day_index={props.index} week_id={props.week_id} block={b}/>
                     ))
-                ) : (
-                    <EmptyDay />
-                )
-            }
+                }
+                </div>
             </div>
         </div>
     )

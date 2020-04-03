@@ -59,6 +59,7 @@ const light_theme = createMuiTheme({
         secondary: {main:'#ffa837'},
         background: {
             dark: '#121212',
+            mediumLight: '#dee2e4',
             mediumDark: '#cfcfd0',
             main: '#f0f4f7',
             light: '#ffffff',

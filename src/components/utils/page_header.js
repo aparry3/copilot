@@ -74,7 +74,7 @@ const styles = theme => ({
     },
     selected: {
         color: theme.text.dark,
-        borderBottom: `1px solid ${theme.accents.primary}`
+        borderBottom: `1px solid ${theme.accents.primary.main}`
     },
     tabsContainer: {
         display: 'flex'

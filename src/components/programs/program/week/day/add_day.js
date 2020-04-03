@@ -10,8 +10,8 @@ const useStyles = makeStyles(styles)
 export const AddDay = props => {
     let classes = useStyles()
     return (
-        <div className={classes.day}>
-            <div className={classes.dayContent}>
+        <div className={classes.dayContainer}>
+            <div className={classes.day}>
                 <div className={classes.dayHeader}>
                     <span onClick={props.handleClick} className={classes.addDayText}><AddIcon /> New day</span>
                 </div>

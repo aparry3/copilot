@@ -2,7 +2,9 @@ export const styles = theme => ({
     overview: {
         flexGrow: 1,
         overflow: 'auto',
-        padding: '10px'
+        padding: '10px',
+        display: 'flex',
+        flexDirection: 'column'
     },
     weekContainer: {
         width: '100%',
@@ -68,7 +70,7 @@ export const styles = theme => ({
         padding: '5px'
     },
     expanded: {
-        height: '90%'
+        minHeight: '90%'
     }
 
 

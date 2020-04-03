@@ -1,8 +1,14 @@
 export const styles = theme => ({
-    day: {
+    dayContainer: {
         display: 'flex',
         width: '400px',
         padding: '20px'
+    },
+    day: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        flexGrow: 1
     },
     dayContent: {
         display: 'flex',
