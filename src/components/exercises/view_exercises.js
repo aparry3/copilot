@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import {withStyles, makeStyles} from '@material-ui/core/styles';
 import {persistExercise, showExerciseForm} from '../../actions'
 import {ExerciseForm} from './exercise_form';
-import {ProgramHeader} from '../programs/program_header'
+import {PageHeader} from '../utils'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { normalize, titleCase, MuscleGroup } from '../util';
+import { normalize, titleCase, MuscleGroups } from '../utils';
 import {Grid, Paper, List, ListItem, ListItemText, Typography} from '@material-ui/core';
 import {SearchBar} from './search_bar';
 import {ViewExercise} from './view_exercise'
@@ -249,10 +249,14 @@ class ViewExercisesView extends React.Component {
             <>
                 <div className={classes.viewExercisesContainer} >
                     <div className={classes.exercisesListPageContainer} >
-                        <ProgramHeader action={<div className={classes.exercisesHeaderAction}><div onClick={this.props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>}>
-                            <span>Exercises</span>
-                            <SearchBar />
-                        </ProgramHeader>
+                        <PageHeader
+                            content={(
+                                <>
+                                    <span>Exercises</span>
+                                    <SearchBar />
+                                </>
+                            )}
+                            action={<div className={classes.exercisesHeaderAction}><div onClick={this.props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>} />
                         <div className={classes.exercisesListContainer} >
                             <div className={classes.exerciseListHeader} >
                                 <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
@@ -307,7 +311,7 @@ const ExerciseListItem = styled((props) => {
     return (
         <div className={classes.exerciseListRow} onClick={handleSelect}>
             <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
-            <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroup muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
+            <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroups muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
             <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.categories} /></div>
             <div className={clsx(classes.exerciseRowAction, classes.actionColumn)}>
                 { props.action_selected  ? (<div onClick={props.onEditClick} className={classes.rowActionIconContainer}><CreateIcon /></div>) : (<div onClick={props.onActionClick} className={classes.rowActionIconContainer}><MoreHorizIcon /></div>)}

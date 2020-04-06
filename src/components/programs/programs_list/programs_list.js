@@ -1,174 +1,15 @@
+import React, {useState} from 'react';
 import clsx from 'clsx'
+
 import AddIcon from '@material-ui/icons/Add'
 import ClearIcon from '@material-ui/icons/Clear';
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import {PageHeader} from '../../utils'
+
+import {styles} from './programs_list.styles'
 import {makeStyles, withStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
-import { connect } from 'react-redux';
-import {addProgramAndPersist, setActiveProgram, deleteProgramAndPersist} from '../../actions';
-import { Link } from "react-router-dom";
-import {history} from '../../util'
-import {InputLabel, Input, List, ListItem, ListItemText, FormControl, Card, Select, MenuItem, Typography} from '@material-ui/core'
-import {ProgramHeader} from './program_header'
-
-let styles = (theme) => ({
-    programListPageContainer: {
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden'
-    },
-    programListHeader: {
-        height: '50px',
-        textAlign: 'left',
-        width: '100%',
-        fontSize: '14px',
-        fontWeight: 100,
-        color: theme.text.dark,
-        opacity: 0.3,
-        display: 'flex',
-        alignItems: 'flex-end',
-        padding: '0px 0px 5px 0px'
-    },
-    hr: {
-        width: '100%',
-        background: theme.palette.background.dark,
-        opacity: 0.1,
-        margin: '0',
-        border: 0,
-        borderTop: '2px solid rgba(0,0,0,.1)'
-    },
-    programListPageContent: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        width: '100%',
-        height: '100%',
-        overflow: 'auto'
-    },
-    programListContainer: {
-        width: '100%',
-        flexGrow: 1,
-        padding: '20px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    programListBody: {
-        width: '100%',
-        height: '100%',
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    programListRow: {
-        width: '100%',
-        display: 'flex',
-        minHeight: '60px',
-        cursor: 'pointer',
-        alignItems: 'center',
-        '&:hover': {
-            background: theme.palette.background.light
-        }
-    },
-    programInputRow: {
-        width: '100%',
-        display: 'flex',
-        minHeight: '60px',
-        alignItems: 'center',
-    },
-    programRowName: {
-        width: '50%',
-        fontSize: '16px',
-        fontWeight: 600,
-        padding: '10px'
-
-    },
-    programRowLength: {
-        fontWeight: 200,
-        fontSize: '14px',
-        padding: '10px'
-
-    },
-    programRowLastModified: {
-        padding: '10px'
-
-    },
-    programRowAction: {
-        padding: '10px',
-        cursor: 'pointer'
-
-    },
-
-    headerText: {
-        fontWeight: 200
-    },
-    lengthColumn: {
-        width: '20%'
-    },
-    lastModifiedColumn: {
-        width: '30%'
-    },
-    actionColumn: {
-        width: '10%'
-    },
-    nameColumn: {
-        flexGrow: 2,
-        width: '40%'
-    },
-    programHeaderAction: {
-        display: 'flex',
-        alignItems: 'center',
-        jusitfyContent: 'center',
-        height: '100%',
-        padding: '20px',
-    },
-    addIconContainer: {
-        cursor: 'pointer',
-        '&:hover': {
-            background: theme.palette.background.light
-        },
-        borderRadius: '5px',
-        display: 'flex',
-        alignItems:'center',
-        justifyContent: 'center'
-
-    },
-    programLengthInputGroup: {
-        display: 'flex',
-        alignItems: 'center'
-    },
-    programInputActions: {
-        display: 'flex',
-        flexGrow: 1,
-        alignItems: 'center'
-    },
-    programInputAction: {
-        display: 'flex',
-        alignItems: 'center',
-        jusitfyContent: 'center',
-        padding: '5px'
-    },
-    programInputField: {
-        borderRadius: '5px',
-        border: `1px solid ${theme.palette.background.light}`,
-        padding: '8px',
-    },
-    programLengthInputField: {
-        width: '30px',
-        textAlign: 'center',
-    },
-    programLengthInputLabel: {
-        padding: '5px',
-        display: 'flex',
-        alignItems:'center'
-    }
-
-})
-
 let useStyles = makeStyles(styles)
 let styled = withStyles(styles)
 
@@ -189,7 +30,7 @@ const ProgramListItem = styled((props) => {
 })
 
 
-export function ProgramsListView(props) {
+export const ProgramsList = (props) => {
     let {programs} = props
     let [adding_new_program, setAddingNewProgram] = useState(false)
     let [program_name, setProgramName] = useState('');
@@ -204,7 +45,7 @@ export function ProgramsListView(props) {
         setAddingNewProgram(false)
         setProgramName(''),
         setProgramLength(0)
-        handleSelect(new_program)
+        handleSelect(new_program.program)
     }
 
     function handleCancel(e) {
@@ -240,9 +81,9 @@ export function ProgramsListView(props) {
 
     return (
         <div className={classes.programListPageContainer}>
-            <ProgramHeader action={<div className={classes.programHeaderAction}><div onClick={() => setAddingNewProgram(true)} className={classes.addIconContainer}><AddIcon /></div></div>}>
-                <span>Programs</span>
-            </ProgramHeader>
+            <PageHeader
+                content={<span>Programs</span>}
+                action={<div className={classes.programHeaderAction}><div onClick={() => setAddingNewProgram(true)} className={classes.addIconContainer}><AddIcon /></div></div>} />
             <div className={classes.programListPageContent}>
                 <div className={classes.programListContainer}>
                     <div className={classes.programListHeader} >
@@ -252,6 +93,7 @@ export function ProgramsListView(props) {
                         <div className={classes.actionColumn}><span className={classes.headerText}>Action</span></div>
                     </div>
                     <hr className={classes.hr} />
+                    { programs.length > 0 || !!adding_new_program ? (
                     <div className={classes.programListBody}>
                         {!!adding_new_program && (
                         <div className={classes.programInputRow}>
@@ -286,25 +128,15 @@ export function ProgramsListView(props) {
                             );
                         })}
                     </div>
+                ) : (
+                    <div className={classes.emptyProgramsList}>
+                        <span>
+                            You have a no programs. Add a Program to get started.
+                        </span>
+                    </div>
+                )}
                 </div>
             </div>
         </div>
     )
 }
-
-export const ProgramsList = connect(
-    (state, ownProps) => {
-        return {
-            programs: state.programs.all_programs,
-            clients: state.auth.user.clients,
-            user: state.auth.user
-        }
-    },
-    dispatch => {
-        return {
-            addProgram: (name, length) => dispatch(addProgramAndPersist(name, length)),
-            deleteProgram: (program_id) => dispatch(deleteProgramAndPersist(program_id)),
-            setActiveProgram: (program_id) => dispatch(setActiveProgram(program_id))
-        }
-    }
-)(ProgramsListView)

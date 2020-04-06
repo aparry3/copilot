@@ -4,7 +4,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import { normalize, titleCase, CustomSelect } from '../util';
+import { normalize, titleCase, CustomSelect } from '../utils';
 import { allMuscles, CATEGORIES, EXERCISE } from '../../constants/exercises';
 import MenuItem from '@material-ui/core/MenuItem';
 import {withStyles} from '@material-ui/core/styles';

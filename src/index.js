@@ -5,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { fetchExerises, getAllPrograms, fetchUser } from './actions'
+import { fetchExerises, fetchUser } from './actions'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import {API_URI} from './config'
@@ -59,31 +59,34 @@ const light_theme = createMuiTheme({
         secondary: {main:'#ffa837'},
         background: {
             dark: '#121212',
-            mediumDark: '#f1f7ff',
-            main: '#ffffff',
-            light: '#e9ecef',
+            mediumLight: '#dee2e4',
+            mediumDark: '#cfcfd0',
+            main: '#f0f4f7',
+            light: '#ffffff',
             tooltip: '#cbcdd0'
         }
     },
     accents: {
-        primary: '#98ff79',
-        primaryHover: '#51943d',
-        secondary: '#ffa837',
-        secondaryHover: '#bd941a',
+        primary: {main: '#77f981', hover: '#167d1e'},
+        secondary: {main:'#fdbc68',  hover: '#82570a'},
         error: '#ff6f6f',
         errorHover: '#b34949'
     },
     text: {
+        letterSpacing: '1px',
         white: '#ffffff',
+        light: '#a9b0bd',
         primary: '#112540',
         dark: '#000000',
         secondary: '#707275',
         accents: {
+            primary: {main: '#167d1e', hover: '#77f981'},
+            secondary: {main: '#82570a', hover: '#fdbc68'},
+
             error: '#6f1f1f'
         }
     }
 })
-
 
 
 function App(props) {

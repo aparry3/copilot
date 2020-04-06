@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
-import {Program} from './program'
-import {ProgramsList} from './programs_list'
+import Program from './program'
+import ProgramsList from './programs_list'
 
 
 function ProgramPageView(props) {

@@ -1,12 +1,20 @@
 import {API_URI} from '../config'
 import {auth0_client} from '../auth'
-import {getAllPrograms} from './programs'
+import {getPrograms} from './programs'
 
 export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOGGING_OUT = 'LOGGING_OUT';
 export const AUTH_CLIENT_DID_LOAD = 'LOGGING_OUT';
 export const ADD_CLIENT = 'ADD_CLIENT';
+
+
+export function authenticated(func) {
+    return async function(...args) {
+        let token = await auth0_client.getToken()
+        return await func(token, ...args)
+    }
+}
 
 export function login(...p) {
     console.log(p)
@@ -82,7 +90,7 @@ export function loggedIn(user) {
             type: LOGGED_IN,
             user: user
         })
-        dispatch(getAllPrograms(user._id))
+        dispatch(getPrograms(user._id))
 
     }
 

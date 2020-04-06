@@ -2,7 +2,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles';
-import {MuscleGroup, titleCase} from '../util'
+import {MuscleGroups, titleCase} from '../utils'
 
 let styles = theme => ({
     viewExerciseContainer: {
@@ -99,7 +99,7 @@ export const ViewExercise = (props) => {
                 </ViewExerciseSection>
                 <ViewExerciseSection name="Muscle Groups">
                     <div className={classes.exerciseRowMuscleGroups}>
-                        <MuscleGroup muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} />
+                        <MuscleGroups muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} />
                     </div>
                 </ViewExerciseSection>
                 <ViewExerciseSection  name="Primary Muscles">
