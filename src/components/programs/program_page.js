@@ -1,4 +1,7 @@
 import React from "react";
+
+import {Loading} from '../utils'
+
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import Program from './program'
@@ -13,7 +16,7 @@ function ProgramPageView(props) {
                 <Route path={`${props.match.path}/:program_id`} component={Program}/>
                 <Route component={ProgramsList}/>
             </Switch>
-        ) : <div>Loading programs...</div>}
+        ) : <Loading />}
         </>
     )
 }

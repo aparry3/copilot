@@ -27,5 +27,10 @@ export const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'stretch'
+    },
+    detailRowInput: {
+        display: 'flex',
+        alignItems:'center',
+        justifyContent: 'center'
     }
 })

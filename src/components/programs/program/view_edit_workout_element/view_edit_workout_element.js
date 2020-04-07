@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import update from 'immutability-helper'
 
-import AddIcon from '@material-ui/icons/Add'
+import CheckIcon from '@material-ui/icons/Check'
 import ClearIcon from '@material-ui/icons/Clear'
 import {Details, ExerciseName, Notes} from './form_fields'
 
@@ -25,26 +25,32 @@ export const ViewEditWorkoutElement = props => {
     }
 
     return (
-        <div className={classes.viewEditWorkoutElement}>
-            <div className={classes.viewEditWorkoutElementHeader}>
-                <div className={classes.viewEditWorkoutElementTitle}>
-                    <span>Edit Exercise</span>
+        <div className={classes.viewEditWorkoutElementContainer}>
+            <div className={classes.viewEditWorkoutElement}>
+                <div className={classes.viewEditWorkoutElementHeader}>
+                    <div className={classes.viewEditWorkoutElementTitle}>
+                        <span>Edit Exercise</span>
+                    </div>
+                    <div onClick={() => props.closeEdit(props.location)} className={classes.viewEditWorkoutElementClose}>
+                        <ClearIcon />
+                    </div>
                 </div>
-                <div onClick={() => props.closeEdit(props.location)} className={classes.viewEditWorkoutElementClose}>
-                    <ClearIcon />
+                <div className={classes.workoutElementForm}>
+                    <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
+                    <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
+                    <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
                 </div>
             </div>
-            <div className={classes.workoutElementForm}>
-                <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
-                <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
-                <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
-            </div>
-            <div className={classes.viewEditWorkoutElementActionContainer}>
-                <div className={classes.viewEditWorkoutElementAction} onClick={() => props.saveWorkoutElement(workout_element)}>
-                    <span><AddIcon /></span>
+            <div className={classes.viewEditWorkoutElementFooter}>
+                <div className={classes.viewEditWorkoutElementActionContainer}>
+                    <div className={classes.viewEditWorkoutElementAction} onClick={() => props.saveWorkoutElement(props.location, workout_element)}>
+                        <span><CheckIcon /></span>
+                    </div>
                 </div>
-                <div className={classes.viewEditWorkoutElementAction} onClick={() => props.closeEdit(props.location)}>
-                    <span><ClearIcon /></span>
+                <div className={classes.viewEditWorkoutElementActionContainer}>
+                    <div className={classes.viewEditWorkoutElementAction} onClick={() => props.closeEdit(props.location)}>
+                        <span><ClearIcon /></span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -20,13 +20,13 @@ export const AddExercise = props => {
                 <div className={classes.addExercisePopup}>
                     <div className={classes.addExerciseTypeContainer}>
                         <div className={clsx(classes.addExerciseType, classes.exercise)}
-                            onClick={() => props.addWorkoutElement('exercise', props.week_id, props.day_index, props.block_index)}>
+                            onClick={() => props.addWorkoutElement('exercise')}>
                             <span>Execercise</span>
                         </div>
                     </div>
                     <div className={classes.addExerciseTypeContainer}>
                         <div className={clsx(classes.addExerciseType, classes.superset)}
-                            onClick={() => props.addWorkoutElement('superset', props.week_id, props.day_index, props.block_index)}>
+                            onClick={() => props.addWorkoutElement('superset')}>
                             <span>Superset</span>
                         </div>
                     </div>

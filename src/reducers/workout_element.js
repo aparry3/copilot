@@ -1,5 +1,8 @@
 import {copyState} from './utils'
+
+import {actions as week_actions} from '../actions/weeks'
 import {actions as workout_element_actions} from '../actions/workout_elements'
+
 
 export const WORKOUT_ELEMENT_TYPES = {
     exercise: {
@@ -40,6 +43,10 @@ const workout_element = (state = initial_state, action) => {
             return new_state
         }
         case workout_element_actions.CANCEL_EDIT_WORKOUT_ELEMENT: {
+            new_state = {...new_state, type: null, location: null}
+            return new_state
+        }
+        case week_actions.UPDATE_WEEK: {
             new_state = {...new_state, type: null, location: null}
             return new_state
         }

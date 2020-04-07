@@ -1,12 +1,19 @@
 export const styles = theme => ({
-    viewEditWorkoutElement: {
+    viewEditWorkoutElementContainer: {
         display: 'flex',
         padding: '10px',
         flexDirection: 'column',
         minWidth: '40%',
         width: '40%',
+        justifyContent: 'space-between',
         background: theme.palette.background.light,
-        borderLeft: `2px solid ${theme.palette.background.mediumDark}`
+        borderLeft: `2px solid ${theme.palette.background.mediumDark}`,
+        alignItems:'stretch'
+    },
+    viewEditWorkoutElement: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column'
     },
     viewEditWorkoutElementHeader: {
         display: 'flex',
@@ -21,5 +28,29 @@ export const styles = theme => ({
     },
     viewEditWorkoutElementClose: {
         cursor: 'pointer'
+    },
+    viewEditWorkoutElementFooter: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        height: '50px'
+    },
+    viewEditWorkoutElementActionContainer: {
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        cursor: 'pointer',
+        padding: '5px',
+    },
+    viewEditWorkoutElementAction: {
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        borderRadius: '5px',
+        '&:hover': {
+            background: theme.palette.background.main
+        }
     }
 })

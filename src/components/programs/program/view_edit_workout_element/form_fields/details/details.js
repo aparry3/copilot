@@ -44,6 +44,7 @@ export const Details = props => {
             new_details[detail] = value
         }
         setDetails(new_details)
+        props.onChange(new_details)
     }
 
     function handleAdd() {

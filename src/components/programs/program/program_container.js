@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 
+import {Loading} from '../../utils'
 import {Program} from './program'
 
 import {
@@ -45,7 +46,7 @@ const ProgramContainer = connect(
         <>
             {!!props.program._id ? (
                 <Program page={page} current_week={props.current_week} setPage={setPage} program={program} {...pass_through_props} />
-            ) : <div>Loading...</div>}
+            ) : <Loading />}
         </>
     )
 })

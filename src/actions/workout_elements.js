@@ -9,10 +9,11 @@ export const actions = {
     SET_CURRENT_WORKOUT_ELEMENT: 'SET_CURRENT_WORKOUT_ELEMENT',
 }
 
-function _getUrl(week_id, day_index, block_index, workout_element_index = null) {
-    return workout_element_index == null ? (
-        `${API_URI}/weeks/${week_id}/days/${day_index}/blocks/${block_index}/workout_elements`) : (
-        `${API_URI}/weeks/${week_id}/days/${day_index}/blocks/${block_index}/workout_elements/${workout_element_index}`
+function _getUrl(location) {
+    let {week_id, day, block, workout_element} = location
+    return workout_element == null ? (
+        `${API_URI}/weeks/${week_id}/days/${day}/blocks/${block}/workout_elements`) : (
+        `${API_URI}/weeks/${week_id}/days/${day}/blocks/${block}/workout_elements/${workout_element}`
     )
 }
 
@@ -44,7 +45,7 @@ export function cancelEditWorkoutElement(location) {
 
 
 const workout_elements = {
-    add: (week_id, day, block, workout_element) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day, block), 'POST', workout_element))
+    save: (location, workout_element) => dispatched(updateWeek, makeRequest(_getUrl(location), location.workout_element == null ? 'POST' : 'PUT', workout_element))
 }
 
-export const addWorkoutElement = workout_elements.add
+export const saveWorkoutElement = workout_elements.save

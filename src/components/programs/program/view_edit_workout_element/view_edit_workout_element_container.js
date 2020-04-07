@@ -26,7 +26,7 @@ let ViewEditWorkoutElementContainer = connect(
     },
     dispatch => ({
         closeEdit: (location) => dispatch(cancelEditWorkoutElement(location)),
-        saveWorkoutElement: (workout_element) => dispatch(saveWorkoutElement(workout_element))
+        saveWorkoutElement: (location, workout_element) => dispatch(saveWorkoutElement(location, workout_element))
     })
 )(ViewEditWorkoutElement)
 

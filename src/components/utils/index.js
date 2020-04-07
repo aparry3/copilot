@@ -1,6 +1,7 @@
 import {CustomSelect} from './custom_select'
 import {InputTextArea} from './input_text_area'
 import {InputTitle} from './input_title'
+import {Loading} from './loading'
 import {Logo, Wordmark} from './branding'
 import {MuscleGroups} from './muscle_groups'
 import {PageHeader} from './page_header'
@@ -21,6 +22,7 @@ export {
     CustomSelect,
     InputTextArea,
     InputTitle,
+    Loading,
     Logo,
     MuscleGroups,
     PageHeader,

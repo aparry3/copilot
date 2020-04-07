@@ -6,7 +6,7 @@ import {ProgramPage} from './programs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {Sidebar, SidebarList} from './sidebar';
-import {Logo} from './utils';
+import {Loading, Logo} from './utils';
 import {history} from '../util'
 import {login} from '../actions'
 import {Dashboard} from './dashboard'
@@ -18,38 +18,52 @@ const styles = (theme) => {
     return {
         app: {
           display: 'flex',
+          flexGrow: 1,
+          alignItems: 'stretch',
           background: theme.palette.background.main,
           color: theme.text.primary,
           letterSpacing: theme.text.letterSpacing
         },
+        appContainer: {
+            height: '100vh',
+            width: '100vw',
+            display: 'flex',
+            alignItems: 'stretch'
+        },
         content: {
             flexGrow: 1,
+            display: 'flex',
+            alignItems: 'stretch',
             padding: theme.spacing(0),
             minWidth: '0px',
             minHeight: '100vh'
+        },
+        trainer: {
+            flexGrow: 1,
+            display: 'flex',
+            alignItems: 'stretch'
         }
     }
 };
 const useStyles = makeStyles(styles);
 const styled = withStyles(styles)
 
-class MainPage extends React.Component {
+const MainPage = props => {
+    let classes = useStyles()
 
-    render() {
-        return (
-            <>
-            {this.props.client_loaded ?
-                (<Router history={history}>
-                    <Switch>
-                        <Route path='/trainer' component={Trainer} />
-                        <Route path="/login" component={Login} />
-                        <Redirect to='/login'/>
-                    </Switch>
-                </Router>) : <div>Loading...</div>
-            }
-            </>
-        )
-    }
+    return (
+        <div className={classes.appContainer}>
+        {props.client_loaded ?
+            (<Router history={history}>
+                <Switch>
+                    <Route path='/trainer' component={Trainer} />
+                    <Route path="/login" component={Login} />
+                    <Redirect to='/login'/>
+                </Switch>
+            </Router>) : <Loading />
+        }
+        </div>
+    )
 }
 
 const Trainer = styled(connect(state => {
@@ -61,8 +75,9 @@ const Trainer = styled(connect(state => {
 })((props) => {
     let {match, classes} = props;
     return(
-        <div>
-            {!props.client_loaded || props.loading ? ( <div>Loading...</div>) : (<div>
+        <div className={classes.trainer}>
+            {!props.client_loaded || props.loading ? ( <Loading />) : (
+            <>
             {!!props.user ? (
                 <div className={classes.app}>
                     <Sidebar path={match.path}/>
@@ -80,7 +95,7 @@ const Trainer = styled(connect(state => {
                   pathname: "/login",
                   state: { targetUrl: props.location }
               }}/>
-          )}</div>)}
+          )}</>)}
         </div>
 
     )
@@ -111,4 +126,4 @@ export default connect(state => {
     return {
         client_loaded: state.auth.client_loaded
     }
-})(styled(MainPage));
+})(MainPage);
