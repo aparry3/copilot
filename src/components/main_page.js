@@ -18,7 +18,7 @@ const styles = (theme) => {
     return {
         app: {
           display: 'flex',
-          flexGrow: 1,
+          width: '100%',
           alignItems: 'stretch',
           background: theme.palette.background.main,
           color: theme.text.primary,
@@ -39,7 +39,7 @@ const styles = (theme) => {
             minHeight: '100vh'
         },
         trainer: {
-            flexGrow: 1,
+            width: '100%',
             display: 'flex',
             alignItems: 'stretch'
         }
