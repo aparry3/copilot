@@ -15,6 +15,7 @@ export const Notes = props => {
     function handleSave(value) {
         setNotes(value)
         setEditing(false)
+        props.onChange(value)
     }
 
     return (

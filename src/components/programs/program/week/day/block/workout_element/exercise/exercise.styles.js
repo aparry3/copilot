@@ -1,28 +1,25 @@
 export const styles = theme => ({
     exerciseContainer: {
-        padding: '10px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
-        height: '150px'
+        borderLeft: `2px solid ${theme.accents.primary.main}`,
+        padding: '10px'
     },
     exerciseHeader: {
         display: 'flex',
-        height: '30px',
         alignItems: 'center'
     },
     exerciseContent: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
-        flexGrow: 1
+        alignItems: 'stretch'
     },
     exerciseNotes: {
-        flexGrow: 1
     },
     exerciseDetails: {
         display: 'flex',
-        height: '20px',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        height: '30px',
+        alignItems: 'center'
     }
 })

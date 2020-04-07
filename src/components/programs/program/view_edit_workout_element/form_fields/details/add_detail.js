@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 import AddIcon from '@material-ui/icons/Add';
 
-import {all_details} from './all_details'
+import {details} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -50,7 +50,7 @@ export const AddDetail = props => {
             {props.options.map(d => {
                 return (
                     <div onClick={(e) => handleSelect(e, d)} className={classes.option}>
-                        {all_details[d].title()}
+                        {details[d].title()}
                     </div>
                 )
             })}

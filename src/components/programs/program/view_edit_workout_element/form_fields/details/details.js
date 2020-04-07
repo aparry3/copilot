@@ -4,9 +4,7 @@ import React, {useEffect, useState} from  'react'
 import update from 'immutability-helper'
 
 import {AddDetail} from './add_detail'
-import {InputTitle} from '../../../../../utils'
-
-import {all_details} from './all_details'
+import {details as render_details, InputTitle} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './details.styles'
@@ -15,14 +13,14 @@ const useStyles = makeStyles(styles)
 export const Details = props => {
     let classes = useStyles()
     let [details, setDetails] = useState(props.value)
-    let _remaining_details = !!details ? Object.keys(all_details).filter(d => Object.keys(details).indexOf(d) == -1) : Object.keys(all_details)
+    let _remaining_details = !!details ? Object.keys(render_details).filter(d => Object.keys(details).indexOf(d) == -1) : Object.keys(render_details)
     let [remaining_details, setRemainingDetails] = useState(_remaining_details)
     let [add_detail, setAddDetail] = useState(false)
     let [hover, setHover] = useState(false)
 
 
     function remainingDetails() {
-        return Object.keys(all_details).filter(d => Object.keys(details).indexOf(d) == -1)
+        return Object.keys(render_details).filter(d => Object.keys(details).indexOf(d) == -1)
     }
 
     function addDetails() {
@@ -69,7 +67,7 @@ export const Details = props => {
                             { Object.keys(details).map(d => (
                                 <div className={classes.detailRow}>
                                     <div className={classes.detailRowTitle}>
-                                        {all_details[d].title()}
+                                        {render_details[d].title()}
                                     </div>
                                     <div className={classes.detailRowInput}>
                                         <InputTitle value={details[d]} focus name={d} onSave={(value) => updateDetail(d, value)}/>
