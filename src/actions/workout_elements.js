@@ -36,10 +36,9 @@ export function editWorkoutElement(workout_element) {
     }
 }
 
-export function cancelEditWorkoutElement(location) {
+export function cancelEditWorkoutElement() {
     return {
-        type: actions.CANCEL_EDIT_WORKOUT_ELEMENT,
-        location: location
+        type: actions.CANCEL_EDIT_WORKOUT_ELEMENT
     }
 }
 

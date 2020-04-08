@@ -7,6 +7,22 @@ import {WORKOUT_ELEMENT_TYPES} from './workout_element'
 
 const initial_state = {loading: false, current_workout_element: null, location: null}
 
+function cancelEditWorkoutElement(location, new_state) {
+    let block = new_state.weeks.find(w => w._id == location.week_id).days[location.day].workout_blocks[location.block]
+    if (location.workout_element == null || block.workout_elements[location.workout_element].placeholder) {
+        block.workout_elements.pop()
+    } else {
+        block.workout_elements[location.workout_element].active = false
+    }
+    new_state.weeks = new_state.weeks.map(w => {
+        if (w._id == location.week_id) {
+            w.days[location.day].workout_blocks[location.block] = block
+        }
+        return w
+    })
+    return new_state
+}
+
 const active_program = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
@@ -17,20 +33,11 @@ const active_program = (state = initial_state, action) => {
             return new_state;
         }
         case workout_element_actions.CANCEL_EDIT_WORKOUT_ELEMENT: {
-            let {location} = action
-            console.log(action)
-            let block = new_state.weeks.find(w => w._id == location.week_id).days[location.day].workout_blocks[location.block]
-            if (action.location.workout_element == null) {
-                block.workout_elements.pop()
-            } else {
-                block.workout_elements[location.workout_element].active = false
+            let {location} = state
+            if (!!location) {
+                new_state = cancelEditWorkoutElement(location, new_state)
             }
-            new_state.weeks = new_state.weeks.map(w => {
-                if (w._id == location.week_id) {
-                    w.days[location.day].workout_blocks[location.block] = block
-                }
-                return w
-            })
+            new_state.location = null
             return new_state
         }
         case workout_element_actions.EDIT_WORKOUT_ELEMENT: {
@@ -67,6 +74,9 @@ const active_program = (state = initial_state, action) => {
             return new_state
         }
         case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
+            if (state.location != null) {
+                new_state = cancelEditWorkoutElement(state.location, new_state)
+            }
             let week = new_state.weeks.find(w => w._id == action.location.week_id)
             let day = week.days[action.location.day]
             let block = day.workout_blocks[action.location.block]
@@ -83,6 +93,7 @@ const active_program = (state = initial_state, action) => {
                 }
                 return w
             })
+            new_state.location = action.location
             return new_state
         }
         case program_actions.SET_ACTIVE_PROGRAM: {
@@ -114,6 +125,7 @@ const active_program = (state = initial_state, action) => {
             let {week} = action;
             return {
                 ...new_state,
+                location: null,
                 weeks: new_state.weeks.map(w => {
                     if (w._id == week._id) {
                         week.collapsed = w.collapsed

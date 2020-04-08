@@ -4,7 +4,7 @@ import {Block} from './block'
 
 const BlockContainer = connect(
     state => ({
-        edit_workout_element: !!state.workout_element.location
+        edit_workout_element: !!state.active_program.location
     })
 )(Block)
 

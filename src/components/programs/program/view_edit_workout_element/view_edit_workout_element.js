@@ -34,7 +34,7 @@ export const ViewEditWorkoutElement = props => {
                     <div className={classes.viewEditWorkoutElementTitle}>
                         <span>Edit Exercise</span>
                     </div>
-                    <div onClick={() => props.closeEdit(props.location)} className={classes.viewEditWorkoutElementClose}>
+                    <div onClick={() => props.closeEdit()} className={classes.viewEditWorkoutElementClose}>
                         <ClearIcon />
                     </div>
                 </div>
@@ -51,7 +51,7 @@ export const ViewEditWorkoutElement = props => {
                     </div>
                 </div>
                 <div className={classes.viewEditWorkoutElementActionContainer}>
-                    <div className={classes.viewEditWorkoutElementAction} onClick={() => props.closeEdit(props.location)}>
+                    <div className={classes.viewEditWorkoutElementAction} onClick={() => props.closeEdit()}>
                         <span><ClearIcon /></span>
                     </div>
                 </div>

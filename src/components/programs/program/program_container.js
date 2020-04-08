@@ -25,7 +25,7 @@ const ProgramContainer = connect(
                 program: state.active_program,
                 user: state.auth.user,
                 current_week: _getWeek(state.active_program.current_week),
-                edit_workout_element: !!state.workout_element.location
+                edit_workout_element: !!state.active_program.location
             }
         },
         (dispatch) => {

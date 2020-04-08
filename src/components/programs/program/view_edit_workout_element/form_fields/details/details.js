@@ -60,7 +60,7 @@ export const Details = props => {
 
     return (
         <div className={classes.formFieldContainer}>
-            { !!details ? (
+            { Object.keys(details).length > 0 || add_detail ? (
                 <>
                     <div className={classes.formFieldHeader}>
                         <span>DETAILS</span>
@@ -87,7 +87,7 @@ export const Details = props => {
                     </div>
                 </>
             ) : (
-                <div onClick={() => addDetails()} className={clsx(classes.formFieldHeader, classes.emptyForm)}>
+                <div onClick={handleAdd} className={clsx(classes.formFieldHeader, classes.emptyForm)}>
                     <span>Add details...</span>
                 </div>
             )}

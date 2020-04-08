@@ -29,27 +29,24 @@ export const WORKOUT_ELEMENT_TYPES = {
 
 }
 
-const initial_state = {types: WORKOUT_ELEMENT_TYPES, location: null, type: null}
+const initial_state = {types: WORKOUT_ELEMENT_TYPES, type: null}
 
 const workout_element = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
         case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
-            console.log("SET WORKOUT ELEMENT")
-            console.log(action.location)
             new_state = {
                 ...new_state,
-                location: action.location,
                 type: action.workout_element_type
             }
             return new_state
         }
         case workout_element_actions.CANCEL_EDIT_WORKOUT_ELEMENT: {
-            new_state = {...new_state, type: null, location: null}
+            new_state = {...new_state, type: null }
             return new_state
         }
         case week_actions.UPDATE_WEEK: {
-            new_state = {...new_state, type: null, location: null}
+            new_state = {...new_state, type: null}
             return new_state
         }
         default:
