@@ -31,6 +31,7 @@ export const styles = theme => ({
     detailRowInput: {
         display: 'flex',
         alignItems:'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: '0px 10px'
     }
 })

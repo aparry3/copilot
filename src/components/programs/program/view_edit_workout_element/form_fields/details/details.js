@@ -18,6 +18,10 @@ export const Details = props => {
     let [add_detail, setAddDetail] = useState(false)
     let [hover, setHover] = useState(false)
 
+    useEffect(() => {
+        setDetails(props.value)
+    }, [props.value])
+
 
     function remainingDetails() {
         return Object.keys(render_details).filter(d => Object.keys(details).indexOf(d) == -1)
@@ -46,7 +50,6 @@ export const Details = props => {
     }
 
     function handleAdd() {
-        console.log("handle add")
         setAddDetail(true)
     }
 
@@ -54,7 +57,7 @@ export const Details = props => {
         e.stopPropagation()
         setAddDetail(false)
     }
-    console.log(add_detail)
+
     return (
         <div className={classes.formFieldContainer}>
             { !!details ? (
@@ -70,7 +73,7 @@ export const Details = props => {
                                         {render_details[d].title()}
                                     </div>
                                     <div className={classes.detailRowInput}>
-                                        <InputTitle value={details[d]} focus name={d} onSave={(value) => updateDetail(d, value)}/>
+                                        <InputTitle value={details[d]} focus autocomplete="off" name={d} onSave={(value) => updateDetail(d, value)}/>
                                     </div>
                                 </div>
                             ))}

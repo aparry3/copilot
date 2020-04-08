@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import update from 'immutability-helper'
 
 import CheckIcon from '@material-ui/icons/Check'
@@ -15,7 +15,10 @@ const useStyles = makeStyles(styles)
 export const ViewEditWorkoutElement = props => {
     let classes = useStyles()
     let [workout_element, setWorkoutElement] = useState(props.workout_element)
-    console.log(workout_element)
+
+    useEffect(() => {
+        setWorkoutElement(props.workout_element)
+    }, [props.workout_element])
 
     function updateWorkoutElement(property, value) {
         let new_workout_element = update(workout_element, {
@@ -23,7 +26,7 @@ export const ViewEditWorkoutElement = props => {
         })
         setWorkoutElement(new_workout_element)
     }
-
+    console.log(props.workout_element)
     return (
         <div className={classes.viewEditWorkoutElementContainer}>
             <div className={classes.viewEditWorkoutElement}>

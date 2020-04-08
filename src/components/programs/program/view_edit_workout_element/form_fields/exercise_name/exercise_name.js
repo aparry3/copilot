@@ -9,7 +9,7 @@ const useStyles = makeStyles(styles)
 export const ExerciseName = props => {
     let classes = useStyles()
 
-    let [exercise, setExercise] = useState(props.value)
+    // let [exercise, setExercise] = useState(props.value)
     let [name_header, setNameHeader] = useState(!!props.superset ? 'exercises' : 'exercise')
 
     function select(e) {
@@ -30,7 +30,7 @@ export const ExerciseName = props => {
             <div className={classes.formFieldContent}>
                 <div className={classes.exerciseNameText}>
                     <CustomSelect
-                        value={exercise.name}
+                        value={props.value.name}
                         name='name'
                         onChange={select}
                         elements={props.exercises.map(e => e.name)}

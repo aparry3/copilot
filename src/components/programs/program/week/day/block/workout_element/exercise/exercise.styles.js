@@ -3,11 +3,13 @@ export const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         borderLeft: `2px solid ${theme.accents.primary.main}`,
-        padding: '10px'
+        padding: '10px',
+        fontSize: '14px'
     },
     exerciseHeader: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        fontWeight: 500
     },
     exerciseContent: {
         display: 'flex',
@@ -15,6 +17,8 @@ export const styles = theme => ({
         alignItems: 'stretch'
     },
     exerciseNotes: {
+        padding: '10px',
+        fontSize:'12px'
     },
     exerciseDetails: {
         display: 'flex',

@@ -19,8 +19,10 @@ let ViewEditWorkoutElementContainer = connect(
                 .workout_elements[location.workout_element]
             )
         }
+        let we = _getWorkoutElement(state.workout_element.location)
+        console.log(we)
         return {
-            workout_element: _getWorkoutElement(state.workout_element.location),
+            workout_element: we,
             location: state.workout_element.location
         }
     },

@@ -9,24 +9,24 @@ const useStyles = makeStyles(styles)
 
 export const Notes = props => {
     let classes = useStyles()
-    let [notes, setNotes] = useState(props.value)
+    // let [notes, setNotes] = useState(props.value)
     let [editing, setEditing] = useState(false)
 
     function handleSave(value) {
-        setNotes(value)
+        // setNotes(value)
         setEditing(false)
         props.onChange(value)
     }
 
     return (
         <div className={classes.formFieldContainer}>
-            { !!notes || editing ? (
+            { !!props.value || editing ? (
                 <>
                     <div className={classes.formFieldHeader}>
                         <span>NOTES</span>
                     </div>
                     <div className={classes.formFieldContent}>
-                        <ResizeableInputTextArea onSave={handleSave} value={notes} />
+                        <ResizeableInputTextArea onSave={handleSave} value={props.value} />
                     </div>
                 </>
             ) : (

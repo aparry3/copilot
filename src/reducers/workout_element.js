@@ -35,6 +35,8 @@ const workout_element = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
         case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
+            console.log("SET WORKOUT ELEMENT")
+            console.log(action.location)
             new_state = {
                 ...new_state,
                 location: action.location,

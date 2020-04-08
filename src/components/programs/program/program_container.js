@@ -15,10 +15,16 @@ import {pages} from '../../../constants/programs'
 
 const ProgramContainer = connect(
         (state, ownProps) => {
+            function _getWeek(index) {
+                return index != null ? {
+                    ...state.active_program.weeks[index],
+                    index
+                } : null
+            }
             return {
                 program: state.active_program,
                 user: state.auth.user,
-                current_week: state.active_program.current_week,
+                current_week: _getWeek(state.active_program.current_week),
                 edit_workout_element: !!state.workout_element.location
             }
         },

@@ -1,5 +1,4 @@
 export function titleCase(str) {
-    console.log(str)
   return str.replace(/\b[a-zA-Z]/g, function(t) { return t.toUpperCase() });
 }
 

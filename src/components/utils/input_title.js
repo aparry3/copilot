@@ -35,7 +35,7 @@ export function InputTitle(props) {
         <div>
         {!!is_focused ? (
             <>
-                <input ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
+                <input ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} autocomplete={props.autocomplete || 'on'} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
                 { !!props.label && (<label>{props.label}</label>)}
             </>
             ) : (

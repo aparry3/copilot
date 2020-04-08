@@ -96,10 +96,7 @@ const active_program = (state = initial_state, action) => {
             console.log(index)
             return {
                 ...new_state,
-                current_week: {
-                    ...new_state.weeks[index],
-                    index
-                }
+                current_week: index
             }
         }
         case week_actions.TOGGLE_WEEK: {

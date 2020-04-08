@@ -12,7 +12,6 @@ export const WorkoutElement = props => {
     let classes = useStyles()
 
     function renderWorkoutElement(workout_element) {
-        console.log(workout_element)
         switch (workout_element.type) {
             case 'superset':
                 return !!workout_element.placeholder ? <Superset superset={workout_element} /> : <Superset superset={workout_element} />

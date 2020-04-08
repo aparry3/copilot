@@ -13,6 +13,9 @@ import {ResizeableInputTextArea} from './resizeable_input_text_area'
 
 export {
     details,
+    normalize,
+    titleCase,
+    
     CustomSelect,
     InputTextArea,
     InputTitle,

@@ -14,7 +14,8 @@ export const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        flexGrow: 1
+        flexGrow: 1,
+        overflow: 'auto'
     },
     dayHeader: {
         display: 'flex',
