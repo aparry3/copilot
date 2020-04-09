@@ -22,12 +22,17 @@ export const Superset = props => {
                 </div>
             ))
             }
-            </div>
+            { !!props.superset.notes && (
+                <div className={classes.supersetNotes}>
+                    {props.superset.notes}
+                </div>
+            )}
             { Object.keys(props.superset.details).length > 0 && (
                 <div className={classes.supersetDetails}>
                     {Object.keys(props.superset.details).map(k => details[k].value(props.superset.details[k]))}
                 </div>
             )}
+            </div>
         </div>
     )
 }
