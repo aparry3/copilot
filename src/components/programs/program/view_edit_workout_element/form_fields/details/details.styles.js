@@ -5,9 +5,6 @@ export const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        padding: '10px',
-        borderRadius: '5px',
-        boxShadow: `${theme.palette.background.dark} 0px 0px 5px -3px`,
         flexGrow:1,
     },
     addDetail: {

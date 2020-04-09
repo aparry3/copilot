@@ -12,6 +12,11 @@ export function InputTitle(props) {
         }
     }, [is_focused])
 
+    useEffect(() => {
+        setValue(props.value)
+    }, [props.value])
+
+
     function handleChange(e) {
         setValue(e.target.value)
     }

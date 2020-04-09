@@ -8,7 +8,7 @@ const useStyles = makeStyles(styles)
 
 export const Exercise = props => {
     let classes = useStyles()
-    console.log(details)
+    console.log(props.exercise)
     return (
         <div className={classes.exerciseContainer}>
             <div className={classes.exerciseHeader}>

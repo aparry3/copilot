@@ -17,6 +17,7 @@ const styles = theme => ({
     addDetailPopup: {
         position: 'absolute',
         left: 0,
+        zIndex: 10,
         top: '20px',
         display: 'flex',
         flexDirection: 'column',

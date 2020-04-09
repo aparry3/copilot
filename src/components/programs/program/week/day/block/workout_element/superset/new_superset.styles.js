@@ -1,7 +1,7 @@
-import {styles as exerciseStyles} from './exercise.styles'
+import {styles as supersetStyles} from './superset.styles'
 
 export const styles = theme => ({
-    ...exerciseStyles(theme),
+    ...supersetStyles(theme),
     placholderHeader: {
         width: '70%',
         background: theme.palette.background.mediumDark,

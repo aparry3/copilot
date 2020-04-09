@@ -10,10 +10,13 @@ export const styles = theme => ({
         display: 'flex',
         padding: '10px',
         flexGrow: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: '5px',
+        boxShadow: `${theme.palette.background.dark} 0px 0px 5px -3px`,
+        background: theme.palette.background.light
     },
     formFieldHeader: {
-        padding: '0px 0px 0px 10px',
+        padding: '10px',
         display: 'flex',
         alignItems: 'center',
         fontSize: '14px'

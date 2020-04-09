@@ -38,6 +38,10 @@ export const InputTextArea = props => {
     }, [is_focused])
 
     useEffect(() => {
+        setValue(props.value)
+    }, [props.value])
+
+    useEffect(() => {
         setRows(props.rows)
     }, [props.rows])
 

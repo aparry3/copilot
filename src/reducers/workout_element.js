@@ -20,7 +20,22 @@ export const WORKOUT_ELEMENT_TYPES = {
     superset: {
         template: {
             type: 'superset',
-            exercises: [],
+            exercises: [
+                {
+                    exercise: {
+                        id: null,
+                        name: null
+                    },
+                    details: {}
+                },
+                {
+                    exercise: {
+                        id: null,
+                        name: null
+                    },
+                    details: {}
+                }
+            ],
             details: {},
             placeholder: true
         },

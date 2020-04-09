@@ -1,7 +1,7 @@
 export const styles = theme => ({
     viewEditWorkoutElementContainer: {
         display: 'flex',
-        padding: '10px',
+        padding: '20px',
         flexDirection: 'column',
         minWidth: '40%',
         width: '40%',
@@ -11,7 +11,7 @@ export const styles = theme => ({
         alignItems:'stretch'
     },
     viewEditWorkoutElement: {
-        flexGrow: 1,
+        height: '100%',
         display: 'flex',
         flexDirection: 'column'
     },
@@ -21,10 +21,24 @@ export const styles = theme => ({
         alignItems: 'center',
         height: '50px',
         fontSize: '20px',
-        color: theme.text.light
-    },
-    workoutElementForm: {
+        color: theme.text.light,
         padding: '10px'
+    },
+    viewEditWorkoutElementContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        overflow: 'auto',
+        flexGrow: 1
+    },
+    exerciseFormContainer: {
+        padding: '5px'
+    },
+    exerciseForm: {
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow: `inset ${theme.palette.background.dark} 0px 0px 5px -3px`,
+        background: theme.palette.background.main
     },
     viewEditWorkoutElementClose: {
         cursor: 'pointer'
