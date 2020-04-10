@@ -32,7 +32,8 @@ export const styles = theme => ({
     dayHeaderAction: {
         display: 'flex',
         alignItems: 'center',
-        color: theme.text.light
+        color: theme.text.light,
+        cursor: 'pointer'
     },
     addDayText: {
         fontWeight: 300,
