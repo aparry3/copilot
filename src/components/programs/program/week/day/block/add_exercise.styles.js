@@ -2,7 +2,7 @@ const height = 30
 
 export const styles = theme => ({
     addExercise: {
-        margin: '10px 0px',
+        padding: '10px 0px',
         display: 'flex',
         alignItems: 'stretch',
         flexDirection: 'column',

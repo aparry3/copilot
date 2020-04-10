@@ -32,11 +32,14 @@ export const Day = (props) => {
         <div className={classes.dayContainer}>
             <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.day} >
                 <div className={classes.dayHeader}>
-                    <InputTitle
-                        placeholder='i.e. Chest, Monday, Day 1...'
-                        value={!!props.day.name ? props.day.name : `Day ${props.index + 1}`}
-                        focus={!!props.new}
-                        onSave={saveName}/>
+                    <div className={classes.dayHeaderTitle}>
+                        <InputTitle
+                            placeholder='i.e. Chest, Monday, Day 1...'
+                            value={!!props.day.name ? props.day.name : `Day ${props.index + 1}`}
+                            focus={!!props.new}
+                            onSave={saveName}/>
+                    </div>
+                    { !!hover && (<div className={classes.dayHeaderAction}><ClearIcon className={classes.action}/></div>)}
                 </div>
                 <div className={classes.dayContent}>
                 {
@@ -45,7 +48,7 @@ export const Day = (props) => {
                     ))
                 }
                 {
-                    !!hover && emptyLastBlock(props.day.workout_blocks) (
+                    !!hover && emptyLastBlock(props.day.workout_blocks) && (
                         <AddBlock day_index={props.index} week_id={props.week_id}/>
                     )
                 }

@@ -6,6 +6,7 @@ export const styles = theme => ({
         color: theme.text.light
     },
     addBlock: {
-        cursor: 'pointer'
+        padding: '10px',
+        cursor: 'pointer',
     }
 })

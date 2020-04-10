@@ -24,6 +24,16 @@ export const styles = theme => ({
         fontWeight: 600,
         justifyContent: 'space-between'
     },
+    dayHeaderTitle: {
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    dayHeaderAction: {
+        display: 'flex',
+        alignItems: 'center',
+        color: theme.text.light
+    },
     addDayText: {
         fontWeight: 300,
         color: theme.text.light,
@@ -43,5 +53,8 @@ export const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'stretch',
         flexGrow: 1,
+    },
+    action: {
+        height: '20px'
     }
 })
