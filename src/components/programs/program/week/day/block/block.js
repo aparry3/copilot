@@ -14,12 +14,14 @@ export const Block = (props) => {
 
     return (
         <div className={classes.blockContainer}>
+            <div className={classes.block}>
             {
                 props.block.workout_elements.map((we, i) => (
                     <WorkoutElement week_id={props.week_id} day_index={props.day_index} block_index={props.index} index={i} workout_element={we}/>
                 ))
             }
             {!props.edit_workout_element && (<AddExercise  week_id={props.week_id} day_index={props.day_index} block_index={props.index} />)}
+            </div>
         </div>
     )
 }

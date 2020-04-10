@@ -17,7 +17,8 @@ export const styles = theme => ({
         cursor: 'pointer',
         boxShadow: `${theme.palette.background.dark} 0px 0px 6px -5px`,
         '&:hover': {
-            boxShadow: 'none'
+            boxShadow: 'none',
+            opacity: 0.5
         },
         flexGrow:1
     },
