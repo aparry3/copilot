@@ -12,8 +12,8 @@ function _getUrl(week_id, day_index, block_index = null) {
 
 const day = {
     add: (week_id, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day), 'POST', {})),
-    // save: (week_id, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day.index), 'PUT', day))
+    delete: (week_id, day, block) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day, block), 'DELETE'))
 }
 
 export const addBlock = day.add
-// export const saveDay = day.save
+export const deleteBlock = day.delete

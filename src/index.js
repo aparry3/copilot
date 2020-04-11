@@ -69,8 +69,7 @@ const light_theme = createMuiTheme({
     accents: {
         primary: {main: '#77f981', hover: '#167d1e'},
         secondary: {main:'#fdbc68',  hover: '#82570a'},
-        error: '#ff6f6f',
-        errorHover: '#b34949'
+        error: {main: '#ff6f6f', hover: '#b34949'},
     },
     text: {
         letterSpacing: '1px',
@@ -82,8 +81,7 @@ const light_theme = createMuiTheme({
         accents: {
             primary: {main: '#167d1e', hover: '#77f981'},
             secondary: {main: '#82570a', hover: '#fdbc68'},
-
-            error: '#6f1f1f'
+            error: {main: '#6f1f1f', hover: '#ff6f6f'}
         }
     }
 })

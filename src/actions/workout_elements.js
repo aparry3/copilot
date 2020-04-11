@@ -44,7 +44,9 @@ export function cancelEditWorkoutElement() {
 
 
 const workout_elements = {
+    delete: (location, workout_element) => dispatched(updateWeek, makeRequest(_getUrl(location), 'DELETE')),
     save: (location, workout_element) => dispatched(updateWeek, makeRequest(_getUrl(location), location.workout_element == null ? 'POST' : 'PUT', workout_element))
 }
 
+export const deleteWorkoutElement = workout_elements.delete
 export const saveWorkoutElement = workout_elements.save

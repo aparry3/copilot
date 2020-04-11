@@ -9,9 +9,11 @@ function _getUrl(week_id, day_index = null) {
 }
 
 const day = {
-    add: (week, day) => dispatched(updateWeek, makeRequest(_getUrl(week._id), 'POST', day)),
-    save: (week_id, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day.index), 'PUT', day))
+    add: (week_id, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id), 'POST', day)),
+    delete: (week_id, day_index) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day_index), 'DELETE')),
+    save: (week_id, day_index, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day_index), 'PUT', day))
 }
 
 export const addDay = day.add
+export const deleteDay = day.delete
 export const saveDay = day.save

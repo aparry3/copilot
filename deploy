@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+echo "Building Copilot..., output to './dist' directory"
+npm run build-dev
+
+echo "Deploying './dist' to 's3://app.copilotfitness.com'"
+aws s3 cp dist s3://app.copilotfitness.com --recursive

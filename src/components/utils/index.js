@@ -2,6 +2,7 @@ import {normalize, titleCase} from './utils'
 
 import {details} from './details'
 
+import ConfirmMessage from './confirm_message'
 import {CustomSelect} from './custom_select'
 import {InputTextArea} from './input_text_area'
 import {InputTitle} from './input_title'
@@ -15,7 +16,8 @@ export {
     details,
     normalize,
     titleCase,
-    
+
+    ConfirmMessage,
     CustomSelect,
     InputTextArea,
     InputTitle,

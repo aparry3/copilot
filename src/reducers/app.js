@@ -1,6 +1,8 @@
+import {copyState} from './utils'
+
 import {
-    SET_ACTIVE_PAGE,
-} from '../actions'
+    actions as app_actions,
+} from '../actions/app'
 
 const initialState = {
     active_page: null,
@@ -8,17 +10,17 @@ const initialState = {
 }
 
 const app = (state = initialState, action) => {
+    let new_state = copyState(state)
     switch (action.type) {
-        case SET_ACTIVE_PAGE: {
-            console.log(action.page)
+        case app_actions.SET_ACTIVE_PAGE: {
             return {
-                ...state,
+                ...new_state,
                 active_page: action.page,
                 page_state: action.page_state
             }
         }
         default:
-            return state;
+            return new_state;
     }
 }
 export default app;

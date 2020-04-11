@@ -25,7 +25,7 @@ export const Day = (props) => {
     }
 
     function emptyLastBlock(blocks) {
-        return (!!blocks && !!blocks.length && !!blocks[blocks.length - 1].workout_elements.length)
+        return (!!blocks && (!blocks.length || (!!blocks.length && !!blocks[blocks.length - 1].workout_elements.length)))
     }
 
     return (
@@ -39,7 +39,7 @@ export const Day = (props) => {
                             focus={!!props.new}
                             onSave={saveName}/>
                     </div>
-                    { !!hover && (<div className={classes.dayHeaderAction}><ClearIcon className={classes.action}/></div>)}
+                    { !!hover && (<div className={classes.dayHeaderAction} onClick={props.deleteDay}><ClearIcon className={classes.action}/></div>)}
                 </div>
                 <div className={classes.dayContent}>
                 {

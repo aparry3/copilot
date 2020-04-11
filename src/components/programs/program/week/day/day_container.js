@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-import {saveDay} from '../../../../../actions/days'
+import {deleteDay, saveDay} from '../../../../../actions/days'
+import {openConfirm} from '../../../../../actions/confirm'
 
 import {Day} from './day'
 
@@ -10,7 +11,11 @@ const DayContainer = connect(
     null,
     (dispatch, own_props) => {
         return {
-            saveDay: !!own_props.addDay ? own_props.addDay : (day) => dispatch(saveDay(own_props.week_id, day))
+            deleteDay: () => dispatch(openConfirm(
+                {action: 'delete', element: 'day'},
+                () => deleteDay(own_props.week_id, own_props.index)
+            )),
+            saveDay: !!own_props.addDay ? own_props.addDay : (day) => dispatch(saveDay(own_props.week_id, own_props.index, day))
         }
     }
 )(Day)

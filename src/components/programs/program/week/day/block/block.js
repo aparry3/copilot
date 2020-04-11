@@ -25,7 +25,7 @@ export const Block = (props) => {
                     <div className={classes.blockHeaderTitle}>{!!props.block.workout_elements.length && (<div className={classes.actionContainer}><ExpandLessIcon className={classes.action}/></div>)}</div>
                     <div className={classes.blockHeaderActions}>
                         <div className={classes.actionContainer}><EditIcon className={classes.action} /></div>
-                        <div className={classes.actionContainer}><ClearIcon className={classes.action}/></div>
+                        <div className={classes.actionContainer} onClick={props.deleteBlock}><ClearIcon className={classes.action}/></div>
                     </div>
                 </div>
             { !props.block.workout_elements.length && !hover && (<div className={classes.emptyBlock}><span>Click to add Workout Element</span></div>)}

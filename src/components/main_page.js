@@ -6,7 +6,7 @@ import {ProgramPage} from './programs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {Sidebar, SidebarList} from './sidebar';
-import {Loading, Logo} from './utils';
+import {ConfirmMessage, Loading, Logo} from './utils';
 import {history} from '../util'
 import {login} from '../actions'
 import {Dashboard} from './dashboard'
@@ -32,6 +32,7 @@ const styles = (theme) => {
         },
         content: {
             flexGrow: 1,
+            position: 'relative',
             display: 'flex',
             alignItems: 'stretch',
             padding: theme.spacing(0),
@@ -106,6 +107,7 @@ function Main(props) {
     let classes = useStyles();
     return (
         <main className={classes.content}>
+            <ConfirmMessage />
             {props.children}
         </main>
     );

@@ -3,7 +3,7 @@ export const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         borderLeft: `2px solid ${theme.accents.secondary.main}`,
-        padding: '10px',
+        padding: '0px 10px 10px 10px',
         fontSize: '14px',
         alignItems: 'stretch'
     },
@@ -13,7 +13,6 @@ export const styles = theme => ({
         padding: '2px'
     },
     supersetContent: {
-        padding: '5px 0px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch'
@@ -31,5 +30,33 @@ export const styles = theme => ({
         padding: '5px',
         justifyContent: 'flex-end',
         alignItems: 'center'
+    },
+    supersetHeader: {
+        padding: '10px 0px 10px 10px',
+        display: 'flex',
+        alignItems: 'stretch',
+        color: theme.text.light
+
+    },
+    supersetHeaderTitle: {
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'center'
+    },
+    supersetHeaderActionContainer: {
+        display: 'flex',
+        justifyContent:'center',
+        alignItems: 'center'
+    },
+    supersetHeaderAction: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    action: {
+        height: '15px'
+    },
+    hover: {
+        opactiy: 0.5
     }
 })
