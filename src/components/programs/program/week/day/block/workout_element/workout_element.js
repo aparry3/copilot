@@ -14,9 +14,9 @@ export const WorkoutElement = props => {
     function renderWorkoutElement(workout_element) {
         switch (workout_element.type) {
             case 'superset':
-                return !!workout_element.placeholder ? <NewSuperset superset={workout_element} /> : <Superset superset={workout_element} />
+                return !!workout_element.placeholder ? <NewSuperset superset={workout_element} /> : <Superset delete={() => props.deleteWorkoutElement('superset')} superset={workout_element} />
             case 'exercise':
-                return !!workout_element.placeholder ? <NewExercise exercise={workout_element} /> : <Exercise exercise={workout_element} />
+                return !!workout_element.placeholder ? <NewExercise exercise={workout_element} /> : <Exercise delete={() => props.deleteWorkoutElement('exercise')} exercise={workout_element} />
             default:
                 return <Exercise exercise={workout_element} />
         }
