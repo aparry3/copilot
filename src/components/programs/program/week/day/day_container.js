@@ -15,7 +15,7 @@ const DayContainer = connect(
                 {action: 'delete', element: 'day'},
                 () => deleteDay(own_props.week_id, own_props.index)
             )),
-            saveDay: !!own_props.addDay ? own_props.addDay : (day) => dispatch(saveDay(own_props.week_id, own_props.index, day))
+            saveDay: !!own_props.saveDay ? own_props.saveDay : (day) => dispatch(saveDay(own_props.week_id, own_props.index, day))
         }
     }
 )(Day)

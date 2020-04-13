@@ -7,6 +7,6 @@ export const NewDay = (props) => {
 
 
     return (
-        <Day new index={props.index} day={day} addDay={props.onSubmit}/>
+        <Day new index={props.index} day={day} saveDay={props.onSubmit}/>
     )
 }
