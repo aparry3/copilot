@@ -37,10 +37,16 @@ export const ViewEditWorkoutElement = props => {
     }
 
     function addExercise() {
-        let new_exercise = {exercise: {name: null, id: null}, notes: null, details: {}}
+        let new_exercise = {exercise: {name: null, id: null}, notes: null, details: {}, collapsed: false}
         let new_workout_element
         if (workout_element.type == 'exercise') {
-            let exercises = [{exercise: workout_element.exercise, notes: workout_element.notes, details: workout_element.details}, new_exercise]
+            let exercises = [{
+                exercise: workout_element.exercise,
+                notes: workout_element.notes,
+                details: workout_element.details,
+                collapsed: false
+            }, new_exercise]
+
             new_workout_element = {
                 type: 'superset',
                 notes: null,
@@ -68,6 +74,13 @@ export const ViewEditWorkoutElement = props => {
         setWorkoutElement(new_workout_element)
     }
 
+    function toggleCollapse(index) {
+        let new_workout_element = update(workout_element, {
+            exercises: {[index]: {collapsed: {$set: !workout_element.exercises[index].collapsed}}}
+        })
+        setWorkoutElement(new_workout_element)
+    }
+
     return (
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.viewEditWorkoutElementContainer}>
             <div className={classes.viewEditWorkoutElement}>
@@ -92,8 +105,8 @@ export const ViewEditWorkoutElement = props => {
                     <div className={classes.exerciseFormContainer}>
                         <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
                             <div className={classes.exerciseFormHeader}>
-                                <div className={classes.actionContainer}>
-                                    <ExpandLessIcon className={classes.action}/>
+                                <div onClick={() => toggleCollapse(i)} className={classes.actionContainer}>
+                                    { !e.collapsed ? (<ExpandLessIcon className={classes.action}/>) : (<ExpandMoreIcon className={classes.action} />)}
                                 </div>
                                 <div className={classes.actionContainer}>
                                     <ClearIcon onClick={() => removeExercise(i)} className={classes.action}/>
@@ -101,8 +114,12 @@ export const ViewEditWorkoutElement = props => {
                             </div>
                             <div className={classes.exerciseFormContent}>
                                 <ExerciseName value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
-                                <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
-                                <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                                { !e.collapsed && (
+                                <>
+                                    <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
+                                    <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                                </>
+                                )}
                             </div>
                         </div>
                     </div>

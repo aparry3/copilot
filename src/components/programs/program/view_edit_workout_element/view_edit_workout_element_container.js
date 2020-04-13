@@ -9,16 +9,22 @@ let ViewEditWorkoutElementContainer = connect(
         function _getWorkoutElement(location) {
             console.log(state.workout_element)
             let {type, types} = state.workout_element
+            let workout_element
             if (location.workout_element == null) {
-                return {...types[type].template}
+                workout_element = {...types[type].template}
+            } else {
+                workout_element = (
+                    state.active_program.weeks
+                    .find(w => w._id == location.week_id)
+                    .days[location.day]
+                    .workout_blocks[location.block]
+                    .workout_elements[location.workout_element]
+                )
             }
-            return (
-                state.active_program.weeks
-                .find(w => w._id == location.week_id)
-                .days[location.day]
-                .workout_blocks[location.block]
-                .workout_elements[location.workout_element]
-            )
+            if (workout_element.type == 'superset') {
+                workout_element.exercises = workout_element.exercises.map(e => ({...e, collapsed: false}))
+            }
+            return workout_element
         }
         let we = _getWorkoutElement(state.active_program.location)
         console.log(we)
