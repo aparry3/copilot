@@ -8,7 +8,6 @@ export const styles = theme => ({
     },
     exerciseHeader: {
         display: 'flex',
-        alignItems: 'center',
         fontWeight: 500
     },
     exerciseContent: {
@@ -25,5 +24,23 @@ export const styles = theme => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center'
+    },
+    exerciseHeaderText: {
+        display: 'flex',
+        flexGrow: 1,
+        alignItems: 'center'
+    },
+    exerciseHeaderAction: {
+        display: 'flex',
+        color: theme.text.light,
+        flexDirection: 'column'
+    },
+    actionContainer:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    action: {
+        height: '15px'
     }
 })
