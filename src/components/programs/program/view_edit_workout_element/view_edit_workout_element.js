@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, {useEffect, useState} from 'react'
 import update from 'immutability-helper'
 import {titleCase} from '../../../utils'
@@ -81,7 +82,7 @@ export const ViewEditWorkoutElement = props => {
                 <div className={classes.viewEditWorkoutElementContent} >
                 { workout_element.type == 'exercise' ? (
                     <div className={classes.exerciseFormContainer}>
-                        <div className={classes.exerciseForm}>
+                        <div className={clsx(classes.exerciseForm)}>
                                 <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
                                 <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
                                 <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
@@ -89,7 +90,7 @@ export const ViewEditWorkoutElement = props => {
                     </div>
                 ) : workout_element.exercises.map((e, i) => (
                     <div className={classes.exerciseFormContainer}>
-                        <div className={classes.exerciseForm}>
+                        <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
                             <div className={classes.exerciseFormHeader}>
                                 <div className={classes.actionContainer}>
                                     <ExpandLessIcon className={classes.action}/>

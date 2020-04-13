@@ -49,16 +49,20 @@ export const styles = theme => ({
     actionContainer: {
         display: 'flex',
         alignItems:'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        cursor: 'pointer'
     },
     action: {
         height: '15px'
     },
     exerciseForm: {
-        padding: '0px 10px 10px 10px',
+        padding: '10px',
         borderRadius: '5px',
         boxShadow: `inset ${theme.palette.background.dark} 0px 0px 5px -3px`,
         background: theme.palette.background.main
+    },
+    supersetExercise: {
+        paddingTop: '0px'
     },
     viewEditWorkoutElementClose: {
         cursor: 'pointer'

@@ -25,7 +25,7 @@ export const ExerciseName = props => {
 
     return (
         <div className={clsx(classes.formFieldContainer, classes.exerciseNameContainer)}>
-            <div className={classes.formFieldHeader}>
+            <div className={clsx(classes.formFieldHeader, classes.exerciseNameHeader)}>
                 <span>{name_header.toUpperCase()}</span>
             </div>
             <div className={classes.formFieldContent}>

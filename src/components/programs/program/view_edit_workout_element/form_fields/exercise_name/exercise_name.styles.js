@@ -4,6 +4,12 @@ const height = 30
 
 export const styles = theme => ({
     ...formStyles(theme),
+    exerciseNameContainer: {
+        paddingTop: '0px'
+    },
+    exerciseNameHeader: {
+        paddingTop: '0px'
+    },
     exerciseNameText: {
         flexGrow: 1,
 
