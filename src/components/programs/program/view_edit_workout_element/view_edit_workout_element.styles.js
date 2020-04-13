@@ -34,6 +34,10 @@ export const styles = theme => ({
     exerciseFormContainer: {
         padding: '5px'
     },
+    addExercise: {
+        cursor: 'pointer',
+        color: theme.text.light
+    },
     exerciseForm: {
         padding: '10px',
         borderRadius: '5px',
