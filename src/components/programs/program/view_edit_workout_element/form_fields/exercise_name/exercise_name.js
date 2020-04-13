@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, {useState} from 'react'
 
 import {CustomSelect} from '../../../../../utils'
@@ -23,7 +24,7 @@ export const ExerciseName = props => {
     }
 
     return (
-        <div className={classes.formFieldContainer}>
+        <div className={clsx(classes.formFieldContainer, classes.exerciseNameContainer)}>
             <div className={classes.formFieldHeader}>
                 <span>{name_header.toUpperCase()}</span>
             </div>

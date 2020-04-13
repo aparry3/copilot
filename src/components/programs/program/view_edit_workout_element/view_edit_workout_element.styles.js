@@ -38,8 +38,24 @@ export const styles = theme => ({
         cursor: 'pointer',
         color: theme.text.light
     },
+    exerciseFormHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '12px',
+        justifyContent: 'space-between',
+        color: theme.text.light,
+        height: '30px'
+    },
+    actionContainer: {
+        display: 'flex',
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    action: {
+        height: '15px'
+    },
     exerciseForm: {
-        padding: '10px',
+        padding: '0px 10px 10px 10px',
         borderRadius: '5px',
         boxShadow: `inset ${theme.palette.background.dark} 0px 0px 5px -3px`,
         background: theme.palette.background.main

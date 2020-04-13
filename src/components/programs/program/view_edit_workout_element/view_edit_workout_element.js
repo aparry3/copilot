@@ -6,6 +6,8 @@ import AddIcon from '@material-ui/icons/Add'
 import CheckIcon from '@material-ui/icons/Check'
 import ClearIcon from '@material-ui/icons/Clear'
 import {Details, ExerciseName, Notes} from './form_fields'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './view_edit_workout_element.styles'
@@ -52,6 +54,19 @@ export const ViewEditWorkoutElement = props => {
         setWorkoutElement(new_workout_element)
     }
 
+    function removeExercise(index) {
+        let new_workout_element = update(workout_element, {
+            exercises: {$splice: [[index, 1]]}
+        })
+        if (new_workout_element.exercises.length == 1) {
+            new_workout_element = {
+                ...new_workout_element.exercises.pop(),
+                type: 'exercise'
+            }
+        }
+        setWorkoutElement(new_workout_element)
+    }
+
     return (
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.viewEditWorkoutElementContainer}>
             <div className={classes.viewEditWorkoutElement}>
@@ -67,17 +82,27 @@ export const ViewEditWorkoutElement = props => {
                 { workout_element.type == 'exercise' ? (
                     <div className={classes.exerciseFormContainer}>
                         <div className={classes.exerciseForm}>
-                            <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
-                            <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
-                            <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
+                                <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
+                                <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
+                                <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
                         </div>
                     </div>
                 ) : workout_element.exercises.map((e, i) => (
                     <div className={classes.exerciseFormContainer}>
                         <div className={classes.exerciseForm}>
-                            <ExerciseName value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
-                            <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
-                            <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                            <div className={classes.exerciseFormHeader}>
+                                <div className={classes.actionContainer}>
+                                    <ExpandLessIcon className={classes.action}/>
+                                </div>
+                                <div className={classes.actionContainer}>
+                                    <ClearIcon onClick={() => removeExercise(i)} className={classes.action}/>
+                                </div>
+                            </div>
+                            <div className={classes.exerciseFormContent}>
+                                <ExerciseName value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
+                                <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
+                                <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                            </div>
                         </div>
                     </div>
                 ))
