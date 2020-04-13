@@ -17,6 +17,7 @@ export const Week = (props) => {
         let new_day = await props.addDay(props.week, day)
         setAddingDay(false)
     }
+    console.log(props)
 
     return (
         <div className={classes.weekContent}>

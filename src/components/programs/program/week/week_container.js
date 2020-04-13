@@ -7,7 +7,7 @@ import {Week} from './week'
 
 const WeekContainer = connect(null,
     dispatch => ({
-        addDay: (week, name) => dispatch(addDay(week, name))
+        addDay: (week, name) => dispatch(addDay(week._id, name))
     })
 )(Week)
 

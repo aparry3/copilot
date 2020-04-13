@@ -11,7 +11,7 @@ const useStyles = makeStyles(styles)
 export const AddBlock = (props) => {
     let classes = useStyles()
     let [block, setBlock] = useState(props.block)
-
+    console.log(props)
     return (
         <div className={classes.blockContainer}>
             <div onClick={props.addBlock} className={clsx(classes.block, classes.addBlock)}>
