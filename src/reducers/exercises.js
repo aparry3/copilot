@@ -2,6 +2,7 @@ import {actions as exercise_actions} from '../actions/exercises'
 
 import {copyState} from './utils'
 
+
 const initialState = {
     items: [],
     filter: '',
@@ -25,11 +26,13 @@ function saveExercise(items, exercise) {
          return item;
     })
 }
+
 function buildStatus({type, success, name, action}) {
     return {
         success, name, action
     }
 }
+
 const exercises = (state = initialState, action) => {
     let new_state = copyState(state)
     switch (action.type) {
@@ -39,6 +42,12 @@ const exercises = (state = initialState, action) => {
                 current_exercise: null,
                 show_exercise_form: false,
                 options: {}
+            }
+        }
+        case exercise_actions.DELETE_EXERCISE: {
+            return {
+                ...new_state,
+                items: new_state.items.filter(e => e._id != action.exercise._id)
             }
         }
         case exercise_actions.OPEN_EXERCISE_FORM: {

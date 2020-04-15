@@ -42,30 +42,6 @@ export const styles = theme => ({
         minWidth: '30%',
         width: '30%'
     },
-    exerciseListItem: {
-        background: theme.palette.background.light,
-        boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
-        borderBottom: `1px solid ${theme.palette.background.dark}`,
-        '&:last-child': {
-            borderBottom: 'none'
-        },
-        cursor: 'pointer',
-        '&:hover': {
-            background: theme.palette.background.main
-        },
-        height: '80px'
-
-    },
-    exerciseListRow: {
-        width: '100%',
-        display: 'flex',
-        minHeight: '60px',
-        cursor: 'pointer',
-        alignItems: 'center',
-        '&:hover': {
-            background: theme.palette.background.light
-        }
-    },
     exerciseListBody: {
         width: '100%',
         height: '100%',
@@ -103,28 +79,6 @@ export const styles = theme => ({
         alignItems: 'flex-end',
         padding: '0px 0px 5px 0px'
     },
-    exerciseRowName: {
-        width: '50%',
-        fontSize: '16px',
-        fontWeight: 600,
-        padding: '10px'
-
-    },
-    exerciseRowCategories: {
-        fontWeight: 200,
-        fontSize: '14px',
-        padding: '10px'
-
-    },
-    exerciseRowMuscleGroups: {
-        padding: '10px'
-
-    },
-    exerciseRowAction: {
-        padding: '10px',
-        cursor: 'pointer'
-
-    },
     exerciseName: {
         height: '65%',
         width: '100%',
@@ -139,9 +93,6 @@ export const styles = theme => ({
         width: '100%',
         color: theme.text.primary,
         fontSize: '12px'
-    },
-    selected: {
-        background: theme.palette.background.main
     },
     headerText: {
         fontWeight: 200
@@ -185,9 +136,4 @@ export const styles = theme => ({
         justifyContent: 'center'
 
     },
-    rowActionIconContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

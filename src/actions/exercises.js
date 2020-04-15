@@ -3,6 +3,7 @@ import {dispatched, makeRequest} from './utils'
 
 export const actions = {
     CLOSE_EXERCISE_FORM: 'CLOSE_EXERCISE_FORM',
+    DELETE_EXERCISE: 'DELETE_EXERCISE',
     OPEN_EXERCISE_FORM: 'OPEN_EXERCISE_FORM',
     REQUEST_EXERCISES: 'REQUEST_EXERCISES',
     RECIEVE_EXERCISES: 'RECIEVE_EXERCISES',
@@ -25,6 +26,14 @@ export function closeExerciseForm() {
         type: actions.CLOSE_EXERCISE_FORM
     }
 }
+
+export function _deleteExercise(res) {
+    return {
+        type: actions.DELETE_EXERCISE,
+        exercise: res.exercise
+    }
+}
+
 
 export function openExerciseForm(exercise=null, options = {}, current_state = null) {
     console.log(exercise)
@@ -62,13 +71,13 @@ export function setFilter(filter) {
 
 const exercises = {
     add: (exercise) => dispatched(_saveExercise, makeRequest(_getUrl(), 'POST', exercise)),
-    // delete: (program_id) => dispatched(_deleteProgram, makeRequest(_getUrl(program_id), 'DELETE')),
-    // get: (program_id) => dispatched(_recieveProgram, makeRequest(_getUrl(program_id), 'GET')),
+    delete: (exercise_id) => dispatched(_deleteExercise, makeRequest(_getUrl(exercise_id), 'DELETE')),
     query: () => dispatched(_recieveExercises, makeRequest(_getUrl(), 'GET')),
     save: (exercise, callback = null) => dispatched(_saveExercise, makeRequest(_getUrl(exercise._id), 'PUT', exercise))
 }
 
 export const addExercise = exercises.add
+export const deleteExercise = exercises.delete
 export const getExercises = exercises.query
 export const saveExercise = exercises.save
 
