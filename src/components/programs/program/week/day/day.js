@@ -29,7 +29,7 @@ export const Day = (props) => {
     }
 
     return (
-        <div className={classes.dayContainer}>
+        <div ref={props.ref} className={classes.dayContainer}>
             <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.day} >
                 <div className={classes.dayHeader}>
                     <div className={classes.dayHeaderTitle}>

@@ -20,4 +20,4 @@ const DayContainer = connect(
     }
 )(Day)
 
-export default DayContainer
+export default React.forwardRef((props, ref) => <DayContainer {...props} ref={ref} />)

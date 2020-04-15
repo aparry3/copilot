@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 
-import {NewDay} from './new_day'
+import {AddDay} from './add_day'
 import AddIcon from '@material-ui/icons/Add'
-import Day, {AddDay} from './day'
+import Day from './day'
+import DragAndDrop, {drag_and_drop_types as types} from '../../../utils/drag_and_drop'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './week.styles'
@@ -23,14 +24,14 @@ export const Week = (props) => {
         <div className={classes.weekContent}>
             { props.week.days.length > 0 || adding_day ? (
                 <div className={classes.days}>
-                {props.week.days.map((d,i) => (
-                    <Day day={d} index={i} week_id={props.week._id}/>
-                ))}
-                {   !!adding_day ? (
-                    <NewDay index={props.week.days.length} onSubmit={addDay} />
-                ) : (
-                    <AddDay handleClick={() => setAddingDay(true)}/>
-                )}
+                    <DragAndDrop
+                        parent={props.week._id}
+                        save={props.saveWeek}
+                        accept={types.DAY}
+                        items={props.week.days}
+                        renderItem={(d, i, r) => <Day ref={r} day={d} index={i} week_id={props.week._id}/>}
+                        renderAddItem={(i, r) => (<AddDay ref={r} index={i} is_adding={adding_day} handleClick={() => setAddingDay(true)} addDay={addDay}/>)}
+                        />
                 </div>
             ) : (
                 <div className={classes.emptyWeek}>

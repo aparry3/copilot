@@ -63,6 +63,7 @@ const week = {
 
 export const addWeek = week.add
 export const deleteWeek = week.delete
+export const saveWeek = week.save
 
 // export async function persistWeek(week_id, week) {
 //     let token = await auth0_client.getToken()

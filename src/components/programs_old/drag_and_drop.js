@@ -10,22 +10,11 @@ export const DragAndDrop = (props) => {
     let {
         accept,
         insert,
-        element,
         remove,
         index,
-        location,
-        merge,
-        nestable = false,
-        nest = (item) => item.subtype,
-        unnest = (item) => null,
-        subtype = null,
-        reject = (item) => false,
-        canDrop = _canDrop,
-        draggable = true,
-        droppable = true,
-        shouldMerge = () => false
-
+        parent
     } = props
+
     let ref = useRef(null)
 
     function sameLocation(other_item) {
@@ -49,15 +38,6 @@ export const DragAndDrop = (props) => {
               return
             }
             if (monitor.isOver({shallow: true})) {
-                console.log(nestable)
-                if (nestable) {
-                    if (shouldNest()) {
-                        item.subtype = nest(item)
-                    } else {
-                        console.log("unnest")
-                        item.subtype = unnest(item)
-                    }
-                }
                 if (
                     !sameLocation(item)
                     // canDrop(item.element) &&

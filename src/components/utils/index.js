@@ -4,6 +4,7 @@ import {details} from './details'
 
 import ConfirmMessage from './confirm_message'
 import {CustomSelect} from './custom_select'
+import DragAndDrop from './drag_and_drop'
 import {InputTextArea} from './input_text_area'
 import {InputTitle} from './input_title'
 import {Loading} from './loading'
@@ -19,6 +20,7 @@ export {
 
     ConfirmMessage,
     CustomSelect,
+    DragAndDrop,
     InputTextArea,
     InputTitle,
     Loading,
