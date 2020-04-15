@@ -14,6 +14,8 @@ export const DragAndDropManager = (props) => {
     }, [props.items])
 
     function save(items) {
+        console.log("save")
+        console.log(items)
         props.save(items)
     }
 
@@ -32,6 +34,7 @@ export const DragAndDropManager = (props) => {
                 $splice: splice_array
             })
             item.remove = () => remove(index, new_dnd_items)
+            
             setDndItems(new_dnd_items)
         }
 
@@ -40,13 +43,11 @@ export const DragAndDropManager = (props) => {
 
     function remove(index, items = null) {
         let _dnd_items = !!items ? items : dnd_items
-        console.log("remove")
-        console.log(index)
-        console.log(dnd_items)
         let new_dnd_items = update(_dnd_items, {
             $splice: [[index, 1]]
         })
         setDndItems(new_dnd_items)
+        console.log(new_dnd_items)
         return () => save(new_dnd_items)
     }
 

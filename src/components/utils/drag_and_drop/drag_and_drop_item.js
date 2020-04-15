@@ -30,7 +30,8 @@ const DragAndDrop = (props) => {
             }
             if (monitor.isOver({shallow: true})) {
                 if (!sameLocation(item)) {
-                    item.save = insert(item)
+                    let _save = insert(item)
+                    item.save = !!_save ? _save : item.save
                     item.index = index
                     item.parent = parent
                 }
