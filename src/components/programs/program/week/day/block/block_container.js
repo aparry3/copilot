@@ -1,4 +1,5 @@
 import {connect} from 'react-redux'
+import React from 'react'
 
 import {deleteBlock} from '../../../../../../actions/blocks'
 import {openConfirm} from '../../../../../../actions/confirm'
@@ -17,4 +18,4 @@ const BlockContainer = connect(
     })
 )(Block)
 
-export default BlockContainer
+export default React.forwardRef((props, ref) => <BlockContainer {...props} forwardRef={ref} />)

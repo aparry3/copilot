@@ -19,7 +19,7 @@ export const Block = (props) => {
     let [hover, setHover] = useState(false)
 
     return (
-        <div className={classes.blockContainer}>
+        <div ref={props.forwardRef} className={classes.blockContainer}>
             <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.block}>
                 <div className={classes.blockHeader}>
                     <div className={classes.blockHeaderTitle}>{!!props.block.workout_elements.length && (<div className={classes.actionContainer}><ExpandLessIcon className={classes.action}/></div>)}</div>

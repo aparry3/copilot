@@ -12,7 +12,7 @@ export const AddDay = React.forwardRef((props, ref) => {
     let classes = useStyles()
     return (
         <div ref={ref} className={classes.addDayContainer}>
-            {   !!props.adding_day ? (
+            {   !!props.is_adding ? (
                 <NewDay index={props.index} onSubmit={props.addDay} />
             ) : (
                 <div className={classes.dayContainer}>

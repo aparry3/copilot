@@ -57,7 +57,7 @@ export function updateWeek(res) {
 const week = {
     add: (program_id) => dispatched(_addWeek, makeRequest(_getUrl(), 'POST', {program_id: program_id})),
     delete: (week_id) => dispatched(_deleteWeek, makeRequest(_getUrl(week_id), 'DELETE')),
-    save: (week) => makeRequest(_getUrl(week._id), 'PUT', {week})
+    save: (week) => dispatched(updateWeek, makeRequest(_getUrl(week._id), 'PUT', {week}))
 }
 
 

@@ -20,13 +20,16 @@ export const Week = (props) => {
     }
     console.log(props)
 
+    async function save(days) {
+        await props.saveWeek({...props.week, days})
+    }
     return (
         <div className={classes.weekContent}>
             { props.week.days.length > 0 || adding_day ? (
                 <div className={classes.days}>
                     <DragAndDrop
                         parent={props.week._id}
-                        save={props.saveWeek}
+                        save={save}
                         accept={types.DAY}
                         items={props.week.days}
                         renderItem={(d, i, r) => <Day ref={r} day={d} index={i} week_id={props.week._id}/>}

@@ -30,10 +30,9 @@ const DragAndDrop = (props) => {
             }
             if (monitor.isOver({shallow: true})) {
                 if (!sameLocation(item)) {
-                    item.index = insert(item)
+                    item.save = insert(item)
+                    item.index = index
                     item.parent = parent
-                    item.remove = remove
-                    item.save = save
                 }
             }
         },
@@ -42,7 +41,10 @@ const DragAndDrop = (props) => {
                 return
             }
             await save()
-            await item.save()
+            if (parent != item.original_parent){
+                await item.save()
+            }
+
         },
         collect: monitor => ({
             isOver: !!monitor.isOver({shallow: true})
@@ -54,6 +56,7 @@ const DragAndDrop = (props) => {
             type: accept,
             remove,
             parent,
+            original_parent: parent,
             element,
             index,
             save
@@ -74,7 +77,7 @@ const DragAndDrop = (props) => {
     let opacity = isOver ? 0.5 : 1
 
     return (
-        renderItem(ref)
+        props.renderItem(ref)
     )
 }
 
