@@ -32,7 +32,6 @@ export const ViewEditWorkoutElement = props => {
             update_query = {exercises: {[index]: update_query}}
         }
         let new_workout_element = update(workout_element, update_query)
-        console.log(new_workout_element)
         setWorkoutElement(new_workout_element)
     }
 
@@ -96,7 +95,7 @@ export const ViewEditWorkoutElement = props => {
                 { workout_element.type == 'exercise' ? (
                     <div className={classes.exerciseFormContainer}>
                         <div className={clsx(classes.exerciseForm)}>
-                                <ExerciseName value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
+                                <ExerciseName onAddExercise={(name) => props.addExercise(name, workout_element)} value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
                                 <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
                                 <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
                         </div>

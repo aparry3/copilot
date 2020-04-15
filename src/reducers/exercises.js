@@ -9,12 +9,14 @@ const initialState = {
     show_exercise_form: false,
     current_exercise: null,
     previous_page: 'exercises',
-    options: {}
+    options: {},
+    new_Exercise: null
 }
 
-function saveExercise(items, exercise, is_new) {
-    if (is_new) {
-        return [...items, exercise]
+function saveExercise(items, exercise) {
+    if (!items.find(e => e._id == exercise._id)) {
+        items.push(exercise)
+        return items
     }
     return items.map(item => {
          if (exercise._id == item._id ) {
@@ -60,13 +62,11 @@ const exercises = (state = initialState, action) => {
             }
         }
         case exercise_actions.SAVE_EXERCISE:
-            let items = saveExercise([...state.items], action.exercise, action.is_new);
+            let items = saveExercise([...new_state.items], action.exercise);
             return {
                 ...new_state,
                 items: items,
-                current_exercise: null,
-                options: {},
-                show_exercise_form: false
+                new_exercise: action.exercise
             }
         default:
             return new_state;

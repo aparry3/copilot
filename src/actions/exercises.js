@@ -26,13 +26,14 @@ export function closeExerciseForm() {
     }
 }
 
-export function openExerciseForm(exercise = null, options = {}) {
+export function openExerciseForm(exercise=null, options = {}, current_state = null) {
     console.log(exercise)
     return {
         type: actions.OPEN_EXERCISE_FORM,
         show_exercise_form: true,
         exercise,
-        options
+        options,
+        current_state
     }
 }
 
@@ -64,7 +65,7 @@ const exercises = {
     // delete: (program_id) => dispatched(_deleteProgram, makeRequest(_getUrl(program_id), 'DELETE')),
     // get: (program_id) => dispatched(_recieveProgram, makeRequest(_getUrl(program_id), 'GET')),
     query: () => dispatched(_recieveExercises, makeRequest(_getUrl(), 'GET')),
-    save: (exercise) => dispatched(_saveExercise, makeRequest(_getUrl(exercise._id), 'PUT', exercise))
+    save: (exercise, callback = null) => dispatched(_saveExercise, makeRequest(_getUrl(exercise._id), 'PUT', exercise))
 }
 
 export const addExercise = exercises.add

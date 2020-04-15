@@ -166,7 +166,6 @@ export const CustomSelect = (props) => {
     function handleBlur(e) {
         e.preventDefault()
         e.stopPropagation()
-        console.log("handle blur")
         if (!mouse_down_element) {
             setFocus(false)
         }
@@ -193,7 +192,6 @@ export const CustomSelect = (props) => {
     let span_style = focus || !selected_elements ? {
         display: 'none'
     } : {}
-    console.log(selected_elements)
     return (
         <div className={classes.customSelectContainer}>
             <div className={classes.customSelect}>

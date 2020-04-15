@@ -1,5 +1,6 @@
 import {connect} from 'react-redux'
 
+import {openExerciseForm} from '../../../../actions/exercises'
 import {saveWorkoutElement, cancelEditWorkoutElement} from '../../../../actions/workout_elements'
 
 import {ViewEditWorkoutElement} from './view_edit_workout_element'
@@ -26,14 +27,14 @@ let ViewEditWorkoutElementContainer = connect(
             }
             return workout_element
         }
-        let we = _getWorkoutElement(state.active_program.location)
-        console.log(we)
+        let we = !!state.active_program.current_workout_element ? state.active_program.current_workout_element : _getWorkoutElement(state.active_program.location)
         return {
             workout_element: we,
             location: state.active_program.location
         }
     },
     dispatch => ({
+        addExercise: (name, workout_element) => dispatch(openExerciseForm(null, {name: name}, workout_element)),
         closeEdit: () => dispatch(cancelEditWorkoutElement()),
         saveWorkoutElement: (location, workout_element) => dispatch(saveWorkoutElement(location, workout_element))
     })

@@ -65,7 +65,7 @@ const workout_element = (state = initial_state, action) => {
             return new_state
         }
         default:
-            return new_state
+            return state
     }
 }
 export default workout_element

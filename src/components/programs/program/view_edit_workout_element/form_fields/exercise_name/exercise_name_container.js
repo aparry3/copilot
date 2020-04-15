@@ -9,7 +9,6 @@ const ExerciseNameContainer = connect(
         exercises: state.exercises.items
     }),
     dispatch => ({
-        addExercise: (name, callback) => dispatch(openExerciseForm(null, {name: name}, callback))
     })
 )(ExerciseName)
 

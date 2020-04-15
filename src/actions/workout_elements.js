@@ -30,12 +30,6 @@ export function setCurrentWorkoutElement(type, week_id, day, block, workout_elem
     }
 }
 
-export function editWorkoutElement(workout_element) {
-    return dispatch => {
-        editWorkoutElement(null)
-    }
-}
-
 export function cancelEditWorkoutElement() {
     return {
         type: actions.CANCEL_EDIT_WORKOUT_ELEMENT

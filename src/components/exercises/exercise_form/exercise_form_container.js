@@ -13,7 +13,8 @@ const ExerciseFormContainer = connect(
         }
         return {
             open: state.exercises.show_exercise_form,
-            exercise: initializeExercise(state.exercises.current_exercise, state.exercises.options)
+            exercise: initializeExercise(state.exercises.current_exercise, state.exercises.options),
+            callback: state.exercises.callback
         }
     },
     (dispatch, own_props) => ({

@@ -18,7 +18,6 @@ const useStyles = makeStyles(styles)
 export const ExerciseForm = props => {
     let [exercise, setExercise] = useState(props.exercise)
     let classes = useStyles()
-
     useEffect(() => {
         setExercise(props.exercise)
     }, [props.exercise])
@@ -33,7 +32,11 @@ export const ExerciseForm = props => {
     async function handleSubmit(e) {
         e.preventDefault();
         let res = await props.save(exercise)
-        console.log(res)
+        if (props.callback) {
+            props.callback(res.exercise)
+        }
+
+        props.close()
     }
 
     function handleCancel(e) {

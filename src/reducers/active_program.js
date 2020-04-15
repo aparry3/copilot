@@ -1,3 +1,4 @@
+import {actions as exercise_actions} from '../actions/exercises'
 import {actions as program_actions} from '../actions/programs'
 import {actions as workout_element_actions} from '../actions/workout_elements'
 import {actions as week_actions} from '../actions/weeks'
@@ -26,6 +27,17 @@ function cancelEditWorkoutElement(location, new_state) {
 const active_program = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
+        case exercise_actions.OPEN_EXERCISE_FORM: {
+            new_state.current_workout_element = action.current_state
+            return new_state
+        }
+        case exercise_actions.SAVE_EXERCISE: {
+            new_state.current_workout_element.exercise = {
+                name: action.exercise.name,
+                id: action.exercise._id
+            }
+            return new_state
+        }
         case week_actions.ADD_WEEK: {
             let {week} = action;
             week.collapsed = true
@@ -38,12 +50,9 @@ const active_program = (state = initial_state, action) => {
                 new_state = cancelEditWorkoutElement(location, new_state)
             }
             new_state.location = null
+            new_state.current_workout_element = null
             return new_state
         }
-        case workout_element_actions.EDIT_WORKOUT_ELEMENT: {
-            return new_state
-        }
-
         case week_actions.DELETE_WEEK: {
             let {week_id} = action;
             return {
@@ -61,17 +70,6 @@ const active_program = (state = initial_state, action) => {
                 ...program,
                 loading: false
             }
-        }
-        case workout_element_actions.SAVE_WORKOUT_ELEMENT: {
-            new_state.weeks.find(
-                w => w._id == state.location.week_id
-            ).days[state.location.day_index]
-            .workout_blocks[state.location.block_index]
-            .workout_elements[state.location.workout_element_index] = action.workout_element
-
-            new_state.current_workout_element = null
-            new_state.location = null
-            return new_state
         }
         case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
             if (state.location != null) {
