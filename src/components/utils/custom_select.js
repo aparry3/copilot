@@ -148,7 +148,7 @@ export const CustomSelect = (props) => {
     function endSelect(el) {
         if (el == mouse_down_element) {
             if (el == 'action') {
-                props.listAction()
+                props.listAction(filter_text)
             } else {
                 selectElement(el)
                 if (!multiple) {

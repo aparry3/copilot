@@ -1,20 +1,19 @@
-import React, {useState, useEffect} from 'react'
 import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import {ListItemIcon, ListItemText, Typography} from '@material-ui/core';
+import { connect } from 'react-redux';
+import React, {useState, useEffect} from 'react'
+
 import Divider from '@material-ui/core/divider';
 import {ExitToApp} from '@material-ui/icons'
-import TableChartIcon from '@material-ui/icons/TableChart'
-import ViewListIcon from '@material-ui/icons/ViewList'
 import { Link } from "react-router-dom";
 import {Logo} from './utils';
-import {makeStyles} from '@material-ui/core/styles'
-import {SIDEBAR_WIDTH} from './styles'
-import {logout, setActivePage, showExerciseForm} from '../actions'
-import { connect } from 'react-redux';
+import TableChartIcon from '@material-ui/icons/TableChart'
+import ViewListIcon from '@material-ui/icons/ViewList'
 
+import {logout} from '../actions/auth'
+import {setActivePage} from '../actions/app'
+import {showExerciseForm} from '../actions/exercises'
+
+import {makeStyles} from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
 
   drawer: {

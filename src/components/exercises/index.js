@@ -1,3 +1,3 @@
-import {ExercisesPage} from './exercises_page';
+import ViewExercises from './view_exercises';
 
-export {ExercisesPage};
+export {ViewExercises};

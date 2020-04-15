@@ -1,8 +1,11 @@
+import React from 'react'
+import {titleCase} from '../../utils'
+
 import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
-import React from 'react'
+import {MuscleGroups} from '../../utils'
+
 import {makeStyles} from '@material-ui/core/styles';
-import {MuscleGroups, titleCase} from '../utils'
 
 let styles = theme => ({
     viewExerciseContainer: {

@@ -8,8 +8,8 @@ export const EXERCISE = {
     id: '',
     images: [],
     videos: [],
-    categories: []
-
+    categories: [],
+    new: true
 }
 export const CATEGORIES = [
     'Strength', 'Aerobic', 'Flexibility', 'Balance', 'Rest'

@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
-import {ExercisesPage} from './exercises';
+import {ViewExercises} from './exercises';
+import {ExerciseForm} from './exercises/exercise_form'
 import {ProgramPage} from './programs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
@@ -84,7 +85,7 @@ const Trainer = styled(connect(state => {
                     <Sidebar path={match.path}/>
                     <Main>
                         <Switch>
-                            <Route path={`${match.path}/exercises`} component={ExercisesPage} />
+                            <Route path={`${match.path}/exercises`} component={ViewExercises} />
                             <Route path={`${match.path}/programs`} component={ProgramPage} />
                             <Route path={`${match.path}/dashboard`} component={Dashboard} />
                             <Redirect to={`${match.path}/programs`}/>
@@ -108,6 +109,7 @@ function Main(props) {
     return (
         <main className={classes.content}>
             <ConfirmMessage />
+            <ExerciseForm />
             {props.children}
         </main>
     );

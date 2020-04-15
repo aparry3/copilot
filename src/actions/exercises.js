@@ -1,111 +1,80 @@
-import {auth0_client} from '../auth'
 import {API_URI} from '../config'
+import {dispatched, makeRequest} from './utils'
 
-export const SHOW_EXERCISE_FORM = 'SHOW_EXERCISE_FORM';
-export const SAVE_EXERCISE = 'SAVE_EXERCISE';
-export const REQUEST_EXERCISES = 'REQUEST_EXERCISES';
-export const RECIEVE_EXERCISES = 'RECIEVE_EXERCISES';
-export const SELECT_EXERCISE = 'SELECT_EXERCISE';
-export const SET_FILTER = 'SET_FILTER';
-export const PUSH_EXERCISE_STATUS = 'PUSH_EXERCISE_STATUS';
+export const actions = {
+    CLOSE_EXERCISE_FORM: 'CLOSE_EXERCISE_FORM',
+    OPEN_EXERCISE_FORM: 'OPEN_EXERCISE_FORM',
+    REQUEST_EXERCISES: 'REQUEST_EXERCISES',
+    RECIEVE_EXERCISES: 'RECIEVE_EXERCISES',
+    SAVE_EXERCISE: 'SAVE_EXERCISE',
+    SELECT_EXERCISE: 'SELECT_EXERCISE',
+    SET_FILTER: 'SET_FILTER',
+}
 
 function HttpExceptioon(status, body) {
     this.status = status;
     this.body = body;
 }
 
-
-export function persistExercise(exercise) {
-    let action = exercise._id ? 'EDIT' : 'ADD';
-    return async (dispatch) => {
-        let token = await auth0_client.getToken()
-
-        return fetch(`${API_URI}/exercises${action == 'EDIT' ? `/${exercise._id}`: ``}`, {
-            method: action == 'EDIT' ? 'PUT' : 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(exercise)
-        }).then(res => {
-            if (res.status > 300) {
-                throw new HttpException(res.status, res.json());
-            }
-            return res.json();
-        }).then(exercise => {
-            dispatch(saveExercise(exercise, action == 'ADD'))
-            dispatch(pushExerciseStatus(true, exercise.name, action));
-        }).catch(err => {
-            dispatch(pushExerciseStatus(false, exercise.name, action));
-        });
-
-    }
+function _getUrl(exercise_id = null) {
+    return `${API_URI}/exercises${!!exercise_id ? `/${exercise_id}`: ``}`
 }
 
-export function saveExercise(exercise, is_new=false) {
+export function closeExerciseForm() {
     return {
-        type: SAVE_EXERCISE,
-        exercise: exercise,
-        is_new: is_new
+        type: actions.CLOSE_EXERCISE_FORM
     }
 }
 
-export function showExerciseForm(show_exercise_form=true, current_exercise=null, previous_page='exercises') {
-    console.log(show_exercise_form)
+export function openExerciseForm(exercise = null, options = {}) {
+    console.log(exercise)
     return {
-        type: SHOW_EXERCISE_FORM,
-        show_exercise_form,
-        previous_page,
-        current_exercise
+        type: actions.OPEN_EXERCISE_FORM,
+        show_exercise_form: true,
+        exercise,
+        options
     }
 }
+
+export function _recieveExercises(res) {
+    return {
+        type: actions.RECIEVE_EXERCISES,
+        exercises: res.exercises
+    }
+}
+
+function _saveExercise(res) {
+    return {
+        type: actions.SAVE_EXERCISE,
+        exercise: res.exercise
+    }
+}
+
 export function setFilter(filter) {
     return {
         type: SET_FILTER,
         filter: filter
     }
 }
+
+
+
+const exercises = {
+    add: (exercise) => dispatched(_saveExercise, makeRequest(_getUrl(), 'POST', exercise)),
+    // delete: (program_id) => dispatched(_deleteProgram, makeRequest(_getUrl(program_id), 'DELETE')),
+    // get: (program_id) => dispatched(_recieveProgram, makeRequest(_getUrl(program_id), 'GET')),
+    query: () => dispatched(_recieveExercises, makeRequest(_getUrl(), 'GET')),
+    save: (exercise) => dispatched(_saveExercise, makeRequest(_getUrl(exercise._id), 'PUT', exercise))
+}
+
+export const addExercise = exercises.add
+export const getExercises = exercises.query
+export const saveExercise = exercises.save
+
+
 export function requestExercises(query) {
     return {
         type: REQUEST_EXERCISES,
         query: query
-    }
-}
-export function recieveExercises(exercises) {
-    return {
-        type: RECIEVE_EXERCISES,
-        exercises: exercises
-    }
-}
-export function pushExerciseStatus(success, name, action) {
-    return {
-        type: PUSH_EXERCISE_STATUS,
-        success: success,
-        name: name,
-        action: action
-    }
-}
-
-async function fetchAllExercises(query=null) {
-    let token = await auth0_client.getToken()
-    return fetch(`${API_URI}/exercises${query ? `?search_text=${query}` : ''}`, {
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        }
-    }).then(
-        response => response.json(),
-        error => console.log('An error occured', error)
-    )
-}
-
-export function fetchExerises(query=null) {
-    return (dispatch) => {
-        dispatch(requestExercises())
-        return fetchAllExercises(query).then(json => {
-            dispatch(recieveExercises(json))
-        })
     }
 }

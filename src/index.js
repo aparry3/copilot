@@ -5,7 +5,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { fetchExerises, fetchUser } from './actions'
+
+import { getExercises } from './actions/exercises'
+import { fetchUser } from './actions/auth'
+
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import {API_URI} from './config'
@@ -90,7 +93,7 @@ const light_theme = createMuiTheme({
 function App(props) {
 
     useEffect(() => {
-        store.dispatch(fetchExerises())
+        store.dispatch(getExercises())
         store.dispatch(fetchUser());
     })
     return (

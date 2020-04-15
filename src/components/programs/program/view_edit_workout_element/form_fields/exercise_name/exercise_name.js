@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import React, {useState} from 'react'
 
+import AddIcon from '@material-ui/icons/Add';
 import {CustomSelect} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
@@ -12,6 +13,14 @@ export const ExerciseName = props => {
 
     // let [exercise, setExercise] = useState(props.value)
     let [name_header, setNameHeader] = useState(!!props.superset ? 'exercises' : 'exercise')
+
+    function recieveNewExercise(exercise) {
+        let new_exercise = {
+            name: exercise.name,
+            id: exercise.id
+        }
+        props.onChange(exercise)
+    }
 
     function select(e) {
         console.log(e)
@@ -34,6 +43,8 @@ export const ExerciseName = props => {
                         value={props.value.name}
                         name='name'
                         onChange={select}
+                        listActionText={(<span><AddIcon /> Create New Exercise...</span>)}
+                        listAction={(name) => props.addExercise(name, recieveNewExercise)}
                         elements={props.exercises.map(e => e.name)}
                         placeholder={`Exercise name...`}/>
                 </div>

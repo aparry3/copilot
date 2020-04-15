@@ -1,4 +1,6 @@
-import {SHOW_EXERCISE_FORM, SAVE_EXERCISE, RECIEVE_EXERCISES, REQUEST_EXERCISES, SET_FILTER, PUSH_EXERCISE_STATUS} from '../actions'
+import {actions as exercise_actions} from '../actions/exercises'
+
+import {copyState} from './utils'
 
 const initialState = {
     items: [],
@@ -27,41 +29,47 @@ function buildStatus({type, success, name, action}) {
     }
 }
 const exercises = (state = initialState, action) => {
+    let new_state = copyState(state)
     switch (action.type) {
-        case SHOW_EXERCISE_FORM: {
+        case exercise_actions.CLOSE_EXERCISE_FORM: {
             return {
-                ...state,
+                ...new_state,
+                current_exercise: null,
+                show_exercise_form: false,
+                options: {}
+            }
+        }
+        case exercise_actions.OPEN_EXERCISE_FORM: {
+            console.log(action.exercise)
+            return {
+                ...new_state,
                 show_exercise_form: action.show_exercise_form,
-                current_exercise: action.current_exercise,
-                previous_page: action.previous_page,
+                current_exercise: action.exercise,
                 options: action.options
             }
         }
-        case SET_FILTER:
+        case exercise_actions.SET_FILTER:
             return {
-                ...state,
+                ...new_state,
                 filter: action.filter
             }
-        case RECIEVE_EXERCISES: {
+        case exercise_actions.RECIEVE_EXERCISES: {
             return {
-                ...state,
+                ...new_state,
                 items: action.exercises
             }
         }
-        case SAVE_EXERCISE:
+        case exercise_actions.SAVE_EXERCISE:
             let items = saveExercise([...state.items], action.exercise, action.is_new);
             return {
-                ...state,
-                items: items
+                ...new_state,
+                items: items,
+                current_exercise: null,
+                options: {},
+                show_exercise_form: false
             }
-        case PUSH_EXERCISE_STATUS: {
-            return {
-                ...state,
-                statuses: [...state.statuses, buildStatus(action)]
-            }
-        }
         default:
-            return state;
+            return new_state;
 
     }
 }
