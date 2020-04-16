@@ -32,9 +32,11 @@ const active_program = (state = initial_state, action) => {
             return new_state
         }
         case exercise_actions.SAVE_EXERCISE: {
-            new_state.current_workout_element.exercise = {
-                name: action.exercise.name,
-                id: action.exercise._id
+            if (!!new_state.current_workout_element) {
+                new_state.current_workout_element.exercise = {
+                    name: action.exercise.name,
+                    id: action.exercise._id
+                }
             }
             return new_state
         }

@@ -1,6 +1,31 @@
 import React, {useState, useEffect, useRef} from 'react'
 
+import {makeStyles} from '@material-ui/core/styles';
+
+export const line_height = 24
+
+const styles = theme => ({
+    inputTitle: {
+        lineHeight: `${line_height}px`,
+        flexGrow: 1,
+        resize: 'none',
+        padding: '10px'
+    },
+    inputTitleText: {
+        flexGrow: 1,
+        padding: '10px'
+    },
+    inputTitleContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'stretch'
+    }
+})
+const useStyles = makeStyles(styles)
+
 export function InputTitle(props) {
+    let classes = useStyles()
     let [value, setValue] = useState(!!props.value ? props.value : props.default)
     let [is_focused, setIsFocused] = useState(!!props.focus)
 
@@ -37,14 +62,14 @@ export function InputTitle(props) {
     }
 
     return (
-        <div>
+        <div className={classes.inputTitleContainer}>
         {!!is_focused ? (
             <>
-                <input ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} autocomplete={props.autocomplete || 'on'} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
+                <input className={classes.inputTitleText} ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} autocomplete={props.autocomplete || 'on'} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
                 { !!props.label && (<label>{props.label}</label>)}
             </>
             ) : (
-            <div onClick={handleFocus}>
+            <div className={classes.inputTitle} onClick={handleFocus}>
                 <span>
                     {!!value ? value : props.default}
                 </span>

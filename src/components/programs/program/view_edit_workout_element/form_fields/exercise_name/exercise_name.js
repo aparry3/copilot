@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React, {useEffect, useState} from 'react'
 
 import AddIcon from '@material-ui/icons/Add';
-import {CustomSelect} from '../../../../../utils'
+import {CustomSelect, FormField} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './exercise_name.styles'
@@ -25,22 +25,18 @@ export const ExerciseName = props => {
     }
 
     return (
-        <div className={clsx(classes.formFieldContainer, classes.exerciseNameContainer)}>
-            <div className={clsx(classes.formFieldHeader, classes.exerciseNameHeader)}>
-                <span>{name_header.toUpperCase()}</span>
+        <FormField
+            title={name_header}>
+            <div className={classes.exerciseNameText}>
+                <CustomSelect
+                    value={props.value.name}
+                    name='name'
+                    onChange={select}
+                    listActionText={(<span><AddIcon /> Create New Exercise...</span>)}
+                    listAction={props.onAddExercise}
+                    elements={props.exercises.map(e => e.name)}
+                    placeholder={`Exercise name...`}/>
             </div>
-            <div className={classes.formFieldContent}>
-                <div className={classes.exerciseNameText}>
-                    <CustomSelect
-                        value={props.value.name}
-                        name='name'
-                        onChange={select}
-                        listActionText={(<span><AddIcon /> Create New Exercise...</span>)}
-                        listAction={props.onAddExercise}
-                        elements={props.exercises.map(e => e.name)}
-                        placeholder={`Exercise name...`}/>
-                </div>
-            </div>
-        </div>
+        </FormField>
     )
 }

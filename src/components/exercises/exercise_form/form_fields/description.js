@@ -1,5 +1,7 @@
 import clsx from 'clsx'
-import React from 'react'
+import React, {useState} from 'react'
+
+import {FormField, ResizeableInputTextArea} from '../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './form_fields.styles'
@@ -8,13 +10,19 @@ const useStyles = makeStyles(styles)
 
 export const Description = props => {
     let classes = useStyles()
+    let [editing, setEditing] = useState(false)
+
+    function handleSave(value) {
+        setEditing(false)
+        props.onChange(value)
+    }
 
     return (
-        <div className={classes.formSectionContainer}>
-            <div className={clsx(classes.formSection, classes.description)}>
-                <div className={classes.formSectionHeader}><span>Description</span></div>
-                <div className={classes.formSectionInputContainer}><textarea autocomplete="off" className={classes.formSectionInput} id='description' name='description' onChange={props.onChange} value={props.value} /></div>
-            </div>
-        </div>
+        <FormField
+            title='description'
+            onClick={() => setEditing(true)}
+            condition={!!props.value || editing}>
+            <ResizeableInputTextArea onSave={handleSave} value={props.value} />
+        </FormField>
     )
 }

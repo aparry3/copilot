@@ -19,13 +19,13 @@ export const styles = theme => ({
         justifyContent: 'center',
         zIndex: 100
     },
-    exerciseFormPopupContainer: {
+    exerciseFormModalContainer: {
         padding: '200px 0px',
         overflow: 'auto',
         width: '50%',
         zIndex: 101
     },
-    exerciseFormPopup: {
+    exerciseFormModal: {
         background: theme.palette.background.light,
         zIndex: 1,
         borderRadius: '5px',
@@ -35,21 +35,23 @@ export const styles = theme => ({
         flexDirection: 'column',
         padding: '20px'
     },
+    exerciseFormModalHeader: {
+        color: theme.text.light,
+        display: 'flex',
+        padding: '20px',
+        alignItems:'center',
+        fontSize: '24px'
+    },
     exerciseForm: {
         width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'flex-start',
         color: theme.text.primary,
         padding: '10px',
-        background: theme.palette.background.main,
         overflow: 'auto'
-    },
-    form: {
-        width: '100%',
-        height: '100%'
     },
     nameInput: {
         fontSize: '25px',
@@ -61,5 +63,37 @@ export const styles = theme => ({
     },
     description: {
         minWidth: '50%'
+    },
+    exerciseFormActions: {
+        display: 'flex',
+        alignItems: 'stretch',
+        padding: '20px',
+        justifyContent: 'space-around'
+    },
+    exerciseFormAction: {
+        display: 'flex',
+        borderRadius: '5px',
+        alignItems: 'center',
+        padding: '10px',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        width: '20%'
+    },
+    saveButton: {
+        background: theme.accents.primary.main,
+        color: theme.text.accents.primary.main,
+        '&:hover': {
+            background: theme.accents.primary.hover,
+            color: theme.text.accents.primary.hover,
+        }
+    },
+    cancelButton: {
+        background: theme.accents.error.main,
+        color: theme.text.accents.error.main,
+        '&:hover': {
+            background: theme.accents.error.hover,
+            color: theme.text.accents.error.hover,
+        }
     }
+
 })

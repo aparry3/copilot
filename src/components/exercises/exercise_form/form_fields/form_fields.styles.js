@@ -1,7 +1,8 @@
 export const styles = theme => ({
     formSection: {
         flexGrow: 1,
-        boxShadow: `0px 0px 8px -5px ${theme.palette.background.dark}`,
+        boxShadow: `0px 0px 5px -3px ${theme.palette.background.dark}`,
+        borderRadius: '5px',
         background: theme.palette.background.light,
         display: 'flex',
         flexDirection: 'column',

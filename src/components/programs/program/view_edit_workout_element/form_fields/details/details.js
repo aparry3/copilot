@@ -4,7 +4,7 @@ import React, {useEffect, useState} from  'react'
 import update from 'immutability-helper'
 
 import {AddDetail} from './add_detail'
-import {details as render_details, InputTitle} from '../../../../../utils'
+import {details as render_details, FormField, InputTitle} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './details.styles'
@@ -59,38 +59,29 @@ export const Details = props => {
     }
 
     return (
-        <div className={classes.formFieldContainer}>
-            { Object.keys(details).length > 0 || add_detail ? (
-                <>
-                    <div className={classes.formFieldHeader}>
-                        <span>DETAILS</span>
-                    </div>
-                    <div className={classes.formFieldContent} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                        <div className={classes.details}>
-                            { Object.keys(details).map(d => (
-                                <div className={classes.detailRow}>
-                                    <div className={classes.detailRowTitle}>
-                                        {render_details[d].title()}
-                                    </div>
-                                    <div className={classes.detailRowInput}>
-                                        <InputTitle value={details[d]} focus autocomplete="off" name={d} onSave={(value) => updateDetail(d, value)}/>
-                                    </div>
-                                </div>
-                            ))}
-                            { (Object.keys(details).length == 0 || add_detail || remainingDetails().length > 0 && hover) && (
-                                <div className={classes.addDetail} onClick={handleAdd}>
-                                    <div className={classes.addDetailText}><span>Add detail...</span></div>
-                                    { !!add_detail && (<AddDetail options={remainingDetails()} onSelect={addDetail} onClose={handleClose}/>)}
-                                </div>
-                            )}
+        <FormField
+            title='details'
+            condition={Object.keys(details).length > 0 || add_detail}
+            onClick={handleAdd}
+            >
+            <div className={classes.details} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                { Object.keys(details).map(d => (
+                    <div className={classes.detailRow}>
+                        <div className={classes.detailRowTitle}>
+                            {render_details[d].title()}
+                        </div>
+                        <div className={classes.detailRowInput}>
+                            <InputTitle value={details[d]} focus autocomplete="off" name={d} onSave={(value) => updateDetail(d, value)}/>
                         </div>
                     </div>
-                </>
-            ) : (
-                <div onClick={handleAdd} className={clsx(classes.formFieldHeader, classes.emptyForm)}>
-                    <span>Add details...</span>
-                </div>
-            )}
-        </div>
+                ))}
+                { (Object.keys(details).length == 0 || add_detail || remainingDetails().length > 0 && hover) && (
+                    <div className={classes.addDetail} onClick={handleAdd}>
+                        <div className={classes.addDetailText}><span>Add detail...</span></div>
+                        { !!add_detail && (<AddDetail options={remainingDetails()} onSelect={addDetail} onClose={handleClose}/>)}
+                    </div>
+                )}
+            </div>
+        </FormField>
     )
 }
