@@ -23,7 +23,7 @@ export const WorkoutElement = props => {
     }
 
     return (
-        <div onClick={() => props.editWorkoutElement()} className={classes.workoutElementContainer}>
+        <div ref={props.forwardRef} onClick={() => props.editWorkoutElement()} className={classes.workoutElementContainer}>
             <div className={classes.workoutElement} >
                 {renderWorkoutElement(props.workout_element)}
             </div>

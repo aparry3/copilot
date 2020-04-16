@@ -24,7 +24,7 @@ export const Block = (props) => {
     }
 
     async function saveWorkoutElements(workout_elements) {
-        // await props.saveBlock({...props.block, workout_elements})
+        await props.saveBlock({...props.block, workout_elements})
     }
     return (
         <div ref={props.forwardRef} className={classes.blockContainer}>

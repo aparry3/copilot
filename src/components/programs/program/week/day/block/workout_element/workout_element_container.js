@@ -1,4 +1,5 @@
 import {connect} from 'react-redux'
+import React from 'react'
 
 import {deleteWorkoutElement, setCurrentWorkoutElement} from '../../../../../../../actions/workout_elements'
 import {openConfirm} from '../../../../../../../actions/confirm'
@@ -25,4 +26,4 @@ const WorkoutElementContainer = connect(
     }
 )(WorkoutElement)
 
-export default WorkoutElementContainer
+export default React.forwardRef((props, ref) => <WorkoutElementContainer {...props} forwardRef={ref} />)

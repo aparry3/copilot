@@ -11,10 +11,12 @@ function _getUrl(week_id, day_index, block_index = null) {
         `${API_URI}/weeks/${week_id}/days/${day_index}/blocks/${block_index}`)
 }
 
-const day = {
+const blocks = {
     add: (week_id, day) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day), 'POST', {})),
-    delete: (week_id, day, block) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day, block), 'DELETE'))
+    delete: (week_id, day, index) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day, index), 'DELETE')),
+    save: (week_id, day, index, block) => dispatched(updateWeek, makeRequest(_getUrl(week_id, day, index), 'PUT', block)),
 }
 
-export const addBlock = day.add
-export const deleteBlock = day.delete
+export const addBlock = blocks.add
+export const deleteBlock = blocks.delete
+export const saveBlock = blocks.save
