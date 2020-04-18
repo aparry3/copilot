@@ -46,7 +46,7 @@ export const WORKOUT_ELEMENT_TYPES = {
 
 const initial_state = {types: WORKOUT_ELEMENT_TYPES, type: null}
 
-const workout_element = (state = initial_state, action) => {
+const workout_elements = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
         case workout_element_actions.SET_CURRENT_WORKOUT_ELEMENT: {
@@ -68,4 +68,4 @@ const workout_element = (state = initial_state, action) => {
             return state
     }
 }
-export default workout_element
+export default workout_elements

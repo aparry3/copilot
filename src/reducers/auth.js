@@ -6,6 +6,8 @@ import {
     ADD_CLIENT
 } from '../actions'
 
+import {actions as auth_actions} from '../actions/auth'
+
 const initialState = {
     user: null,
     loading: false,
@@ -15,13 +17,14 @@ const initialState = {
 
 const auth = (state = initialState, action) => {
     switch (action.type) {
-        case LOGGING_IN: {
+        case auth_actions.LOGGING_IN: {
             return {
                 ...state,
                 loading: true
             }
         }
-        case LOGGED_IN: {
+        case auth_actions.RECIEVE_USER: {
+            console.log(action)
             return {
                 ...state,
                 user: action.user,
@@ -33,6 +36,12 @@ const auth = (state = initialState, action) => {
                 ...state,
                 client_loaded: true,
                 loading: action.loading
+            }
+        }
+        case auth_actions.RECIEVE_AUTH_USER: {
+            return {
+                ...state,
+                auth_user: action.auth_user
             }
         }
         case ADD_CLIENT: {

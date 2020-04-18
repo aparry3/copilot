@@ -8,6 +8,15 @@ export const LOGGING_OUT = 'LOGGING_OUT';
 export const AUTH_CLIENT_DID_LOAD = 'LOGGING_OUT';
 export const ADD_CLIENT = 'ADD_CLIENT';
 
+export const actions = {
+    LOGGING_IN: 'LOGGING_IN',
+    RECIEVE_USER: 'RECIEVE_USER',
+    LOGGING_OUT: 'LOGGING_OUT',
+    AUTH_CLIENT_DID_LOAD: 'LOGGING_OUT',
+    ADD_CLIENT: 'ADD_CLIENT',
+    RECIEVE_AUTH_USER: 'RECIEVE_AUTH_USER'
+
+}
 
 export function authenticated(func) {
     return async function(...args) {
@@ -22,9 +31,33 @@ export function login(...p) {
 }
 export function loggingIn() {
     return {
-        type: LOGGING_IN,
+        type: actions.LOGGING_IN,
     }
 }
+
+function recieveAuthUser(user) {
+    return {
+        type: actions.RECIEVE_AUTH_USER,
+        auth_user: user
+    }
+}
+
+export function recieveUser(user) {
+    console.log(user)
+    return dispatch => {
+        dispatch({
+            type: actions.RECIEVE_USER,
+            user: user
+        })
+        if (!!user) {
+            dispatch(getPrograms(user._id))
+        }
+
+    }
+
+}
+
+
 export function fetchUser() {
     return async (dispatch) => {
         dispatch(loggingIn())
@@ -33,7 +66,8 @@ export function fetchUser() {
             dispatch(authClientDidLoad(true));
             const token = await auth0_client.getToken();
             const auth_user = await auth0_client.getUser();
-            fetch(`${API_URI}/users/identity`, {
+            dispatch(recieveAuthUser(auth_user))
+            let user = await fetch(`${API_URI}/users/identity`, {
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
@@ -43,57 +77,19 @@ export function fetchUser() {
             }).then(res => {
                 let data = res.json();
                 return data;
-            }).then(data => {
-                let user = data.user;
-                if (!user || !user._id) {
-                    fetch(`${API_URI}/users`, {
-                        method: 'POST',
-                        headers: {
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`
-                        },
-                        body:JSON.stringify({
-                            user:{
-                                email: auth_user.email,
-                                name: {
-                                    first: auth_user.given_name,
-                                    last: auth_user.given_name
-                                }
-                            }
-                        })
-                    }).then(res => {
-                        let data = res.json();
-                        return data;
-                    }).then(data => {
-                        dispatch(loggedIn(data.user))
-                    })
-                } else {
-                    dispatch(loggedIn(data.user))
-                }
-            })
+            }).then(res => res.user)
+            dispatch(recieveUser(user))
+
         } else {
             dispatch(authClientDidLoad(false));
-
+            login({targetUrl: {pathname: '/'}})
         }
 
     }
 }
+
 export function logout(...p) {
     auth0_client.logout();
-}
-
-
-export function loggedIn(user) {
-    return dispatch => {
-        dispatch({
-            type: LOGGED_IN,
-            user: user
-        })
-        dispatch(getPrograms(user._id))
-
-    }
-
 }
 
 function authClientDidLoad(loading=true) {
@@ -103,16 +99,6 @@ function authClientDidLoad(loading=true) {
     }
 }
 
-
-function addClient(name, email) {
-    return {
-        type: ADD_CLIENT,
-        client: {
-            name,
-            email
-        }
-    }
-}
 
 export function addClientAndPersist(id, name, email) {
     return async dispatch => {

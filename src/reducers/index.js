@@ -6,7 +6,8 @@ import auth from './auth'
 import confirm from './confirm'
 import exercises from './exercises';
 import programs from './programs';
-import workout_element from './workout_element'
+import users from './users'
+import workout_elements from './workout_elements'
 
 
 export default combineReducers({
@@ -16,5 +17,5 @@ export default combineReducers({
     confirm: confirm,
     exercises: exercises,
     programs: programs,
-    workout_element: workout_element
+    workout_elements: workout_elements
 })

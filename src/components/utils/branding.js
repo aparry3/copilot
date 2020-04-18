@@ -17,11 +17,15 @@ export const Logo = (props) => {
 
 
 export const Wordmark = (props) => {
+    const ratio = 113 / 30
+    let height = !!props.height ? props.height : !!props.width ? props.width / ratio : 30
+    let width = !!props.height ? props.height * ratio : !!props.width ? props.width : 113
+
     return (
     <div id="logo-container">
-        <svg width="113px" height="30px" viewBox="0 0 113 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width={`${width}px`} height={`${height}px`} viewBox="0 0 113 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <g id="Final-Rough-Draft" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                <g id="Main-UI" transform="translate(-33.000000, -16.000000)" fill="#FFFFFF">
+                <g id="Main-UI" transform="translate(-33.000000, -16.000000)" fill={!!props.inverse ? '#FFFFFF' : '#156ed0'}>
                     <g id="sidebar">
                         <g id="wordmark" transform="translate(33.000000, 14.000000)">
                             <g>

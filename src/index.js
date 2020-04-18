@@ -18,7 +18,7 @@ import {API_URI} from './config'
 
 import React, {useEffect} from "react";
 import ReactDOM from "react-dom";
-import {MainPage} from './components'
+import {App} from './components'
 
 import rootReducer from './reducers'
 import {auth0_client} from './auth'
@@ -90,7 +90,7 @@ const light_theme = createMuiTheme({
 })
 
 
-function App(props) {
+function Copilot(props) {
 
     useEffect(() => {
         store.dispatch(getExercises())
@@ -99,7 +99,7 @@ function App(props) {
     return (
         <Provider store={store} >
             <ThemeProvider theme={light_theme} >
-                <MainPage />
+                <App />
             </ThemeProvider>
         </Provider>
     )
@@ -107,5 +107,5 @@ function App(props) {
 }
 
 
-ReactDOM.render(<App />,
+ReactDOM.render(<Copilot />,
      document.getElementById("root"))

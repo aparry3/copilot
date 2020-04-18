@@ -4,7 +4,7 @@ import {actions as workout_element_actions} from '../actions/workout_elements'
 import {actions as week_actions} from '../actions/weeks'
 import {copyState} from './utils'
 
-import {WORKOUT_ELEMENT_TYPES} from './workout_element'
+import {WORKOUT_ELEMENT_TYPES} from './workout_elements'
 
 const initial_state = {loading: false, current_workout_element: null, location: null}
 
