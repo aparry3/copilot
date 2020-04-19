@@ -4,11 +4,11 @@ import update from 'immutability-helper'
 import {titleCase} from '../../../utils'
 
 import AddIcon from '@material-ui/icons/Add'
-import CheckIcon from '@material-ui/icons/Check'
-import ClearIcon from '@material-ui/icons/Clear'
+import ClearIcon from '@material-ui/icons/Clear';
 import {Details, ExerciseName, Notes} from './form_fields'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import {Modal} from '../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './view_edit_workout_element.styles'
@@ -81,17 +81,14 @@ export const ViewEditWorkoutElement = props => {
     }
 
     return (
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.viewEditWorkoutElementContainer}>
-            <div className={classes.viewEditWorkoutElement}>
-                <div className={classes.viewEditWorkoutElementHeader}>
-                    <div className={classes.viewEditWorkoutElementTitle}>
-                        <span>Edit {titleCase(workout_element.type)}</span>
-                    </div>
-                    <div onClick={() => props.closeEdit()} className={classes.viewEditWorkoutElementClose}>
-                        <ClearIcon />
-                    </div>
-                </div>
-                <div className={classes.viewEditWorkoutElementContent} >
+        <Modal
+            close={props.closeEdit}
+            open={props.open}
+            save={() => props.saveWorkoutElement(props.location, workout_element)}
+            title={`Edit  ${!!workout_element && titleCase(workout_element.type)}`}
+            >
+            { !!workout_element && (
+                <div className={classes.viewEditWorkoutElementContent}  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
                 { workout_element.type == 'exercise' ? (
                     <div className={classes.exerciseFormContainer}>
                         <div className={clsx(classes.exerciseForm)}>
@@ -112,7 +109,7 @@ export const ViewEditWorkoutElement = props => {
                                 </div>
                             </div>
                             <div className={classes.exerciseFormContent}>
-                                <ExerciseName value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
+                                <ExerciseName onAddExercise={(name) => props.addExercise(name, workout_element)} value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
                                 { !e.collapsed && (
                                 <>
                                     <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
@@ -141,19 +138,7 @@ export const ViewEditWorkoutElement = props => {
                     </>
                 )}
                 </div>
-                <div className={classes.viewEditWorkoutElementFooter}>
-                    <div className={classes.viewEditWorkoutElementActionContainer}>
-                        <div className={classes.viewEditWorkoutElementAction} onClick={() => props.saveWorkoutElement(props.location, workout_element)}>
-                            <span><CheckIcon /></span>
-                        </div>
-                    </div>
-                    <div className={classes.viewEditWorkoutElementActionContainer}>
-                        <div className={classes.viewEditWorkoutElementAction} onClick={() => props.closeEdit()}>
-                            <span><ClearIcon /></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            )}
+        </Modal>
     )
 }

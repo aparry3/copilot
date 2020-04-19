@@ -38,7 +38,7 @@ const styles = theme => ({
     customSelectDropdown: {
         position: 'absolute',
         background: theme.palette.background.light,
-        zIndex: 10,
+        zIndex: 150,
         boxShadow: `${theme.palette.background.dark} 0px 2px 6px -5px`,
         maxHeight: '200px',
         overflow: 'auto',
@@ -151,6 +151,7 @@ export const CustomSelect = (props) => {
                 props.listAction(filter_text)
             } else {
                 selectElement(el)
+                setFilterText('')
                 if (!multiple) {
                     setFocus(false)
                 }

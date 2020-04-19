@@ -7,10 +7,8 @@ import {ExerciseName} from './exercise_name'
 const ExerciseNameContainer = connect(
     state => ({
         exercises: state.exercises.items
-    }),
-    dispatch => ({
-        addExercise: (name) => dispatch(openExerciseForm(null, {name: name}))
     })
+
 )(ExerciseName)
 
 export default ExerciseNameContainer

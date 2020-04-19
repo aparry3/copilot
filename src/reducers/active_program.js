@@ -126,6 +126,7 @@ const active_program = (state = initial_state, action) => {
             return {
                 ...new_state,
                 location: null,
+                current_workout_element: null,
                 weeks: new_state.weeks.map(w => {
                     if (w._id == week._id) {
                         week.collapsed = w.collapsed

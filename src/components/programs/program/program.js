@@ -77,7 +77,6 @@ export const Program = (props) => {
                 <DndProvider backend={HTML5Backend} >
                     <div className={classes.programContent}>
                         {renderPageConent(props.page, props.current_week)}
-                        {props.edit_workout_element && <ViewEditWorkoutElement /> }
                     </div>
                 </DndProvider>
             </div>

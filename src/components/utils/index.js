@@ -10,6 +10,7 @@ import {InputTextArea} from './input_text_area'
 import {InputTitle} from './input_title'
 import {Loading} from './loading'
 import {Logo, Wordmark} from './branding'
+import {Modal} from './modal'
 import {MuscleGroups} from './muscle_groups'
 import {PageHeader} from './page_header'
 import {ResizeableInputTextArea} from './resizeable_input_text_area'
@@ -27,6 +28,7 @@ export {
     InputTitle,
     Loading,
     Logo,
+    Modal,
     MuscleGroups,
     PageHeader,
     ResizeableInputTextArea,

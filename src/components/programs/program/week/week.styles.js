@@ -54,6 +54,6 @@ export const styles = theme => ({
     days: {
         display: 'flex',
         alignItems: 'stretch',
-        padding: '20px 30px 0px 30px'
+        padding: '0px 15px'
     }
 })

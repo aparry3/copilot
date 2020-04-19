@@ -6,6 +6,7 @@ import {Dashboard} from '../dashboard'
 import {ExerciseForm} from '../exercises/exercise_form'
 import {ProgramPage} from '../programs';
 import Sidebar from './sidebar';
+import ViewEditWorkoutElement from '../programs/program/view_edit_workout_element'
 import {ViewExercises} from '../exercises';
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
@@ -26,6 +27,7 @@ export const Home = (props) => {
                     <Sidebar path={match.path}/>
                     <main className={classes.content}>
                         <ConfirmMessage />
+                        <ViewEditWorkoutElement />
                         <ExerciseForm />
                         <Switch>
                             <Route path={`/exercises`} component={ViewExercises} />

@@ -55,7 +55,7 @@ export const Form = props => {
                 </div>
                 { !!props.confirm && (
                     <div onClick={confirm} className={!!props.condition ? classes.nextActive : classes.nextInactive}>
-                        <span>Confrim</span>
+                        <span>Confirm</span>
                     </div>
                 )}
                 { !!props.next && (

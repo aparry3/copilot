@@ -28,7 +28,6 @@ export const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflow: 'auto',
         flexGrow: 1
     },
     exerciseFormContainer: {

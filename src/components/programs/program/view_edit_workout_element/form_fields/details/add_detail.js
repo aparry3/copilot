@@ -18,7 +18,7 @@ const styles = theme => ({
         position: 'absolute',
         left: 0,
         zIndex: 10,
-        top: '20px',
+        bottom: '0px',
         display: 'flex',
         flexDirection: 'column',
         background: theme.palette.background.light,

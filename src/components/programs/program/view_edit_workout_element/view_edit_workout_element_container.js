@@ -7,11 +7,14 @@ import {ViewEditWorkoutElement} from './view_edit_workout_element'
 
 let ViewEditWorkoutElementContainer = connect(
     state => {
+        console.log(state)
         function _getWorkoutElement(location) {
             console.log(state.workout_elements)
             let {type, types} = state.workout_elements
             let workout_element
-            if (location.workout_element == null) {
+            if (!location) {
+                return null
+            } else if (location.workout_element == null) {
                 workout_element = {...types[type].template}
             } else {
                 workout_element = (
@@ -30,7 +33,8 @@ let ViewEditWorkoutElementContainer = connect(
         let we = !!state.active_program.current_workout_element ? state.active_program.current_workout_element : _getWorkoutElement(state.active_program.location)
         return {
             workout_element: we,
-            location: state.active_program.location
+            location: state.active_program.location,
+            open: !!state.active_program.location && !state.exercises.show_exercise_form
         }
     },
     dispatch => ({

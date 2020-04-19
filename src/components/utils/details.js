@@ -3,6 +3,7 @@ import React from 'react'
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
 import AutorenewIcon from '@material-ui/icons/Autorenew'
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
+import SnoozeIcon from '@material-ui/icons/Snooze';
 import StraightenIcon from '@material-ui/icons/Straighten'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
 
@@ -72,6 +73,8 @@ const SetsTitle = () => <DetailTitle icon={<AutorenewIcon />} title='sets'/>
 
 const RepetitionsTitle = () => <DetailTitle icon={<SwapVertIcon />} title='repetitions'/>
 
+const RestTitle = () => <DetailTitle icon={<SnoozeIcon />} title='rest'/>
+
 const WeightTitle = () => <DetailTitle icon={<FitnessCenterIcon />} title='weight'/>
 
 
@@ -84,6 +87,8 @@ const SetsValue = (value) => <DetailValue icon={<AutorenewIcon />} value={value}
 
 const RepetitionsValue = (value) => <DetailValue icon={<SwapVertIcon />} value={value}/>
 
+const RestValue = (value) => <DetailValue icon={<SnoozeIcon />} value={value}/>
+
 const WeightValue = (value) => <DetailValue icon={<FitnessCenterIcon />} value={value}/>
 
 
@@ -93,6 +98,7 @@ export const details = {
     duration: { icon: <AccessAlarmIcon />, title: DurationTitle, value: DurationValue},
     sets: { icon: <AutorenewIcon />, title: SetsTitle, value: SetsValue},
     repetitions: { icon: <SwapVertIcon />, title: RepetitionsTitle, value: RepetitionsValue},
+    rest: { icons: <SnoozeIcon />, title: RestTitle, value: RestValue},
     weight: { icon: <FitnessCenterIcon />, title: WeightTitle, value: WeightValue}
 
 }
