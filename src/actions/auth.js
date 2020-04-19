@@ -1,12 +1,7 @@
 import {API_URI} from '../config'
 import {auth0_client} from '../auth'
 import {getPrograms} from './programs'
-
-export const LOGGING_IN = 'LOGGING_IN';
-export const LOGGED_IN = 'LOGGED_IN';
-export const LOGGING_OUT = 'LOGGING_OUT';
-export const AUTH_CLIENT_DID_LOAD = 'LOGGING_OUT';
-export const ADD_CLIENT = 'ADD_CLIENT';
+import {getUser} from './users'
 
 export const actions = {
     LOGGING_IN: 'LOGGING_IN',
@@ -42,22 +37,6 @@ function recieveAuthUser(user) {
     }
 }
 
-export function recieveUser(user) {
-    console.log(user)
-    return dispatch => {
-        dispatch({
-            type: actions.RECIEVE_USER,
-            user: user
-        })
-        if (!!user) {
-            dispatch(getPrograms(user._id))
-        }
-
-    }
-
-}
-
-
 export function fetchUser() {
     return async (dispatch) => {
         dispatch(loggingIn())
@@ -67,18 +46,7 @@ export function fetchUser() {
             const token = await auth0_client.getToken();
             const auth_user = await auth0_client.getUser();
             dispatch(recieveAuthUser(auth_user))
-            let user = await fetch(`${API_URI}/users/identity`, {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(res => {
-                let data = res.json();
-                return data;
-            }).then(res => res.user)
-            dispatch(recieveUser(user))
+            dispatch(getUser())
 
         } else {
             dispatch(authClientDidLoad(false));
@@ -94,7 +62,7 @@ export function logout(...p) {
 
 function authClientDidLoad(loading=true) {
     return {
-        type: AUTH_CLIENT_DID_LOAD,
+        type: actions.AUTH_CLIENT_DID_LOAD,
         loading: loading
     }
 }

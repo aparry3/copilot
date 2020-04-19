@@ -16,6 +16,7 @@ const users = (state = initial_state, action) => {
                 user: action.user
             }
         }
+        default:
             return state
     }
 }

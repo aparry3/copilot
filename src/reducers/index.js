@@ -17,5 +17,6 @@ export default combineReducers({
     confirm: confirm,
     exercises: exercises,
     programs: programs,
+    users: users,
     workout_elements: workout_elements
 })

@@ -9,8 +9,7 @@ const ProgramsListContainer = connect(
         console.log(state)
         return {
             programs: state.programs.all_programs,
-            clients: state.auth.user.clients,
-            user: state.auth.user
+            user: state.users.user
         }
     },
     dispatch => {
