@@ -1,17 +1,17 @@
 export const styles = theme => ({
-     userTypes: {
+     userRoles: {
          flexGrow: 1,
          display: 'flex',
          padding :'20px',
          alignItems: 'stretch'
      },
-     userTypeContainer: {
+     userRoleContainer: {
          flexGrow: 1,
          padding: '10px',
          display: 'flex',
          alignItems: 'stretch'
      },
-     userType: {
+     userRole: {
          cursor: 'pointer',
          flexGrow: 1,
          padding: '20px',
@@ -22,13 +22,13 @@ export const styles = theme => ({
          borderRadius: '5px',
          border: `${theme.palette.background.mediumDark} solid 1px`
      },
-     typeIcon: {
+     roleIcon: {
          display: 'flex',
          flexGrow: 1,
          alignItems: 'center',
          justifyContent: 'center'
      },
-     typeTitle: {
+     roleTitle: {
          display: 'flex',
          padding: '10px',
          fontSize: '25px',

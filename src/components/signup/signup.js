@@ -2,14 +2,14 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-ro
 import React, {useState} from 'react'
 import update from 'immutability-helper'
 
-import {UserType, Profile} from './forms'
+import {UserRole, Profile} from './forms'
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {styles} from './signup.styles'
 const useStyles = makeStyles(styles);
 
 const pages = {
-    TYPE: 'TYPE',
+    ROLE: 'ROLE',
     PROFILE: 'PROFILE',
     CONFIRM: 'CONFIRM'
 }
@@ -17,10 +17,10 @@ const pages = {
 export const Signup = props => {
     let classes = useStyles()
     let [loading, setLoading] = useState(false)
-    let [page, setPage] = useState(pages.TYPE)
+    let [page, setPage] = useState(pages.ROLE)
 
     let [new_user, setNewUser] = useState({
-        type: null,
+        role: null,
         name: {
             first: null,
             middle: null,
@@ -43,11 +43,11 @@ export const Signup = props => {
     function renderPage() {
         switch (page) {
             case pages.TYPE:
-                return <UserType user={new_user} onChange={updateUser} next={() => setPage(pages.PROFILE)}/>
+                return <UserRole user={new_user} onChange={updateUser} next={() => setPage(pages.PROFILE)}/>
             case pages.PROFILE:
                 return <Profile user={new_user} onChange={updateUser} back={() => setPage(pages.TYPE)} confirm={addUser} />
             default:
-                return <UserType user={new_user} onChange={updateUser} next={() => setPage(pages.PROFILE)} />
+                return <UserRole user={new_user} onChange={updateUser} next={() => setPage(pages.PROFILE)} />
         }
     }
 

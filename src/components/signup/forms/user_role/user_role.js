@@ -7,7 +7,7 @@ import {Form} from '../form'
 import {Wordmark} from '../../../utils'
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import {styles} from './user_type.styles'
+import {styles} from './user_role.styles'
 const useStyles = makeStyles(styles);
 
 
@@ -16,12 +16,12 @@ const roles = {
     CLIENT: 'CLIENT'
 }
 
-const Type = props => {
+const Role = props => {
     let classes = useStyles()
 
-    let css_classes = props.selected ? clsx(classes.userType, classes.selected) : clsx(classes.userType)
+    let css_classes = props.selected ? clsx(classes.userRole, classes.selected) : clsx(classes.userRole)
     return (
-        <div className={classes.userTypeContainer}>
+        <div className={classes.userRoleContainer}>
             <div onClick={props.onClick} className={css_classes}>
                 {props.children}
             </div>
@@ -30,43 +30,43 @@ const Type = props => {
     )
 }
 
-export const UserType = props => {
+export const UserRole = props => {
     let classes = useStyles()
 
-    function toggleType(role) {
-        if (props.user.type == role) {
+    function toggleRole(role) {
+        if (props.user.role == role) {
             role = null
         }
-        props.onChange('type', role)
+        props.onChange('role', role)
     }
 
 
     return (
         <Form
             next={props.next}
-            condition={!!props.user.type}
+            condition={!!props.user.role}
             title={`Welcome, ${props.auth_user.name || props.auth_user.email}!`}
             subtitle='Please select role(s):'
             >
-            <div className={classes.userTypes}>
-                <Type onClick={() => toggleType(roles.TRAINER)} selected={props.user.type == roles.TRAINER}>
-                    <div className={classes.typeIcon}>
+            <div className={classes.userRoles}>
+                <Role onClick={() => toggleRole(roles.TRAINER)} selected={props.user.role == roles.TRAINER}>
+                    <div className={classes.roleIcon}>
                         <AssignmentIcon className={classes.icon}/>
                     </div>
-                    <div className={classes.typeTitle}>
+                    <div className={classes.roleTitle}>
                         <span>Trainer</span>
                     </div>
-                </Type>
+                </Role>
                 <div>
                 </div>
-                <Type onClick={() => toggleType(roles.CLIENT)} selected={props.user.type == roles.CLIENT}>
-                    <div className={classes.typeIcon}>
+                <Role onClick={() => toggleRole(roles.CLIENT)} selected={props.user.role == roles.CLIENT}>
+                    <div className={classes.roleIcon}>
                         <FitnessCenterIcon className={classes.icon}/>
                     </div>
-                    <div className={classes.typeTitle}>
+                    <div className={classes.roleTitle}>
                         <span>Client</span>
                     </div>
-                </Type>
+                </Role>
             </div>
         </Form>
     )

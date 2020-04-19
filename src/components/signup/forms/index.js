@@ -1,4 +1,4 @@
-import UserType from './user_type'
+import UserRole from './user_role'
 import Profile from './profile'
 
-export {UserType, Profile}
+export {UserRole, Profile}
