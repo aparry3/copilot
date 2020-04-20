@@ -50,12 +50,7 @@ export const ViewExercises = props => {
             <div className={classes.viewExercisesContainer} >
                 <div className={classes.exercisesListPageContainer} >
                     <PageHeader
-                        content={(
-                            <>
-                                <span>Exercises</span>
-                                <SearchBar />
-                            </>
-                        )}
+                        content={(<span>Exercises</span>)}
                         action={<div className={classes.exercisesHeaderAction}><div onClick={props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>} />
                     <div className={classes.exercisesListContainer} >
                         <div className={classes.exerciseListHeader} >

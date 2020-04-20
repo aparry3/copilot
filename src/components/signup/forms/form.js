@@ -50,19 +50,30 @@ export const Form = props => {
                 {props.children}
             </div>
             <div className={classes.signupFormFooter}>
-                <div onClick={back} className={classes.nextActive}>
-                    { !!props.back && (<span className={classes.nextActive}><ArrowBackIcon /> Back</span>)}
+                <div className={classes.backContainer}>
+                    { !!props.back && (
+                        <div onClick={back} className={classes.nextActive}>
+                            <span className={classes.nextActive}><ArrowBackIcon /> Back</span>
+                        </div>
+                    )}
+                    { !!props.logout && (
+                        <div onClick={props.logout} className={classes.nextActive}>
+                            <span className={classes.nextActive}>Logout</span>
+                        </div>
+                    )}
                 </div>
-                { !!props.confirm && (
-                    <div onClick={confirm} className={!!props.condition ? classes.nextActive : classes.nextInactive}>
-                        <span>Confirm</span>
-                    </div>
-                )}
-                { !!props.next && (
-                    <div onClick={next} className={!!props.condition ? classes.nextActive : classes.nextInactive}>
-                        <span>Next <ArrowForwardIcon /></span>
-                    </div>
-                )}
+                <div className={classes.nextContainer}>
+                    { !!props.confirm && (
+                        <div onClick={confirm} className={!!props.condition ? classes.nextActive : classes.nextInactive}>
+                            <span>Confirm</span>
+                        </div>
+                    )}
+                    { !!props.next && (
+                        <div onClick={next} className={!!props.condition ? classes.nextActive : classes.nextInactive}>
+                            <span>Next <ArrowForwardIcon /></span>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

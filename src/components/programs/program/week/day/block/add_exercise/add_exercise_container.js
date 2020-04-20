@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 
-import {setCurrentWorkoutElement} from '../../../../../../actions/workout_elements'
+import {setCurrentWorkoutElement} from '../../../../../../../actions/workout_elements'
 
 import {AddExercise} from './add_exercise'
 

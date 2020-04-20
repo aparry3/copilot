@@ -3,8 +3,7 @@ import {actions as program_actions} from '../actions/programs'
 import {actions as workout_element_actions} from '../actions/workout_elements'
 import {actions as week_actions} from '../actions/weeks'
 import {copyState} from './utils'
-
-import {WORKOUT_ELEMENT_TYPES} from './workout_elements'
+import {types as workout_element_types} from '../constants/workout_elements'
 
 const initial_state = {loading: false, current_workout_element: null, location: null}
 
@@ -28,14 +27,23 @@ const active_program = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
         case exercise_actions.OPEN_EXERCISE_FORM: {
-            new_state.current_workout_element = action.current_state
+            let {index, ..._current_state} = action.current_state
+            new_state.current_workout_element = _current_state
+            new_state.current_workout_element_index = index
             return new_state
         }
         case exercise_actions.SAVE_EXERCISE: {
             if (!!new_state.current_workout_element) {
-                new_state.current_workout_element.exercise = {
-                    name: action.exercise.name,
-                    id: action.exercise._id
+                if (new_state.current_workout_element.type == workout_element_types.SUPERSET) {
+                    new_state.current_workout_element.exercises[state.current_workout_element_index].exercise = {
+                        name: action.exercise.name,
+                        id: action.exercise._id
+                    }
+                } else {
+                    new_state.current_workout_element.exercise = {
+                        name: action.exercise.name,
+                        id: action.exercise._id
+                    }
                 }
             }
             return new_state

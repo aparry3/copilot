@@ -27,4 +27,15 @@ export const DETAILS = {
         icon: <AssessmentIcon />
     }
 }
-export const WORKOUT_SCHEMES = ['AMRAP', 'For Time', 'Pyramid'];
+export const workout_schemes = {
+    AMRAP: {type: 'AMRAP', title: 'As Many Rounds as Possible'},
+    RFT: {type: 'RFT', title: 'Rounds for Time'},
+    LADDER: {type: 'LADDER', title: 'Ladder'},
+    EMOM: {type: 'EMOM', title: 'Every Minute on the Minute'}
+}
+
+export const types = {
+    EXERCISE: 'EXERCISE',
+    SUPERSET: 'SUPERSET',
+    ALTERNATE: 'ALTERNATE'
+}

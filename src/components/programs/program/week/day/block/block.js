@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import AddExercise from './add_exercise_container'
+import AddExercise from './add_exercise'
 import ClearIcon from '@material-ui/icons/Clear';
 import DragAndDrop, {drag_and_drop_types as types} from '../../../../../utils/drag_and_drop'
 import EditIcon from '@material-ui/icons/Edit'

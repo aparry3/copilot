@@ -61,11 +61,16 @@ export function InputTitle(props) {
         }
     }
 
+    function handleKeyDown(e) {
+        if (e.key == 'Enter') {
+            handleBlur()
+        }
+    }
     return (
         <div className={classes.inputTitleContainer}>
         {!!is_focused ? (
             <>
-                <input className={classes.inputTitleText} ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} autocomplete={props.autocomplete || 'on'} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
+                <input onKeyDown={handleKeyDown} className={classes.inputTitleText} ref={ref} placeholder={!!props.placeholder ? props.placeholder : ''} autocomplete={props.autocomplete || 'on'} value={value} onBlur={handleBlur} onChange={handleChange} name='name' />
                 { !!props.label && (<label>{props.label}</label>)}
             </>
             ) : (

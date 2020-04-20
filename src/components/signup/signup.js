@@ -14,6 +14,14 @@ const pages = {
     CONFIRM: 'CONFIRM'
 }
 
+function parseName(user) {
+    return {
+        first: !!user.given_name ? user.given_name : null,
+        middle: null,
+        last: !!user.family_name ? user.family_name : null
+    }
+}
+
 export const Signup = props => {
     let classes = useStyles()
     let [loading, setLoading] = useState(false)
@@ -21,11 +29,7 @@ export const Signup = props => {
 
     let [new_user, setNewUser] = useState({
         role: null,
-        name: {
-            first: null,
-            middle: null,
-            last: null
-        },
+        name: parseName(props.auth_user),
         email: props.auth_user.email
     })
 

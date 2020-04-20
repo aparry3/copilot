@@ -47,6 +47,7 @@ export const UserRole = props => {
             condition={!!props.user.role}
             title={`Welcome, ${props.auth_user.name || props.auth_user.email}!`}
             subtitle='Please select role(s):'
+            logout={props.logout}
             >
             <div className={classes.userRoles}>
                 <Role onClick={() => toggleRole(roles.TRAINER)} selected={props.user.role == roles.TRAINER}>

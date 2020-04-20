@@ -2,6 +2,7 @@ import {connect} from 'react-redux'
 
 import {openExerciseForm} from '../../../../actions/exercises'
 import {saveWorkoutElement, cancelEditWorkoutElement} from '../../../../actions/workout_elements'
+import {types as workout_element_types} from '../../../../constants/workout_elements'
 
 import {ViewEditWorkoutElement} from './view_edit_workout_element'
 
@@ -11,6 +12,8 @@ let ViewEditWorkoutElementContainer = connect(
         function _getWorkoutElement(location) {
             console.log(state.workout_elements)
             let {type, types} = state.workout_elements
+            console.log(state.workout_elements)
+            console.log(state.workout_elements.types[type])
             let workout_element
             if (!location) {
                 return null
@@ -25,7 +28,7 @@ let ViewEditWorkoutElementContainer = connect(
                     .workout_elements[location.workout_element]
                 )
             }
-            if (workout_element.type == 'superset') {
+            if (workout_element.type == workout_element_types.SUPERSET) {
                 workout_element.exercises = workout_element.exercises.map(e => ({...e, collapsed: false}))
             }
             return workout_element

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import {types as workout_element_types} from '../../../../../../../constants/workout_elements'
+
 import Exercise, {NewExercise} from './exercise'
 import Superset, {NewSuperset} from './superset'
 
@@ -13,9 +15,9 @@ export const WorkoutElement = props => {
 
     function renderWorkoutElement(workout_element) {
         switch (workout_element.type) {
-            case 'superset':
+            case workout_element_types.SUPERSET:
                 return !!workout_element.placeholder ? <NewSuperset superset={workout_element} /> : <Superset delete={() => props.deleteWorkoutElement('superset')} superset={workout_element} />
-            case 'exercise':
+            case workout_element_types.EXERCISE:
                 return !!workout_element.placeholder ? <NewExercise exercise={workout_element} /> : <Exercise deletable delete={() => props.deleteWorkoutElement('exercise')} exercise={workout_element} />
             default:
                 return <Exercise exercise={workout_element} />

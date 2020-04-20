@@ -13,8 +13,9 @@ export const styles = theme => ({
     formFieldContent: {
         display: 'flex',
         padding: '10px',
+        flexDirection: 'column',
+        alignItems: 'stretch',
         flexGrow: 1,
-        alignItems: 'center',
         borderRadius: '5px',
         boxShadow: `${theme.palette.background.dark} 0px 0px 5px -3px`,
         background: theme.palette.background.light

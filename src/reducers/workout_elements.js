@@ -5,9 +5,9 @@ import {actions as workout_element_actions} from '../actions/workout_elements'
 
 
 export const WORKOUT_ELEMENT_TYPES = {
-    exercise: {
+    EXERCISE: {
         template: {
-            type: 'exercise',
+            type: 'EXERCISE',
             exercise: {
                 id: null,
                 name: null
@@ -17,9 +17,9 @@ export const WORKOUT_ELEMENT_TYPES = {
         },
         name: 'Exercise',
     },
-    superset: {
+    SUPERSET: {
         template: {
-            type: 'superset',
+            type: 'SUPERSET',
             exercises: [
                 {
                     exercise: {
