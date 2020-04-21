@@ -1,4 +1,5 @@
 import {connect} from 'react-redux'
+import React from 'react'
 
 import {openExerciseForm} from '../../../../actions/exercises'
 import {saveWorkoutElement, cancelEditWorkoutElement} from '../../../../actions/workout_elements'
@@ -45,6 +46,12 @@ let ViewEditWorkoutElementContainer = connect(
         closeEdit: () => dispatch(cancelEditWorkoutElement()),
         saveWorkoutElement: (location, workout_element) => dispatch(saveWorkoutElement(location, workout_element))
     })
-)(ViewEditWorkoutElement)
+)((props) => {
+    return (
+        <>
+            { !!props.workout_element && <ViewEditWorkoutElement {...props} /> }
+        </>
+    )
+})
 
 export default ViewEditWorkoutElementContainer

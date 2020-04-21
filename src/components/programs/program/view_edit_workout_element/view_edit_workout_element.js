@@ -7,7 +7,7 @@ import {types as workout_element_types} from '../../../../constants/workout_elem
 
 import AddIcon from '@material-ui/icons/Add'
 import ClearIcon from '@material-ui/icons/Clear';
-import {Details, ExerciseName, Notes} from './form_fields'
+import {Details, ExerciseName, Notes, Scheme, SchemeSelect} from './form_fields'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import {FormField, Modal} from '../../../utils'
@@ -28,10 +28,10 @@ export const ViewEditWorkoutElement = props => {
         setWorkoutElement(props.workout_element)
     }, [props.workout_element])
 
-    function updateWorkoutElement(property, value, index = null) {
+    function updateWorkoutElement(property, value, subproperty = null) {
         let update_query = {[property]: {$set: value}}
-        if (index != null) {
-            update_query = {exercises: {[index]: update_query}}
+        if (subproperty != null) {
+            update_query = {exercises: {[subproperty]: update_query}}
         }
         let new_workout_element = update(workout_element, update_query)
         setWorkoutElement(new_workout_element)
@@ -87,78 +87,79 @@ export const ViewEditWorkoutElement = props => {
             close={props.closeEdit}
             open={props.open}
             save={() => props.saveWorkoutElement(props.location, workout_element)}
-            title={`Edit  ${!!workout_element && titleCase(workout_element.type)}`}
+            title={`Edit  ${titleCase(workout_element.type)}`}
+            options={(
+                <SchemeSelect value={workout_element.scheme} onChange={(value) => updateWorkoutElement('scheme', value, 'types')}/>
+            )}
             >
-            { !!workout_element && (
-                <div className={classes.viewEditWorkoutElementContent}  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                { workout_element.type == workout_element_types.EXERCISE ? (
-                    <>
+            <div className={classes.viewEditWorkoutElementContent}  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            { workout_element.type == workout_element_types.EXERCISE ? (
+                <>
+                <div className={classes.exerciseFormContainer}>
+                    <div className={clsx(classes.exerciseForm)}>
+                            <ExerciseName onAddExercise={(name) => props.addExercise(name, workout_element)} value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
+                            <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
+                            <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
+                    </div>
+                </div>
+                {
+                    hover && (
                     <div className={classes.exerciseFormContainer}>
-                        <div className={clsx(classes.exerciseForm)}>
-                                <ExerciseName onAddExercise={(name) => props.addExercise(name, workout_element)} value={workout_element.exercise} onChange={(value) => updateWorkoutElement('exercise', value)}/>
-                                <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
-                                <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
+                        <div onClick={addExercise} className={classes.exerciseForm}>
+                            <div className={classes.addExercise}>
+                                <span><AddIcon /> Add Exercise...</span>
+                            </div>
                         </div>
                     </div>
-                    {
-                        hover && (
-                        <div className={classes.exerciseFormContainer}>
-                            <div onClick={addExercise} className={classes.exerciseForm}>
-                                <div className={classes.addExercise}>
-                                    <span><AddIcon /> Add Exercise...</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    </>
-                ) : (
-                    <FormField
-                    title='exercises'
-                    >
-                    {workout_element.exercises.map((e, i) => (
-                        <div className={classes.exerciseFormContainer}>
-                            <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
-                                <div className={classes.exerciseFormHeader}>
-                                    <div onClick={() => toggleCollapse(i)} className={classes.actionContainer}>
-                                        { !e.collapsed ? (<ExpandLessIcon className={classes.action}/>) : (<ExpandMoreIcon className={classes.action} />)}
-                                    </div>
-                                    <div className={classes.actionContainer}>
-                                        <ClearIcon onClick={() => removeExercise(i)} className={classes.action}/>
-                                    </div>
-                                </div>
-                                <div className={classes.exerciseFormContent}>
-                                    <ExerciseName onAddExercise={(name) => props.addExercise(name,{...workout_element, index:i})} value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
-                                    { !e.collapsed && (
-                                    <>
-                                        <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
-                                        <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
-                                    </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    {
-                        hover && (
-                        <div className={classes.exerciseFormContainer}>
-                            <div onClick={addExercise} className={classes.exerciseForm}>
-                                <div className={classes.addExercise}>
-                                    <span><AddIcon /> Add Exercise...</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    </FormField>
                 )}
-
-                { workout_element.type == 'superset' && (
-                    <>
-                    <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
-                    <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
-                    </>
+                </>
+            ) : (
+                <FormField
+                title='exercises'
+                >
+                {workout_element.exercises.map((e, i) => (
+                    <div className={classes.exerciseFormContainer}>
+                        <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
+                            <div className={classes.exerciseFormHeader}>
+                                <div onClick={() => toggleCollapse(i)} className={classes.actionContainer}>
+                                    { !e.collapsed ? (<ExpandLessIcon className={classes.action}/>) : (<ExpandMoreIcon className={classes.action} />)}
+                                </div>
+                                <div className={classes.actionContainer}>
+                                    <ClearIcon onClick={() => removeExercise(i)} className={classes.action}/>
+                                </div>
+                            </div>
+                            <div className={classes.exerciseFormContent}>
+                                <ExerciseName onAddExercise={(name) => props.addExercise(name,{...workout_element, index:i})} value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
+                                { !e.collapsed && (
+                                <>
+                                    <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
+                                    <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                                </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                {
+                    hover && (
+                    <div className={classes.exerciseFormContainer}>
+                        <div onClick={addExercise} className={classes.exerciseForm}>
+                            <div className={classes.addExercise}>
+                                <span><AddIcon /> Add Exercise...</span>
+                            </div>
+                        </div>
+                    </div>
                 )}
-                </div>
+                </FormField>
             )}
+
+            { workout_element.type == workout_element_types.SUPERSET && (
+                <>
+                <Notes value={workout_element.notes} onChange={(value) => updateWorkoutElement('notes', value)}/>
+                <Details value={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
+                </>
+            )}
+            </div>
         </Modal>
     )
 }

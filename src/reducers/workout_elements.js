@@ -13,6 +13,7 @@ export const WORKOUT_ELEMENT_TYPES = {
                 name: null
             },
             details: {},
+            scheme: {},
             placeholder: true
         },
         name: 'Exercise',
@@ -37,6 +38,7 @@ export const WORKOUT_ELEMENT_TYPES = {
                 }
             ],
             details: {},
+            scheme: {},
             placeholder: true
         },
         name: 'Superset',

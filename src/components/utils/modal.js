@@ -49,7 +49,8 @@ const styles = theme => ({
         display: 'flex',
         padding: '20px',
         alignItems:'center',
-        fontSize: '24px'
+        fontSize: '24px',
+        jusitfyContent: 'space-between'
     },
     modalContent: {
         width: '100%',
@@ -123,6 +124,9 @@ export const Modal = props => {
                         <div className={classes.modalHeader}>
                             <div className={classes.modalHeaderTitle}>
                                 <span>{props.title}</span>
+                            </div>
+                            <div className={classes.modalHeaderOptions}>
+                                {props.options}
                             </div>
                         </div>
                         <div className={classes.modalContent}>

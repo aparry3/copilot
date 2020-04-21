@@ -27,7 +27,7 @@ export const DETAILS = {
         icon: <AssessmentIcon />
     }
 }
-export const workout_schemes = {
+export const schemes = {
     AMRAP: {type: 'AMRAP', title: 'As Many Rounds as Possible'},
     RFT: {type: 'RFT', title: 'Rounds for Time'},
     LADDER: {type: 'LADDER', title: 'Ladder'},
