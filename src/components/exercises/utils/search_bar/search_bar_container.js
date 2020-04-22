@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 
-import {setFilter} from '../../../../actions';
+import {setFilter} from '../../../../actions/exercises';
 
 import {SearchBar} from './search_bar'
 
