@@ -18,6 +18,7 @@ export const Details = props => {
     let _remaining_details = !!details ? Object.keys(render_details).filter(d => Object.keys(details).indexOf(d) == -1) : Object.keys(render_details)
     let [remaining_details, setRemainingDetails] = useState(_remaining_details)
     let [add_detail, setAddDetail] = useState(false)
+    let [current_detail, setCurrentDetail] = useState('')
     let [hover, setHover] = useState(false)
 
     useEffect(() => {
@@ -35,6 +36,7 @@ export const Details = props => {
 
     function addDetail(detail) {
         setAddDetail(false)
+        setCurrentDetail(detail)
         setDetails(update(details, {
             [detail]: {$set: null}
         }))
@@ -48,6 +50,7 @@ export const Details = props => {
             new_details[detail] = value
         }
         setDetails(new_details)
+        setCurrentDetail('')
         props.onChange(new_details)
     }
 
@@ -77,7 +80,7 @@ export const Details = props => {
                             {render_details[d].title()}
                         </div>
                         <div className={classes.detailRowInput}>
-                            <InputTitle value={details[d]} focus autocomplete="off" name={d} onSave={(value) => updateDetail(d, value)}/>
+                            <InputTitle value={details[d]} focus={current_detail == d} autocomplete="off" name={d} onSave={(value) => updateDetail(d, value)}/>
                         </div>
                     </div>
                 ))}

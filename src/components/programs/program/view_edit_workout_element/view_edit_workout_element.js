@@ -116,9 +116,7 @@ export const ViewEditWorkoutElement = props => {
         let length = workout_element.exercises.length
         if (!workout_element.alternate) {
             _exercises = workout_element.exercises.map((e, i) => {
-                if (!e.alternate_detail) {
-                    e.alternate_detail = getAlternateDetail(i, length)
-                }
+                e.alternate_detail = getAlternateDetail(i, length)
                 return e
             })
         }

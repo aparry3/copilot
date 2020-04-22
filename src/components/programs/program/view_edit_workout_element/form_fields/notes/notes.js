@@ -24,7 +24,7 @@ export const Notes = props => {
             title='notes'
             onClick={() => setEditing(true)}
             >
-                <ResizeableInputTextArea onSave={handleSave} value={props.value} />
+                <ResizeableInputTextArea focus={editing} onSave={handleSave} value={props.value} />
         </FormField>
     )
 }

@@ -23,6 +23,6 @@ export const ResizeableInputTextArea = props => {
     console.log("resizeable")
 
     return (
-        <InputTextArea focus rows={_rows} onChange={handleChange} {...props}/>
+        <InputTextArea focus={!!props.focus} rows={_rows} onChange={handleChange} {...props}/>
     )
 }

@@ -29,7 +29,7 @@ export const Superset = props => {
     }
 
     function title() {
-        return !!props.superset.scheme && !!props.superset.scheme.length ? props.superset.scheme.join(', ') : !!props.exercises.length > 2 ? 'Circuit' : 'Superset'
+        return !!props.superset.scheme && !!props.superset.scheme.length ? props.superset.scheme.join(', ') : !!props.superset.exercises.length > 2 ? 'Circuit' : 'Superset'
     }
 
     return (
