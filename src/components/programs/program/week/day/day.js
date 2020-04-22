@@ -26,7 +26,6 @@ export const Day = (props) => {
     }
 
     async function saveBlocks(blocks) {
-        console.log(props.day.name)
         await props.saveDay({...props.day, workout_blocks: blocks})
     }
 

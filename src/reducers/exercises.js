@@ -51,7 +51,6 @@ const exercises = (state = initialState, action) => {
             }
         }
         case exercise_actions.OPEN_EXERCISE_FORM: {
-            console.log(action.exercise)
             return {
                 ...new_state,
                 show_exercise_form: action.show_exercise_form,

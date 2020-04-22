@@ -31,7 +31,6 @@ function _deleteProgram(res) {
 }
 
 function _recieveProgram(res) {
-    console.log(res)
     return {
         type: actions.RECIEVE_PROGRAM,
         program: res.program
@@ -39,7 +38,6 @@ function _recieveProgram(res) {
 }
 
 function _recievePrograms(res) {
-    console.log(res)
     return {
         type: actions.RECIEVE_PROGRAMS,
         programs: res.programs

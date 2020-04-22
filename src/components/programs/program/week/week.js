@@ -18,7 +18,6 @@ export const Week = (props) => {
         let new_day = await props.addDay(props.week, day)
         setAddingDay(false)
     }
-    console.log(props)
 
     async function save(days) {
         await props.saveWeek({...props.week, days})

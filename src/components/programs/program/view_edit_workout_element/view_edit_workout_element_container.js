@@ -9,12 +9,8 @@ import {ViewEditWorkoutElement} from './view_edit_workout_element'
 
 let ViewEditWorkoutElementContainer = connect(
     state => {
-        console.log(state)
         function _getWorkoutElement(location) {
-            console.log(state.workout_elements)
             let {type, types} = state.workout_elements
-            console.log(state.workout_elements)
-            console.log(state.workout_elements.types[type])
             let workout_element
             if (!location) {
                 return null

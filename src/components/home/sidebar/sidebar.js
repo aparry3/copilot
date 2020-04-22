@@ -20,7 +20,6 @@ export const Sidebar = (props) => {
 
     useEffect(() => {
         let page = window.location.pathname.match(/\/(\w+)/i)[1]
-        console.log(page)
         props.setActivePage(page)
     }, [])
 

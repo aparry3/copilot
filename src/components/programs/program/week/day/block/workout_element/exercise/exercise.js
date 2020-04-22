@@ -11,7 +11,6 @@ const useStyles = makeStyles(styles)
 
 export const Exercise = props => {
     let classes = useStyles()
-    console.log(props.exercise)
 
     function handleDelete(e) {
         e.stopPropagation()

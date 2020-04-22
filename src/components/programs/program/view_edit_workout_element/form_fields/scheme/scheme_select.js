@@ -17,7 +17,6 @@ export const SchemeSelect = props => {
         setEditing(false)
         props.onChange(e.target.value)
     }
-    console.log(props)
     return (
         <div className={classes.schemeSelect}>
             {(!!props.value && !!props.value.length || editing) ? (

@@ -21,7 +21,6 @@ export function authenticated(func) {
 }
 
 export function login(...p) {
-    console.log(p)
     auth0_client.login(...p)
 }
 export function loggingIn() {

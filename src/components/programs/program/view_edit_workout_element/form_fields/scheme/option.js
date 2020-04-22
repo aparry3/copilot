@@ -11,7 +11,7 @@ const useStyles = makeStyles(styles)
 
 export const Option = props => {
     let classes = useStyles()
-    console.log(props)
+
     return (
         <div className={classes.option}>
             <div className={classes.optionTitle}>

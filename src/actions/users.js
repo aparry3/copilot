@@ -17,7 +17,6 @@ export function recieveUser(res) {
             type: actions.RECIEVE_USER,
             user: res.user
         })
-        console.log(res.user)
         if (!!res.user) {
             dispatch(getPrograms(res.user._id))
         }

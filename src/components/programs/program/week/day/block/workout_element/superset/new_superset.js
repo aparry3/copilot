@@ -9,7 +9,7 @@ const useStyles = makeStyles(styles)
 
 export const NewSuperset = props => {
     let classes = useStyles()
-    console.log(props)
+
     return (
         <div className={classes.supersetContainer}>
             <div className={classes.supersetContent}>

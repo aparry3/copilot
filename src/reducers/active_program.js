@@ -112,7 +112,6 @@ const active_program = (state = initial_state, action) => {
         }
         case week_actions.SET_CURRENT_WEEK: {
             let {index} = action
-            console.log(index)
             return {
                 ...new_state,
                 current_week: index

@@ -24,10 +24,8 @@ function _newProgram(active_program, week) {
 }
 
 function _updateProgram(program, all_programs) {
-    console.log(program._id)
     return all_programs.map(p => {
         if (p._id == program._id) {
-            console.log(program)
             return program
         }
         return p
@@ -114,7 +112,6 @@ const programs = (state = initialState, action) => {
         }
         case week_actions.DELETE_WEEK: {
             let {week_id, program_id} = action;
-            console.log("DELETE")
             let s = {
                 ...new_state,
                 all_programs: _removeWeekFromProgram(new_state.all_programs, program_id, week_id)

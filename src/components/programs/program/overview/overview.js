@@ -22,7 +22,7 @@ export const Overview = (props) => {
             [index]: {collapsed: {$set: !weeks[index].collapsed}}
         }))
     }
-    console.log(props)
+
     return (
         <div className={classes.overview}>
             {props.program.weeks.map((week, index) => {

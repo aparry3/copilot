@@ -5,7 +5,6 @@ import {dispatched, makeRequest} from './utils'
 import {updateWeek} from './weeks'
 
 function _getUrl(week_id, day_index, block_index = null) {
-    console.log(week_id)
     return block_index == null ? (
         `${API_URI}/weeks/${week_id}/days/${day_index}/blocks`) : (
         `${API_URI}/weeks/${week_id}/days/${day_index}/blocks/${block_index}`)

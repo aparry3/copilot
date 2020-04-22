@@ -14,13 +14,10 @@ export const ResizeableInputTextArea = props => {
     let [_rows, setRows] = useState(!!rows ? rows : 3)
 
     function handleChange(e) {
-        console.log(e.target.rows)
-        console.log(e.target.scrollHeight)
         let current_rows = ~~(e.target.scrollHeight / line_height)
         e.target.rows = current_rows
         setRows(current_rows)
     }
-    console.log("resizeable")
 
     return (
         <InputTextArea focus={!!props.focus} rows={_rows} onChange={handleChange} {...props}/>

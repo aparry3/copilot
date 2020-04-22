@@ -9,13 +9,10 @@ export const DragAndDropManager = (props) => {
     let ref = useRef(null)
 
     useEffect(() => {
-        console.log("useeffect")
         setDndItems(props.items)
     }, [props.items])
 
     function save(items) {
-        console.log("save")
-        console.log(items)
         props.save(items)
     }
 
@@ -34,7 +31,7 @@ export const DragAndDropManager = (props) => {
                 $splice: splice_array
             })
             item.remove = () => remove(index, new_dnd_items)
-            
+
             setDndItems(new_dnd_items)
         }
 
@@ -47,7 +44,6 @@ export const DragAndDropManager = (props) => {
             $splice: [[index, 1]]
         })
         setDndItems(new_dnd_items)
-        console.log(new_dnd_items)
         return () => save(new_dnd_items)
     }
 

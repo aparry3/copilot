@@ -43,7 +43,7 @@ export const Signup = props => {
         props.addUser(new_user)
         setLoading(true)
     }
-    console.log(new_user)
+
     function renderPage() {
         switch (page) {
             case pages.TYPE:

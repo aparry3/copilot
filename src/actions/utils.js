@@ -3,7 +3,6 @@ import {authenticated} from './auth'
 export function dispatched(action, res) {
     return async dispatch => {
         let data = await res
-        console.log(data)
         dispatch(action(data))
         return data
     }

@@ -39,7 +39,6 @@ export const Scheme = props => {
     }, [props.scheme])
 
     function handleChange(option, value, index, scheme) {
-        console.log(value)
         if (!!value) {
             let new_details = copyState(props.details)
             let detail = option.detail
@@ -78,7 +77,6 @@ export const Scheme = props => {
         _scheme = toggleOption(_scheme, option, true)
         _scheme.editing = true
         _scheme.add_option = false
-        console.log(_scheme)
         setSchemes(update(schemes, {
             [index]: {$set: _scheme}
         }))
@@ -96,13 +94,10 @@ export const Scheme = props => {
     }
 
     function renderItem(scheme, option) {
-        console.log(scheme)
         let _option = scheme.options.find(o => o.title == option)
         return <DetailTitle title={_option.title} icon={details[_option.detail].icon} />
     }
 
-    console.log(props)
-    console.log(schemes)
     return (
         <FormField
             condition={!!schemes && schemes.length}

@@ -4,7 +4,6 @@ import createAuth0Client from "@auth0/auth0-spa-js";
 import {history} from './util'
 import {API_URI} from './config'
 
-console.log(API_URI)
 const onRedirectCallback = appState => {
   history.push(
       appState && appState.targetUrl

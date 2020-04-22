@@ -23,7 +23,6 @@ function _addWeek(res) {
 }
 
 function _deleteWeek(res) {
-    console.log(res)
     return {
         type: actions.DELETE_WEEK,
         program_id: res.program_id,
@@ -32,7 +31,6 @@ function _deleteWeek(res) {
 }
 
 export function setCurrentWeek(index) {
-    console.log('set current week')
     return {
         type: actions.SET_CURRENT_WEEK,
         index

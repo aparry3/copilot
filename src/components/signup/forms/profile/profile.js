@@ -10,7 +10,6 @@ const useStyles = makeStyles(styles);
 
 export const Profile = props => {
     let classes = useStyles()
-    console.log(props)
 
     function handleChangeName(e) {
         let name = {

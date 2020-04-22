@@ -36,7 +36,6 @@ export function _deleteExercise(res) {
 
 
 export function openExerciseForm(exercise=null, options = {}, current_state = null) {
-    console.log(exercise)
     return {
         type: actions.OPEN_EXERCISE_FORM,
         show_exercise_form: true,

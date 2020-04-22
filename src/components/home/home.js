@@ -17,7 +17,6 @@ const useStyles = makeStyles(styles)
 export const Home = (props) => {
     let {match} = props;
     let classes = useStyles()
-    console.log(props)
     return(
         <div className={classes.home}>
             {props.loading ? ( <Loading />) : (

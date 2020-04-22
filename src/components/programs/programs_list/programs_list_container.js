@@ -6,7 +6,6 @@ import {ProgramsList} from './programs_list'
 
 const ProgramsListContainer = connect(
     (state, ownProps) => {
-        console.log(state)
         return {
             programs: state.programs.all_programs,
             user: state.users.user

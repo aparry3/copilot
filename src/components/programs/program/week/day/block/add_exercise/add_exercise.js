@@ -12,8 +12,8 @@ const useStyles = makeStyles(styles)
 
 export const AddExercise = props => {
     let classes = useStyles()
-    console.log(workout_element_types)
     let [active, setActive] = useState(false)
+
     return (
         <div onClick={() => setActive(!active)} className={classes.addExercise}>
             <div className={classes.addExerciseButton}>

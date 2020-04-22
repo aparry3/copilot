@@ -115,7 +115,6 @@ export const CustomSelect = (props) => {
     let [filter_text, setFilterText] = useState(!multiple && !!props.value && !no_filter ? props.value : '')
     let classes = useStyles()
 
-    console.log(selected_elements)
     useEffect(() => {
         if (!!props.focus) {
             input_ref.current.focus()

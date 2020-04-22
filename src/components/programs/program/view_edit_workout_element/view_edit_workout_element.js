@@ -34,7 +34,6 @@ export const ViewEditWorkoutElement = props => {
         if (key != null) {
             update_query = {[key]: index != null ? {[index]: update_query} : update_query}
         }
-        console.log(update_query)
         let new_workout_element = update(workout_element, update_query)
         setWorkoutElement(new_workout_element)
     }
@@ -126,7 +125,6 @@ export const ViewEditWorkoutElement = props => {
         }))
     }
 
-    console.log(workout_element)
     return (
         <Modal
             close={props.closeEdit}
