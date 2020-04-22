@@ -28,10 +28,40 @@ export const DETAILS = {
     }
 }
 export const schemes = {
-    AMRAP: {type: 'AMRAP', title: 'As Many Rounds as Possible'},
-    RFT: {type: 'RFT', title: 'Rounds for Time'},
-    LADDER: {type: 'LADDER', title: 'Ladder'},
-    EMOM: {type: 'EMOM', title: 'Every Minute on the Minute'}
+    AMRAP: {
+        type: 'AMRAP',
+        title: 'As Many Rounds as Possible',
+        options: [
+            {title: 'Time', detail: 'duration'}
+        ],
+        set: ['LADDER']
+    },
+    RFT: {
+        type: 'RFT',
+        title: 'Rounds for Time',
+        options: [
+            {title: 'Rounds', detail: 'sets'}
+        ],
+        set: ['LADDER']
+    },
+    LADDER: {
+        type: 'LADDER',
+        title: 'Ladder',
+        options: [
+            {title: 'Step', detail: 'step'},
+            {title: 'Start', detail: 'start'},
+            {title: 'End', detail: 'end'}
+        ],
+        set: ['RFT', 'EMOM', 'AMRAP']
+    },
+    EMOM: {
+        type: 'EMOM',
+        title: 'Every Minute on the Minute',
+        options: [
+            {title: 'Time', detail: 'duration'}
+        ],
+        set: ['LADDER']
+    }
 }
 
 export const types = {

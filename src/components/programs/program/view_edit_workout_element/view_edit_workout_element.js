@@ -28,11 +28,12 @@ export const ViewEditWorkoutElement = props => {
         setWorkoutElement(props.workout_element)
     }, [props.workout_element])
 
-    function updateWorkoutElement(property, value, subproperty = null) {
+    function updateWorkoutElement(property, value, key = null, index = null) {
         let update_query = {[property]: {$set: value}}
-        if (subproperty != null) {
-            update_query = {exercises: {[subproperty]: update_query}}
+        if (key != null) {
+            update_query = {[key]: index != null ? {[index]: update_query} : update_query}
         }
+        console.log(update_query)
         let new_workout_element = update(workout_element, update_query)
         setWorkoutElement(new_workout_element)
     }
@@ -43,15 +44,16 @@ export const ViewEditWorkoutElement = props => {
         if (workout_element.type == workout_element_types.EXERCISE) {
             let exercises = [{
                 exercise: workout_element.exercise,
-                notes: workout_element.notes,
-                details: workout_element.details,
+                notes: null,
+                details: {},
                 collapsed: false
             }, new_exercise]
 
             new_workout_element = {
                 type: workout_element_types.SUPERSET,
-                notes: null,
-                details: {},
+                notes: workout_element.notes,
+                details: workout_element.details,
+                scheme: workout_element.scheme,
                 exercises: exercises
             }
         } else {
@@ -68,7 +70,10 @@ export const ViewEditWorkoutElement = props => {
         })
         if (new_workout_element.exercises.length == 1) {
             new_workout_element = {
-                ...new_workout_element.exercises.pop(),
+                exercise: {...new_workout_element.exercises.pop().exercise},
+                notes: new_workout_element.notes,
+                details: new_workout_element.details,
+                scheme: new_workout_element.scheme,
                 type: workout_element_types.EXERCISE
             }
         }
@@ -82,17 +87,27 @@ export const ViewEditWorkoutElement = props => {
         setWorkoutElement(new_workout_element)
     }
 
+    function title() {
+        return (
+            !!workout_element.scheme && !!workout_element.scheme.length ?
+            titleCase(workout_element.scheme.join(', ')) :
+            titleCase(workout_element.type)
+        )
+    }
+
+    console.log(workout_element)
     return (
         <Modal
             close={props.closeEdit}
             open={props.open}
             save={() => props.saveWorkoutElement(props.location, workout_element)}
-            title={`Edit  ${titleCase(workout_element.type)}`}
+            title={`Edit  ${title()}`}
             options={(
-                <SchemeSelect value={workout_element.scheme} onChange={(value) => updateWorkoutElement('scheme', value, 'types')}/>
+                <SchemeSelect value={workout_element.scheme} onChange={(value) => updateWorkoutElement('scheme', value)}/>
             )}
             >
             <div className={classes.viewEditWorkoutElementContent}  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <Scheme scheme={workout_element.scheme} details={workout_element.details} onChange={(value) => updateWorkoutElement('details', value)}/>
             { workout_element.type == workout_element_types.EXERCISE ? (
                 <>
                 <div className={classes.exerciseFormContainer}>
@@ -129,11 +144,11 @@ export const ViewEditWorkoutElement = props => {
                                 </div>
                             </div>
                             <div className={classes.exerciseFormContent}>
-                                <ExerciseName onAddExercise={(name) => props.addExercise(name,{...workout_element, index:i})} value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, i)}/>
+                                <ExerciseName onAddExercise={(name) => props.addExercise(name,{...workout_element, index:i})} value={e.exercise} onChange={(value) => updateWorkoutElement('exercise', value, 'exercises', i)}/>
                                 { !e.collapsed && (
                                 <>
-                                    <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, i)}/>
-                                    <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, i)}/>
+                                    <Notes value={e.notes} onChange={(value) => updateWorkoutElement('notes', value, 'exercises', i)}/>
+                                    <Details value={e.details} onChange={(value) => updateWorkoutElement('details', value, 'exercises', i)}/>
                                 </>
                                 )}
                             </div>

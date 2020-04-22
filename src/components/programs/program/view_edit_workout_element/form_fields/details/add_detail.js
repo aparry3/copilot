@@ -3,8 +3,6 @@ import React, {useState} from 'react'
 
 import AddIcon from '@material-ui/icons/Add';
 
-import {details} from '../../../../../utils'
-
 import {makeStyles} from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -52,7 +50,7 @@ export const AddDetail = props => {
             {props.options.map(d => {
                 return (
                     <div onClick={(e) => handleSelect(e, d)} className={classes.option}>
-                        {details[d].title()}
+                        {props.renderItem(d)}
                     </div>
                 )
             })}

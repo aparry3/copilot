@@ -44,8 +44,6 @@ const styles = theme => ({
         overflow: 'auto',
         padding: '5px',
         top: `${height}px`,
-        left: 0,
-        right: 0
     },
     customSelectChip: {
         height: '30px',
@@ -117,6 +115,7 @@ export const CustomSelect = (props) => {
     let [filter_text, setFilterText] = useState(!multiple && !!props.value && !no_filter ? props.value : '')
     let classes = useStyles()
 
+    console.log(selected_elements)
     useEffect(() => {
         if (!!props.focus) {
             input_ref.current.focus()
@@ -124,7 +123,7 @@ export const CustomSelect = (props) => {
     },[])
 
     useEffect(() => {
-        setSelectedElements(props.value)
+        setSelectedElements(props.value ? props.value : multiple ? [] : null)
     },[props.value])
 
 
@@ -174,6 +173,7 @@ export const CustomSelect = (props) => {
             props.onBlur()
         }
     }
+
     function filteredElements() {
         return props.elements.filter(el => {
             if (!!multiple) {
@@ -184,7 +184,7 @@ export const CustomSelect = (props) => {
 
     }
     let input_style = {
-        width: focus || !selected_elements ? '100%' : '0%'
+        width: focus || !selected_elements ? '100%' : '0px'
     }
     let no_input = {
         width: '0',
@@ -193,9 +193,12 @@ export const CustomSelect = (props) => {
     let span_style = focus || !selected_elements ? {
         display: 'none'
     } : {}
+
+    let dropdown_style = !!props.left ? {left: 0} : !!props.right ? {right: 0} : {left: 0, right: 0}
+
     return (
         <div className={classes.customSelectContainer}>
-            <div className={classes.customSelect}>
+            <div className={classes.customSelect} onClick={() => {input_ref.current.focus(); setFocus(true)}}>
             {!!multiple && selected_elements.map((element, index) => {
                 return (
                     <div className={classes.customSelectChip}>
@@ -207,7 +210,7 @@ export const CustomSelect = (props) => {
             {
                 !!no_filter && (
                     <>
-                        <div className={classes.customSelectTextContainer} onClick={() => setFocus(true)}>
+                        <div className={classes.customSelectTextContainer}>
                             {!selected_elements || multiple ? <span>{props.placeholder}</span> : <span>{selected_elements}</span>}
                         </div>
                         <input ref={input_ref} style={no_input} autoComplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/>
@@ -218,14 +221,14 @@ export const CustomSelect = (props) => {
                 <div className={classes.customSelectTextContainer}><input ref={input_ref} autocomplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/></div>
             )}
             { (!multiple && !no_filter) && (
-                <div className={classes.customSelectTextContainer} onClick={() => {input_ref.current.focus(); setFocus(true)}}>
+                <div className={classes.customSelectTextContainer}>
                     <input ref={input_ref} style={input_style} autoComplete="off" value={filter_text} onChange={(e) => setFilterText(e.target.value)} placeholder={props.placeholder} className={classes.customSelectText} onFocus={() => setFocus(true)}  onBlur={handleBlur}/>
                     <span style={span_style}>{selected_elements}</span>
                 </div>
             )}
             </div>
             {focus && (
-                <div className={classes.customSelectDropdown}>
+                <div style={dropdown_style} className={classes.customSelectDropdown}>
                     <ul className={classes.customSelectList}>
                     {filteredElements().map(el => {
                         return (

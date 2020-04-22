@@ -1,38 +1,37 @@
 import clsx from 'clsx'
 import React, {useState} from  'react'
 
+import {schemes} from '../../../../../../constants/workout_elements'
+
 import {CustomSelect} from '../../../../../utils'
 
-
 import {makeStyles} from '@material-ui/core/styles';
-import {styles} from './scheme.styles'
+import {styles} from './scheme_select.styles'
 const useStyles = makeStyles(styles)
 
-export const Scheme = props => {
+export const SchemeSelect = props => {
     let classes = useStyles()
-    // let [notes, setNotes] = useState(props.value)
     let [editing, setEditing] = useState(false)
 
-    function handleSave(value) {
-        // setNotes(value)
-        setEditing(false)
-        props.onChange(value)
-    }
-
     function select(e) {
+        setEditing(false)
         props.onChange(e.target.value)
     }
-
+    console.log(props)
     return (
         <div className={classes.schemeSelect}>
-            {(!!props.value && !!props.value.types && !!props.value.types.length || editing) ? (
+            {(!!props.value && !!props.value.length || editing) ? (
                 <CustomSelect
-                    value={props.value.types}
+                    right
+                    multiple
+                    focus
+                    onBlur={() => setEditing(false)}
+                    value={props.value}
                     name='scheme'
+                    no_filter
                     onChange={select}
-                    elements={schemes}
-                    placeholder={`Exercise name...`}/> ) : (
-                <div className={classes.exmptySchemeSelect}><span>Choose scheme...</span></div>
+                    elements={Object.values(schemes).map(s => s.type)}/> ) : (
+                <div onClick={() => setEditing(true)} className={classes.emptySchemeSelect}><span>Choose scheme...</span></div>
                 )
             }
         </div>

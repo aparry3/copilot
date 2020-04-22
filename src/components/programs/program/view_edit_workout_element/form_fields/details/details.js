@@ -3,8 +3,10 @@ import {copyState} from '../../../../../../reducers/utils'
 import React, {useEffect, useState} from  'react'
 import update from 'immutability-helper'
 
+import {details as render_details} from '../../../../../utils'
+
 import {AddDetail} from './add_detail'
-import {details as render_details, FormField, InputTitle} from '../../../../../utils'
+import {FormField, InputTitle} from '../../../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './details.styles'
@@ -58,6 +60,10 @@ export const Details = props => {
         setAddDetail(false)
     }
 
+    function renderItem(detail) {
+        return render_details[detail].title()
+    }
+
     return (
         <FormField
             title='details'
@@ -78,7 +84,7 @@ export const Details = props => {
                 { (Object.keys(details).length == 0 || add_detail || remainingDetails().length > 0 && hover) && (
                     <div className={classes.addDetail} onClick={handleAdd}>
                         <div className={classes.addDetailText}><span>Add detail...</span></div>
-                        { !!add_detail && (<AddDetail options={remainingDetails()} onSelect={addDetail} onClose={handleClose}/>)}
+                        { !!add_detail && (<AddDetail renderItem={renderItem} options={remainingDetails()} onSelect={addDetail} onClose={handleClose}/>)}
                     </div>
                 )}
             </div>

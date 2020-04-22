@@ -50,7 +50,7 @@ export const FormField = props => {
                         {props.children}
                     </div>
                 </>
-            ) : (
+            ) : !!props.onClick && (
                 <div className={clsx(classes.formFieldHeader, classes.emptyForm)}>
                     <span onClick={props.onClick}>{!!props.add_text ? props.add_text : `Add ${props.title}...`}</span>
                 </div>

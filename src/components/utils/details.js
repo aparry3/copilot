@@ -36,7 +36,7 @@ const styles = theme => ({
 const useStyles = makeStyles(styles)
 
 
-const DetailTitle = props => {
+export const DetailTitle = props => {
     let classes = useStyles()
     return (
         <div className={classes.detailTitle}>

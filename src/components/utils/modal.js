@@ -50,7 +50,14 @@ const styles = theme => ({
         padding: '20px',
         alignItems:'center',
         fontSize: '24px',
-        jusitfyContent: 'space-between'
+        justifyContent: 'space-between'
+    },
+    modalHeaderOptions: {
+        color: theme.text.light,
+        fontSize: '14px',
+        fontWeight: 200,
+        padding: '5px',
+        cursor: 'pointer'
     },
     modalContent: {
         width: '100%',
