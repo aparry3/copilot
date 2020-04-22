@@ -3,6 +3,9 @@ import React from 'react'
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
 import AutorenewIcon from '@material-ui/icons/Autorenew'
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
+import SignalCellularAltIcon from '@material-ui/icons/SignalCellularAlt';
+import SkipNextIcon from '@material-ui/icons/SkipNext'
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SnoozeIcon from '@material-ui/icons/Snooze';
 import StraightenIcon from '@material-ui/icons/Straighten'
 import SwapVertIcon from '@material-ui/icons/SwapVert'
@@ -77,6 +80,13 @@ const RestTitle = () => <DetailTitle icon={<SnoozeIcon />} title='rest'/>
 
 const WeightTitle = () => <DetailTitle icon={<FitnessCenterIcon />} title='weight'/>
 
+const StartTitle = () => <DetailTitle icon={<SkipPreviousIcon />} title='start'/>
+
+const EndTitle = () => <DetailTitle icon={<SkipNextIcon />} title='end'/>
+
+const StepTitle = () => <DetailTitle icon={<SignalCellularAltIcon />} title='step'/>
+
+
 
 
 const DistanceValue = (value) => <DetailValue icon={<StraightenIcon />} value={value}/>
@@ -91,6 +101,14 @@ const RestValue = (value) => <DetailValue icon={<SnoozeIcon />} value={value}/>
 
 const WeightValue = (value) => <DetailValue icon={<FitnessCenterIcon />} value={value}/>
 
+const StartValue = (value) => <DetailValue icon={<SkipPreviousIcon />} value={value}/>
+
+const EndValue = (value) => <DetailValue icon={<SkipNextIcon />} value={value}/>
+
+const StepValue = (value) => <DetailValue icon={<SignalCellularAltIcon />} value={value}/>
+
+
+
 
 
 export const details = {
@@ -99,6 +117,9 @@ export const details = {
     sets: { icon: <AutorenewIcon />, title: SetsTitle, value: SetsValue},
     repetitions: { icon: <SwapVertIcon />, title: RepetitionsTitle, value: RepetitionsValue},
     rest: { icons: <SnoozeIcon />, title: RestTitle, value: RestValue},
-    weight: { icon: <FitnessCenterIcon />, title: WeightTitle, value: WeightValue}
+    weight: { icon: <FitnessCenterIcon />, title: WeightTitle, value: WeightValue},
+    step: { icon: <SignalCellularAltIcon />, title: StepTitle, value: StepValue},
+    start: { icon: <SkipPreviousIcon />, title: StartTitle, value: StartValue},
+    end: { icon: <SkipNextIcon />, title: EndTitle, value: EndValue},
 
 }

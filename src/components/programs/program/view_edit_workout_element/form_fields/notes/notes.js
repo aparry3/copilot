@@ -9,11 +9,9 @@ const useStyles = makeStyles(styles)
 
 export const Notes = props => {
     let classes = useStyles()
-    // let [notes, setNotes] = useState(props.value)
     let [editing, setEditing] = useState(false)
 
     function handleSave(value) {
-        // setNotes(value)
         setEditing(false)
         props.onChange(value)
     }

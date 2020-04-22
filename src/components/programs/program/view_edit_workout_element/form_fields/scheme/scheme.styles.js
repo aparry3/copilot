@@ -8,6 +8,8 @@ export const styles = theme => ({
         padding: '5px'
     },
     schemeDetails: {
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center'
     }
 })
