@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import {copyState} from '../../../../reducers/utils'
 import React, {useEffect, useState} from 'react'
 import update from 'immutability-helper'
 import {titleCase} from '../../../utils'
@@ -10,7 +11,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import {Details, ExerciseName, Notes, Scheme, SchemeSelect} from './form_fields'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import {FormField, Modal} from '../../../utils'
+import {FormField, InputTitle, Modal} from '../../../utils'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './view_edit_workout_element.styles'
@@ -57,8 +58,16 @@ export const ViewEditWorkoutElement = props => {
                 exercises: exercises
             }
         } else {
+            let _exercises = copyState(workout_element.exercises)
+            _exercises.push(new_exercise)
+            if (!!workout_element.alternate) {
+                _exercises.map((e, i) => {
+                    e.alternate_detail = getAlternateDetail(i, length)
+                    return e
+                })
+            }
             new_workout_element = update(workout_element, {
-                exercises: {$push: [new_exercise]}
+                exercises: {$set: _exercises}
             })
         }
         setWorkoutElement(new_workout_element)
@@ -93,6 +102,30 @@ export const ViewEditWorkoutElement = props => {
             titleCase(workout_element.scheme.join(', ')) :
             titleCase(workout_element.type)
         )
+    }
+
+    function getAlternateDetail(index, length) {
+        if (length == 2) {
+            return index == 0 ? 'Evens' : 'Odds'
+        }
+        return `${index + 1}s`
+    }
+
+    function toggleAlternate() {
+        let _exercises = workout_element.exercises
+        let length = workout_element.exercises.length
+        if (!workout_element.alternate) {
+            _exercises = workout_element.exercises.map((e, i) => {
+                if (!e.alternate_detail) {
+                    e.alternate_detail = getAlternateDetail(i, length)
+                }
+                return e
+            })
+        }
+        setWorkoutElement(update(workout_element, {
+            alternate: {$set: !workout_element.alternate},
+            exercises: {$set: _exercises}
+        }))
     }
 
     console.log(workout_element)
@@ -131,13 +164,19 @@ export const ViewEditWorkoutElement = props => {
             ) : (
                 <FormField
                 title='exercises'
+                action={(
+                    <div className={clsx(classes.formAction, !!workout_element.alternate ? classes.alternateSelected : classes.alternateUnselected)} onClick={toggleAlternate}>
+                        <span>Alternate</span>
+                    </div>
+                )}
                 >
                 {workout_element.exercises.map((e, i) => (
                     <div className={classes.exerciseFormContainer}>
                         <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
                             <div className={classes.exerciseFormHeader}>
-                                <div onClick={() => toggleCollapse(i)} className={classes.actionContainer}>
-                                    { !e.collapsed ? (<ExpandLessIcon className={classes.action}/>) : (<ExpandMoreIcon className={classes.action} />)}
+                                <div className={classes.titleContainer}>
+                                    <div onClick={() => toggleCollapse(i)} className={classes.actionContainer}>{ !e.collapsed ? (<ExpandLessIcon className={classes.action}/>) : (<ExpandMoreIcon className={classes.action} />)}</div>
+                                    { !!workout_element.alternate && (<InputTitle value={e.alternate_detail} autocomplete="off" onSave={(value) => updateWorkoutElement('alternate_detail', value, 'exercises', i)} />)}
                                 </div>
                                 <div className={classes.actionContainer}>
                                     <ClearIcon onClick={() => removeExercise(i)} className={classes.action}/>

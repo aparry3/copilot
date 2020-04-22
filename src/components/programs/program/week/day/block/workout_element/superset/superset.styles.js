@@ -2,14 +2,20 @@ export const styles = theme => ({
     supersetContainer: {
         display: 'flex',
         flexDirection: 'column',
-        borderLeft: `2px solid ${theme.accents.secondary.main}`,
         padding: '0px 10px 10px 10px',
         fontSize: '14px',
         alignItems: 'stretch'
     },
+    supersetColor: {
+        borderLeft: `2px solid ${theme.accents.secondary.main}`
+    },
+    schemeColor: {
+        borderLeft: `2px solid ${theme.accents.tertiary.main}`
+    },
     exerciseContainer: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'stretch',
+        flexDirection: 'column',
         padding: '2px'
     },
     supersetContent: {
@@ -24,6 +30,11 @@ export const styles = theme => ({
     supersetNotes: {
         padding: '10px',
         fontSize:'12px'
+    },
+    alternateDetail: {
+        display: 'flex',
+        color: theme.text.light,
+        alignItems: 'center'
     },
     supersetDetails: {
         display: 'flex',

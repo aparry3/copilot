@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 
 import ClearIcon from '@material-ui/icons/Clear';
@@ -19,7 +20,7 @@ export const Exercise = props => {
     }
 
     return (
-        <div className={classes.exerciseContainer}>
+        <div className={clsx(classes.exerciseContainer, !!props.exercise.scheme && !!props.exercise.scheme.length ? classes.schemeColor : classes.exerciseColor)}>
             <div className={classes.exerciseHeader}>
                 <div className={classes.exerciseHeaderText}>
                     <span>{props.exercise.exercise.name}</span>

@@ -2,9 +2,14 @@ export const styles = theme => ({
     exerciseContainer: {
         display: 'flex',
         flexDirection: 'column',
-        borderLeft: `2px solid ${theme.accents.primary.main}`,
         padding: '10px',
         fontSize: '14px'
+    },
+    exerciseColor: {
+        borderLeft: `2px solid ${theme.accents.primary.main}`
+    },
+    schemeColor: {
+        borderLeft: `2px solid ${theme.accents.tertiary.main}`
     },
     exerciseHeader: {
         display: 'flex',

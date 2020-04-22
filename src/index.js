@@ -72,6 +72,7 @@ const light_theme = createMuiTheme({
     accents: {
         primary: {main: '#77f981', hover: '#167d1e'},
         secondary: {main:'#fdbc68',  hover: '#82570a'},
+        tertiary: {main:'#b86aff', hover: '#b86aff'},
         error: {main: '#ff6f6f', hover: '#b34949'},
     },
     text: {

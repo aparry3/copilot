@@ -51,6 +51,11 @@ export const styles = theme => ({
         justifyContent: 'center',
         cursor: 'pointer'
     },
+    titleContainer: {
+        display: 'flex',
+        alignItems:'center',
+        cursor: 'pointer'
+    },
     action: {
         height: '15px'
     },
@@ -89,5 +94,21 @@ export const styles = theme => ({
         '&:hover': {
             background: theme.palette.background.main
         }
+    },
+    formAction: {
+        display: 'flex',
+        padding: '5px',
+        alignItems: 'center',
+        borderRadius: '5px',
+        cursor: 'pointer'
+    },
+    alternateSelected: {
+        color: theme.text.accents.primary.main,
+        border: `1px solid ${theme.accents.primary.main}`
+    },
+    alternateUnselected: {
+        color: theme.text.light,
+        border: `1px solid ${theme.palette.background.mediumLight}`
     }
+
 })

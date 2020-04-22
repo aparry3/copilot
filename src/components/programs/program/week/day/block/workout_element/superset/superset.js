@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, {useState} from 'react'
 
 import {details} from '../../../../../../../utils'
@@ -26,11 +27,16 @@ export const Superset = props => {
         e.preventDefault()
         props.delete()
     }
+
+    function title() {
+        return !!props.superset.scheme && !!props.superset.scheme.length ? props.superset.scheme.join(', ') : !!props.exercises.length > 2 ? 'Circuit' : 'Superset'
+    }
+
     return (
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={classes.supersetContainer}>
+        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className={clsx(classes.supersetContainer, !!props.superset.scheme && !!props.superset.scheme.length ? classes.schemeColor : classes.supersetColor)}>
             <div className={classes.supersetHeader}>
                 <div className={classes.supersetHeaderTitle}>
-                    <span>{props.superset.exercises.length > 2 ? 'Giant Set' : 'Superset'}</span>
+                    <span>{title()}</span>
                 </div>
                 <div className={classes.supersetHeaderActionContainer}>
                     <div onClick={handleDelete}
@@ -44,6 +50,11 @@ export const Superset = props => {
             <div className={classes.supersetContent}>
             { props.superset.exercises.map(e => (
                 <div className={classes.exerciseContainer}>
+                    { !!props.superset.alternate && (
+                    <div className={classes.alternateDetail}>
+                        {e.alternate_detail}
+                    </div>
+                    )}
                     <div className={classes.exercise}>
                         <Exercise exercise={e} />
                     </div>

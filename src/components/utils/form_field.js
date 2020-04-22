@@ -24,7 +24,8 @@ export const styles = theme => ({
         padding: '10px',
         display: 'flex',
         alignItems: 'center',
-        fontSize: '14px'
+        fontSize: '14px',
+        justifyContent: 'space-between'
     },
     emptyForm: {
         cursor: 'pointer',
@@ -44,7 +45,8 @@ export const FormField = props => {
             { props.condition === undefined || props.condition ? (
                 <>
                     <div className={classes.formFieldHeader}>
-                        <span>{props.title.toUpperCase()}</span>
+                        <div className={classes.formFieldTitle}><span>{props.title.toUpperCase()}</span></div>
+                        <div className={classes.formFieldAction}>{props.action}</div>
                     </div>
                     <div className={classes.formFieldContent}>
                         {props.children}
