@@ -42,10 +42,14 @@ export const Program = (props) => {
         }
     }
 
+    function saveName(name) {
+        props.saveProgram({...props.program, name})
+    }
+
     function renderContent() {
         return (
             <>
-                {props.page != 'week' && (<div>{props.program.name}</div>)}
+                {props.page != 'week' && (<InputTitle value={props.program.name} onSave={saveName}/>)}
                 {props.page == 'week' && (
                     <div>
                         {props.program.name}{props.page == 'week' ? ` - Week: ${props.current_week.index + 1}` : ''}

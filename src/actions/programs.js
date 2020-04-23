@@ -56,7 +56,7 @@ const programs = {
     delete: (program_id) => dispatched(_deleteProgram, makeRequest(_getUrl(program_id), 'DELETE')),
     query: () => dispatched(_recievePrograms, makeRequest(_getUrl(), 'GET')),
     get: (program_id) => dispatched(_recieveProgram, makeRequest(_getUrl(program_id), 'GET')),
-    save: (program) => dispatched(_recieveProgram, makeRequest(_getUrl(program._id), 'POST', program))
+    save: (program) => dispatched(_recieveProgram, makeRequest(_getUrl(program._id), 'PUT', program))
 }
 
 export const addProgram = programs.add
@@ -64,56 +64,3 @@ export const deleteProgram = programs.delete
 export const getProgram = programs.get
 export const getPrograms = programs.query
 export const saveProgram = programs.save
-
-
-//
-// function updateWorkout(week_id, day, workout) {
-//     return {
-//         type: UPDATE_WORKOUT,
-//         week_id,
-//         day,
-//         workout
-//     }
-// }
-//
-// export function persistWorkout(week_id, day, workout) {
-//     return async dispatch => {
-//         dispatch(updateWorkout(week_id, day, workout))
-//         let token = await auth0_client.getToken()
-//         fetch(`${API_URI}/weeks/${week_id}/days/${day}`, {
-//             method: 'PUT',
-//             headers: {
-//                 Accept: 'application/json',
-//                 'Content-Type': 'application/json',
-//                 Authorization: `Bearer ${token}`
-//             },
-//             body: JSON.stringify({
-//                 workout: workout
-//             })
-//         })
-//     }
-//
-// }
-
-
-//
-// export function saveProgram(program_id, options={}) {
-//     return async (dispatch) => {
-//         let token = await auth0_client.getToken()
-//         return fetch(`${API_URI}/programs/${program_id}`, {
-//             method: 'PUT',
-//             headers: {
-//                 Accept: 'application/json',
-//                 'Content-Type': 'application/json',
-//                 Authorization: `Bearer ${token}`
-//             },
-//             body: JSON.stringify(options)
-//         }).then(res => {
-//             let data = res.json();
-//             return data
-//         }).then(program => {
-//             dispatch(recieveProgram(program))
-//             return program
-//         });
-//     }
-// }

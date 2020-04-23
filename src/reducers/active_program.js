@@ -27,9 +27,11 @@ const active_program = (state = initial_state, action) => {
     let new_state = copyState(state)
     switch (action.type) {
         case exercise_actions.OPEN_EXERCISE_FORM: {
-            let {index, ..._current_state} = action.current_state
-            new_state.current_workout_element = _current_state
-            new_state.current_workout_element_index = index
+            if (!!action.current_state) {
+                let {index, ..._current_state} = action.current_state
+                new_state.current_workout_element = _current_state
+                new_state.current_workout_element_index = index
+            }
             return new_state
         }
         case exercise_actions.SAVE_EXERCISE: {

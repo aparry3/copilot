@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 
+import {addWeek, deleteWeek, setCurrentWeek} from '../../../actions/weeks'
+import {getProgram, saveProgram} from '../../../actions/programs'
+import {pages} from '../../../constants/programs'
+
 import {Loading} from '../../utils'
 import {Program} from './program'
-
-import {
-    didRefreshProgram,
-    saveProgram,
-} from '../../../actions'
-import {addWeek, deleteWeek, setCurrentWeek} from '../../../actions/weeks'
-import {getProgram} from '../../../actions/programs'
-import {pages} from '../../../constants/programs'
 
 
 const ProgramContainer = connect(
@@ -30,6 +26,7 @@ const ProgramContainer = connect(
         (dispatch) => {
             return {
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
+                saveProgram: (program) => dispatch(saveProgram(program)),
                 setCurrentWeek: i => dispatch(setCurrentWeek(i))
             }
         }
