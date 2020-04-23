@@ -94,7 +94,6 @@ const light_theme = createMuiTheme({
 function Copilot(props) {
 
     useEffect(() => {
-        store.dispatch(getExercises())
         store.dispatch(fetchUser());
     })
     return (

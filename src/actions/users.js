@@ -1,6 +1,7 @@
 import {API_URI} from '../config'
 import {dispatched, makeRequest} from './utils'
 
+import {getExercises} from './exercises'
 import {getPrograms} from './programs'
 
 export const actions = {
@@ -19,6 +20,7 @@ export function recieveUser(res) {
         })
         if (!!res.user) {
             dispatch(getPrograms(res.user._id))
+            dispatch(getExercises())
         }
     }
 }
