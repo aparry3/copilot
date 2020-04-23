@@ -9,6 +9,7 @@ export const styles = theme => ({
     weekContainer: {
         width: '100%',
         display: 'flex',
+        minHeight: '50px',
         flexDirection: 'column'
     },
     weekHeader: {
@@ -24,7 +25,8 @@ export const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '10px'
+        padding: '10px',
+        minHeight: '50px'
     },
     addWeek: {
         borderRadius: '25px',

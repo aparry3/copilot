@@ -1,9 +1,6 @@
 export const styles = theme => ({
     blockContainer: {
-        display: 'flex',
-        flexDirection: 'column',
         padding: '5px 0px',
-        alignItems: 'stretch'
     },
     block: {
         display: 'flex',
