@@ -26,7 +26,7 @@ export const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         padding: '10px',
-        minHeight: '50px'
+        minHeight: '60px'
     },
     addWeek: {
         borderRadius: '25px',
