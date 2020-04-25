@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import {addWeek, deleteWeek, setCurrentWeek} from '../../../actions/weeks'
@@ -7,6 +8,7 @@ import {pages} from '../../../constants/programs'
 
 import {Loading} from '../../utils'
 import {Program} from './program'
+import PrintProgram from './print_program'
 
 
 const ProgramContainer = connect(
@@ -43,11 +45,13 @@ const ProgramContainer = connect(
         }
     }, [props.program, page])
 
-
     return (
         <>
             {!!props.program._id ? (
-                <Program page={page} current_week={props.current_week} setPage={setPage} program={program} {...pass_through_props} />
+                <Switch>
+                    <Route path={`${props.match.path}/print`} component={PrintProgram}/>
+                    <Route component={() => <Program page={page} current_week={props.current_week} setPage={setPage} program={program} {...pass_through_props} />}/>
+                </Switch>
             ) : <Loading />}
         </>
     )
