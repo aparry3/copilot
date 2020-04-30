@@ -55,7 +55,6 @@ function renderHeader(scheme, details) {
             }
         })]
     })
-    console.log(detail)
     return (
         <div className={classes.supersetHeader}>
             <div className={classes.supersetHeaderTitle}><span>{title}</span></div>
@@ -123,7 +122,7 @@ const Superset = props => {
 export const PrintProgram = props => {
     let classes = useStyles()
     return (
-        <div className={classes.program}>
+        <div id="print_program" className={classes.program}>
             {props.program.weeks.map((w, i) => (
                 <div className={classes.week}>
                     <div className={classes.weekHeader}>

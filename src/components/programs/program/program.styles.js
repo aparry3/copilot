@@ -34,6 +34,21 @@ export const styles = theme => ({
     week: {
         flexGrow: 1,
         overflow: 'auto'
-    }
+    },
+    exportButton: {
+        borderRadius: '5px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: theme.text.white,
+        cursor: 'pointer',
+        fontSize: '16px',
+        height: '30px',
+        width: '50px',
+        background: theme.palette.primary.main,
+        '&:hover': {
+            background: theme.palette.primary.dark
+        }
+    },
 
 });

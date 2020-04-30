@@ -1,8 +1,14 @@
 export const styles = theme => ({
     program: {
+        position: 'absolute',
+        top: 0,
+        left: '-65px',
+        right: 0,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        background: theme.palette.background.light,
+        minHeight: '100vh'
     },
     weekHeader: {
         padding: '10px',
@@ -11,8 +17,10 @@ export const styles = theme => ({
     },
     week: {
         display: 'flex',
+        pageBreakAfter: 'always',
         flexDirection: 'column',
         minHeight: '100vh',
+        minWidth: '100vw',
         border: `1px solid ${theme.palette.background.dark}`
     },
     weekContent: {
