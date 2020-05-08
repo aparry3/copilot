@@ -72,6 +72,14 @@ const active_program = (state = initial_state, action) => {
                 weeks: new_state.weeks.filter(week => week._id != week_id)
             }
         }
+        case program_actions.RECIEVE_EXPORT: {
+            let _export = action.export
+            return {
+                ...new_state,
+                export: _export
+            }
+        }
+
         case program_actions.RECIEVE_PROGRAM: {
             let program = action.program
             program.weeks = program.weeks.map(w => {

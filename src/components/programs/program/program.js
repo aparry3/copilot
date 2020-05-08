@@ -1,6 +1,4 @@
 import React, {useEffect, useState, useRef} from "react";
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 
 import { DndProvider, } from 'react-dnd';
 import {fade, withStyles, makeStyles} from '@material-ui/core/styles';
@@ -28,8 +26,8 @@ export const Program = (props) => {
         props.setCurrentWeek(index)
     }
 
-    function goToPrintView() {
-        props.history.push(`${props.location.pathname}/print`)
+    function exportProgram() {
+        props.exportProgram(props.program._id)
     }
 
     async function handleDeleteWeek(index) {
@@ -80,7 +78,7 @@ export const Program = (props) => {
                     content={renderContent()}
                     tabs={getOptions()}
                     action={(
-                        <div className={classes.exportButton} onClick={goToPrintView}>
+                        <div className={classes.exportButton} onClick={exportProgram}>
                             <GetAppIcon />
                         </div>
                     )}/>

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-ro
 import { connect } from 'react-redux';
 
 import {addWeek, deleteWeek, setCurrentWeek} from '../../../actions/weeks'
-import {getProgram, saveProgram} from '../../../actions/programs'
+import {exportProgram, getProgram, saveProgram} from '../../../actions/programs'
 import {pages} from '../../../constants/programs'
 
 import {Loading} from '../../utils'
@@ -27,6 +27,7 @@ const ProgramContainer = connect(
         },
         (dispatch) => {
             return {
+                exportProgram: (program_id) => dispatch(exportProgram(program_id)),
                 getProgram: (program_id) => dispatch(getProgram(program_id)),
                 saveProgram: (program) => dispatch(saveProgram(program)),
                 setCurrentWeek: i => dispatch(setCurrentWeek(i))
