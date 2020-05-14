@@ -13,7 +13,7 @@ import {Modal} from '../../utils';
 import Select from '@material-ui/core/Select';
 
 import {makeStyles} from '@material-ui/core/styles';
-import {styles} from './exercise_form.styles'
+import {styles} from './exercise_details.styles'
 const useStyles = makeStyles(styles)
 
 

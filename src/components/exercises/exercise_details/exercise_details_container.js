@@ -4,7 +4,7 @@ import {addExercise, saveExercise, closeExerciseDetails} from '../../../actions/
 
 import { EXERCISE } from '../../../constants/exercises';
 
-import {ExerciseDetails} from './exercise_form'
+import {ExerciseDetails} from './exercise_details'
 
 const ExerciseDetailsContainer = connect(
     state => {
