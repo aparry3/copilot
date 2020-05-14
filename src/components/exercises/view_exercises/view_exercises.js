@@ -53,7 +53,7 @@ export const ViewExercises = props => {
                         content={(<span>Exercises</span>)}
                         action={<div className={classes.exercisesHeaderAction}><div onClick={props.onNewExercise} className={classes.addIconContainer}><AddIcon /></div></div>} />
                     <div className={classes.exercisesListContainer} >
-                        <div className={classes.exerciseListHeader} >
+                        <div className={clsx(classes.exerciseListRow, classes.exerciseListHeader)} >
                             <div className={classes.nameColumn}><span className={classes.headerText}>Name</span></div>
                             <div className={classes.muscleGroupsColumn}><span className={classes.headerText}>Muscle Group</span></div>
                             <div className={classes.categoriesColumn}><span className={classes.headerText}>Category</span></div>

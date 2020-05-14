@@ -68,16 +68,21 @@ export const styles = theme => ({
         padding: 0
     },
     exerciseListHeader: {
-        height: '50px',
-        textAlign: 'left',
-        width: '100%',
+        height: '45px',
+        // textAlign: 'left',
+        // width: '100%',
         fontSize: '14px',
         fontWeight: 100,
         color: theme.text.dark,
         opacity: 0.3,
+        // display: 'flex',
+        // alignItems: 'flex-end',
+        // padding: '0px 0px 5px 0px'
+    },
+    exerciseListRow: {
+        width: '100%',
         display: 'flex',
-        alignItems: 'flex-end',
-        padding: '0px 0px 5px 0px'
+        alignItems: 'center',
     },
     exerciseName: {
         height: '65%',
@@ -101,14 +106,17 @@ export const styles = theme => ({
         width: '20%'
     },
     muscleGroupsColumn: {
-        width: '30%'
+        width: '20%',
+        maxWidth: '20%'
     },
     actionColumn: {
-        width: '10%'
+        width: '10%',
+        display: 'flex',
+        jusitfyContent: 'center'
     },
     nameColumn: {
-        flexGrow: 2,
-        width: '40%'
+        width: '50%',
+        maxWidth: '50%'
     },
     hr: {
         width: '100%',

@@ -25,7 +25,7 @@ export const ExerciseListItem = (props) => {
 
     let css_class = props.selected ? clsx(classes.exerciseListItem, classes.selected) : clsx(classes.exerciseListItem)
     return (
-        <div className={classes.exerciseListRow} onClick={handleSelect}>
+        <div className={clsx(classes.exerciseListRow, classes.exerciseListItem)} onClick={handleSelect}>
             <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
             <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroups muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
             <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.categories} /></div>

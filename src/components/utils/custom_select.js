@@ -54,7 +54,10 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: theme.palette.background.light
+        background: theme.palette.background.light,
+        '&:hover': {
+            width: 'auto'
+        }
     },
     customSelectList: {
         listStyleType: 'none',

@@ -17,7 +17,7 @@ import {styles} from './exercise_form.styles'
 const useStyles = makeStyles(styles)
 
 
-export const ExerciseForm = props => {
+export const ExerciseDetails = props => {
     let [exercise, setExercise] = useState(props.exercise)
     let classes = useStyles()
     useEffect(() => {
