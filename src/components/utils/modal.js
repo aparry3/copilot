@@ -109,7 +109,7 @@ const useStyles = makeStyles(styles)
 
 export const Modal = props => {
     let classes = useStyles()
-
+    let {interactive = true} = props
     async function handleSubmit(e) {
         e.preventDefault();
         await props.save()
@@ -139,6 +139,7 @@ export const Modal = props => {
                         <div className={classes.modalContent}>
                             {props.children}
                         </div>
+                        { !!interactive && (
                         <div className={classes.modalActions}>
                             <div onClick={handleSubmit} className={clsx(classes.modalAction, classes.saveButton)}>
                                 <CheckIcon className={classes.action} />
@@ -146,7 +147,7 @@ export const Modal = props => {
                             <div onClick={handleCancel} className={clsx(classes.modalAction, classes.cancelButton)}>
                                 <ClearIcon className={classes.action} />
                             </div>
-                        </div>
+                        </div> )}
                     </div>
                 </div>
             </div>)}

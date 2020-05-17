@@ -3,7 +3,7 @@ import {normalize, titleCase} from './utils'
 import {details} from './details'
 
 import ConfirmMessage from './confirm_message'
-import {CustomSelect} from './custom_select'
+import {CustomSelect, MultiSelectView} from './custom_select'
 import {DetailTitle} from './details'
 import DragAndDrop from './drag_and_drop'
 import {FormField} from './form_field'
@@ -31,6 +31,7 @@ export {
     Loading,
     Logo,
     Modal,
+    MultiSelectView,
     MuscleGroups,
     PageHeader,
     ResizeableInputTextArea,

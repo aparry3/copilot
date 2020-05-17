@@ -15,7 +15,7 @@ export const ExerciseListItem = (props) => {
     let classes = useStyles()
 
     function handleSelect(e) {
-        props.handleExerciseSelect(props.index)
+        props.handleExerciseSelect(e, props.index)
     }
 
     function handleDelete(e) {
@@ -25,7 +25,7 @@ export const ExerciseListItem = (props) => {
 
     let css_class = props.selected ? clsx(classes.exerciseListItem, classes.selected) : clsx(classes.exerciseListItem)
     return (
-        <div className={classes.exerciseListRow} onClick={handleSelect}>
+        <div className={clsx(classes.exerciseListRow, classes.exerciseListItem)} onClick={handleSelect}>
             <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
             <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroups muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} /></div>
             <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.categories} /></div>
@@ -35,9 +35,11 @@ export const ExerciseListItem = (props) => {
                         <div onClick={props.onEditClick} className={classes.action}>
                             <CreateIcon />
                         </div>
+                        { !!props.is_author && (
                         <div onClick={handleDelete} className={classes.action}>
                             <ClearIcon />
                         </div>
+                        )}
                     </div>
                 ) : (
                     <div className={classes.rowActionIconContainer}>

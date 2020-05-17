@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-ro
 
 import {ConfirmMessage, Loading, Logo} from '../utils';
 import {Dashboard} from '../dashboard'
-import {ExerciseForm} from '../exercises/exercise_form'
+import {ExerciseDetails} from '../exercises/exercise_details'
 import {ProgramPage} from '../programs';
 import Sidebar from './sidebar';
 import ViewEditWorkoutElement from '../programs/program/view_edit_workout_element'
@@ -27,7 +27,7 @@ export const Home = (props) => {
                     <main className={classes.content}>
                         <ConfirmMessage />
                         <ViewEditWorkoutElement />
-                        <ExerciseForm />
+                        <ExerciseDetails />
                         <Switch>
                             <Route path={`/exercises`} component={ViewExercises} />
                             <Route path={`/programs`} component={ProgramPage} />

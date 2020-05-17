@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import {openExerciseForm} from '../../../actions/exercises'
+import {openExerciseDetails} from '../../../actions/exercises'
 import {ViewExercises} from './view_exercises'
 
 function applyExercisesFilter(exercises) {
@@ -18,8 +18,8 @@ const ViewExercisesContainer = connect(
     },
     (dispatch, own_props) => {
         return {
-            onNewExercise: () => dispatch(openExerciseForm()),
-            onEditExercise: (exercise) => dispatch(openExerciseForm(exercise))
+            onNewExercise: () => dispatch(openExerciseDetails(null, {edit: true})),
+            onEditExercise: (exercise, edit) => dispatch(openExerciseDetails(exercise, {edit: edit}))
         }
     }
 )(ViewExercises)

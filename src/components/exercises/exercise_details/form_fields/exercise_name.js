@@ -12,8 +12,11 @@ export const ExerciseName = props => {
     return (
         <FormField
             title='name'
+            edit={props.edit}
+            value={props.value}
             >
-            <InputTitle onSave={handleSave} value={props.value} />
+                <InputTitle onSave={handleSave} value={props.value} />
+                <span>{props.value}</span>
         </FormField>
     )
 }

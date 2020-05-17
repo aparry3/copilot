@@ -1,15 +1,19 @@
 import {connect} from 'react-redux'
 
-import {addExercise, saveExercise, closeExerciseForm} from '../../../actions/exercises'
+import {addExercise, saveExercise, closeExerciseDetails, openExerciseDetails} from '../../../actions/exercises'
 
 import { EXERCISE } from '../../../constants/exercises';
 
-import {ExerciseForm} from './exercise_form'
+import {ExerciseDetails} from './exercise_details'
 
-const ExerciseFormContainer = connect(
+const ExerciseDetailsContainer = connect(
     state => {
         function initializeExercise(exercise, options) {
             return !!exercise ? {...exercise, ...options} : {...EXERCISE, ...options}
+        }
+        function canEdit(user, exercise) {
+            console.log(user)
+            return !exercise || user._id == exercise.author_id
         }
         return {
             open: state.exercises.show_exercise_form,
@@ -19,8 +23,9 @@ const ExerciseFormContainer = connect(
     },
     (dispatch, own_props) => ({
         save: (exercise) => dispatch(!!exercise.new ? addExercise(exercise) : saveExercise(exercise)),
-        close: () => dispatch(closeExerciseForm())
+        onEditExercise: (exercise) => dispatch(openExerciseDetails(exercise, {edit: true})),
+        close: () => dispatch(closeExerciseDetails())
     })
-)(ExerciseForm)
+)(ExerciseDetails)
 
-export default ExerciseFormContainer
+export default ExerciseDetailsContainer
