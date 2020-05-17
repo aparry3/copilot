@@ -15,7 +15,7 @@ export const ExerciseListItem = (props) => {
     let classes = useStyles()
 
     function handleSelect(e) {
-        props.handleExerciseSelect(props.index)
+        props.handleExerciseSelect(e, props.index)
     }
 
     function handleDelete(e) {
@@ -35,9 +35,11 @@ export const ExerciseListItem = (props) => {
                         <div onClick={props.onEditClick} className={classes.action}>
                             <CreateIcon />
                         </div>
+                        { !!props.is_author && (
                         <div onClick={handleDelete} className={classes.action}>
                             <ClearIcon />
                         </div>
+                        )}
                     </div>
                 ) : (
                     <div className={classes.rowActionIconContainer}>

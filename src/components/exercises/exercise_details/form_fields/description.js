@@ -20,9 +20,12 @@ export const Description = props => {
     return (
         <FormField
             title='description'
-            onClick={() => setEditing(true)}
-            condition={!!props.value || editing}>
-            <ResizeableInputTextArea onSave={handleSave} value={props.value} />
+            onClick={!!props.edit ? () => setEditing(true) : null}
+            condition={!!props.value || editing}
+            value={props.value}
+            edit={props.edit}>
+                <ResizeableInputTextArea onSave={handleSave} value={props.value} />
+                <div>{props.value}</div>
         </FormField>
     )
 }

@@ -4,7 +4,7 @@ import React, {useState} from 'react'
 import { allMuscles } from '../../../../constants/exercises';
 import { titleCase } from '../../../utils';
 
-import { CustomSelect, FormField } from '../../../utils';
+import { CustomSelect, FormField, MultiSelectView } from '../../../utils';
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './form_fields.styles'
@@ -31,8 +31,11 @@ export const Muscles = props => {
             title={props.title}
             condition={!!props.value.length || editing}
             onClick={() => setEditing(true)}
+            edit={props.edit}
+            value={props.value}
             >
             <CustomSelect multiple placeholder={`Add ${props.title}...`} name={props.name} onChange={handleChange} value={props.value.map(m => m.name)} elements={all_muscles.map(m => m.name)} />
+            <MultiSelectView values={props.value.map(m => m.name)} />
         </FormField>
     )
 }

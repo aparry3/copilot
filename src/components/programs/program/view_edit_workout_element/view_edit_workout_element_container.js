@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import React from 'react'
 
-import {openExerciseForm} from '../../../../actions/exercises'
+import {openExerciseDetails} from '../../../../actions/exercises'
 import {saveWorkoutElement, cancelEditWorkoutElement} from '../../../../actions/workout_elements'
 import {types as workout_element_types} from '../../../../constants/workout_elements'
 
@@ -38,7 +38,7 @@ let ViewEditWorkoutElementContainer = connect(
         }
     },
     dispatch => ({
-        addExercise: (name, workout_element) => dispatch(openExerciseForm(null, {name: name}, workout_element)),
+        addExercise: (name, workout_element) => dispatch(openExerciseDetails(null, {name: name, edit: true}, workout_element)),
         closeEdit: () => dispatch(cancelEditWorkoutElement()),
         saveWorkoutElement: (location, workout_element) => dispatch(saveWorkoutElement(location, workout_element))
     })

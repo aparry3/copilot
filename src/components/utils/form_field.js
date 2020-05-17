@@ -39,25 +39,30 @@ const useStyles = makeStyles(styles)
 
 
 export const FormField = props => {
+    let {edit = true} = props
     let classes = useStyles()
     return (
-        <div className={classes.formFieldContainer}>
-            { props.condition === undefined || props.condition ? (
-                <>
-                    <div className={classes.formFieldHeader}>
-                        <div className={classes.formFieldTitle}><span>{props.title.toUpperCase()}</span></div>
-                        <div className={classes.formFieldAction}>{props.action}</div>
+        <>
+        { (!!edit || !!props.value) && (
+            <div className={classes.formFieldContainer}>
+                { props.condition === undefined || props.condition ? (
+                    <>
+                        <div className={classes.formFieldHeader}>
+                            <div className={classes.formFieldTitle}><span>{props.title.toUpperCase()}</span></div>
+                            <div className={classes.formFieldAction}>{props.action}</div>
+                        </div>
+                        <div className={classes.formFieldContent}>
+                            { !!edit ? props.children[0] : props.children[1]}
+                        </div>
+                    </>
+                ) : !!props.onClick && (
+                    <div className={clsx(classes.formFieldHeader, classes.emptyForm)}>
+                        <span onClick={props.onClick}>{!!props.add_text ? props.add_text : `Add ${props.title}...`}</span>
                     </div>
-                    <div className={classes.formFieldContent}>
-                        {props.children}
-                    </div>
-                </>
-            ) : !!props.onClick && (
-                <div className={clsx(classes.formFieldHeader, classes.emptyForm)}>
-                    <span onClick={props.onClick}>{!!props.add_text ? props.add_text : `Add ${props.title}...`}</span>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        )}
+        </>
     )
 
 }

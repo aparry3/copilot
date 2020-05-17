@@ -7,7 +7,9 @@ import {ExerciseListItem} from './exercise_list_item'
 
 
 const ExerciseListItemContainer = connect(
-    null,
+    (state, own_props) => ({
+        is_author: state.users.user._id == own_props.exercise.author_id
+    }),
     (dispatch, own_props) => {
         return {
             delete: () => dispatch(openConfirm(

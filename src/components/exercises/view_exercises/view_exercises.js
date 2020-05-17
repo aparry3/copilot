@@ -23,10 +23,10 @@ export const ViewExercises = props => {
         setActionSelectedIndex(-1)
     }, [props.exercises])
 
-    function handleEditClick(e, index) {
+    function handleEditClick(e, index, edit = false) {
         e.stopPropagation()
         e.preventDefault()
-        props.onEditExercise(props.exercises[index])
+        props.onEditExercise(props.exercises[index], edit)
     }
 
     function handleActionClick(e, index) {
@@ -36,9 +36,10 @@ export const ViewExercises = props => {
 
     }
 
-    function handleSelect(index) {
+    function handleSelect(e, index) {
         setSelectedExerciseIndex(index)
         setActionSelectedIndex(-1)
+        handleEditClick(e, index)
 
     }
     function handleCancel(){
@@ -63,10 +64,10 @@ export const ViewExercises = props => {
                         <div className={classes.exerciseListBody}>
                             {props.exercises.map((exercise, index) => {
                                 return (<ExerciseListItem
-                                    onEditClick={(e) => handleEditClick(e, index)}
+                                    onEditClick={(e) => handleEditClick(e, index, true)}
                                     onActionClick={(e) => handleActionClick(e, index)}
                                     action_selected={action_selected_index == index}
-                                    selected={index==selected_exercise_index}
+                                    selected={(index==selected_exercise_index)}
                                     index={index}
                                     handleExerciseSelect={handleSelect}
                                     key={exercise._id}
@@ -76,12 +77,6 @@ export const ViewExercises = props => {
                         </div>
                     </div>
                 </div>
-                { selected_exercise_index > -1 && (
-                    <div className={classes.exerciseViewContainer}>
-                        <ViewExercise onEditClick={(e) => handleEditClick(e, selected_exercise_index)} exercise={props.exercises[selected_exercise_index]} onCancel={handleCancel}/>
-                    </div>
-                )}
-
             </div>
         </div>
     )

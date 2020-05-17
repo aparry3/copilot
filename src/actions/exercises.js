@@ -21,7 +21,7 @@ function _getUrl(exercise_id = null) {
     return `${API_URI}/exercises${!!exercise_id ? `/${exercise_id}`: ``}`
 }
 
-export function closeExerciseForm() {
+export function closeExerciseDetails() {
     return {
         type: actions.CLOSE_EXERCISE_FORM
     }
@@ -35,8 +35,7 @@ export function _deleteExercise(res) {
 }
 
 
-export function openExerciseForm(exercise=null, options = {}, current_state = null) {
-    console.log(exercise)
+export function openExerciseDetails(exercise=null, options = {}, current_state = null) {
     return {
         type: actions.OPEN_EXERCISE_FORM,
         show_exercise_form: true,
@@ -66,7 +65,6 @@ export function setFilter(filter) {
         filter: filter
     }
 }
-
 
 
 const exercises = {
