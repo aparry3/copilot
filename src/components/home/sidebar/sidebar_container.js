@@ -14,7 +14,7 @@ const SidebarContainer = connect(
     dispatch => ({
         logout: logout,
         setActivePage: (page) => dispatch(setActivePage(page)),
-        hideExerciseForm: () => dispatch(closeExerciseForm())
+        hideExerciseForm: () => dispatch(closeExerciseDetails())
     })
 )(Sidebar)
 

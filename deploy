@@ -1,7 +1,15 @@
 #!/bin/zsh
 
 echo "Building Copilot..., output to './dist' directory"
-npm run build-dev
+echo $1
+if [[ "$1" != "" ]]; then
+    build_cmd="npm run build-${1}"
+    deploy_dest="s3://${1}-app.copilotfitness.com"
+else
+    build_cmd="npm run build"
+    deploy_dest="s3://app.copilotfitness.com"
+fi
+eval $cmd
 
-echo "Deploying './dist' to 's3://app.copilotfitness.com'"
-aws s3 cp dist s3://app.copilotfitness.com --recursive
+echo "Deploying './dist' to '${deploy_dest}'"
+aws s3 cp dist $deploy_dest --recursive
