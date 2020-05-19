@@ -41,6 +41,7 @@ const useStyles = makeStyles(styles)
 export const FormField = props => {
     let {edit = true} = props
     let classes = useStyles()
+    console.log(props.children.length)
     return (
         <>
         { (!!edit || !!props.value) && (
@@ -52,7 +53,7 @@ export const FormField = props => {
                             <div className={classes.formFieldAction}>{props.action}</div>
                         </div>
                         <div className={classes.formFieldContent}>
-                            { !!edit ? props.children[0] : props.children[1]}
+                            { !!props.children && !props.children.length ? props.children : !!edit ? props.children[0] : props.children[1]}
                         </div>
                     </>
                 ) : !!props.onClick && (
