@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 
 import {logout} from '../../../actions/auth'
 import {setActivePage} from '../../../actions/app'
-import {closeExerciseForm} from '../../../actions/exercises'
+import {closeExerciseDetails} from '../../../actions/exercises'
 
 import {Sidebar} from './sidebar'
 
