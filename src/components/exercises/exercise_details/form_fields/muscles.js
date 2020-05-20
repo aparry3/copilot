@@ -30,7 +30,7 @@ export const Muscles = props => {
         <FormField
             title={props.title}
             condition={!!props.value.length || editing}
-            onClick={() => setEditing(true)}
+            onClick={!!props.edit ? () => setEditing(true) : null}
             edit={props.edit}
             value={props.value}
             >

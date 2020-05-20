@@ -9,7 +9,7 @@ else
     build_cmd="npm run build"
     deploy_dest="s3://app.copilotfitness.com"
 fi
-eval $cmd
+eval $build_cmd
 
 echo "Deploying './dist' to '${deploy_dest}'"
 aws s3 cp dist $deploy_dest --recursive
