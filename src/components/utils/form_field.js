@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {makeStyles} from '@material-ui/core/styles';
 export const styles = theme => ({
@@ -41,7 +41,9 @@ const useStyles = makeStyles(styles)
 export const FormField = props => {
     let {edit = true} = props
     let classes = useStyles()
-    console.log(props.children.length)
+    
+
+
     return (
         <>
         { (!!edit || !!props.value) && (

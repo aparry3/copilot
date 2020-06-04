@@ -166,6 +166,7 @@ export const ViewEditWorkoutElement = props => {
                     </div>
                 )}
                 >
+                <>
                 {workout_element.exercises.map((e, i) => (
                     <div className={classes.exerciseFormContainer}>
                         <div className={clsx(classes.exerciseForm, classes.supersetExercise)}>
@@ -200,6 +201,8 @@ export const ViewEditWorkoutElement = props => {
                         </div>
                     </div>
                 )}
+
+                </>
                 </FormField>
             )}
 
