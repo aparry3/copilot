@@ -2,7 +2,6 @@ import {actions as program_actions} from '../actions/programs';
 import {actions as week_actions} from '../actions/weeks';
 
 import {copyState} from './utils'
-import {WEEK_SKELETON} from '../constants/programs';
 
 
 const initialState = {all_programs: [], requires_refresh: false, programs_loaded:false}

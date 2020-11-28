@@ -100,27 +100,15 @@ export const ViewExercise = (props) => {
                         </div>
                     )}
                 </ViewExerciseSection>
-                <ViewExerciseSection name="Muscle Groups">
-                    <div className={classes.exerciseRowMuscleGroups}>
-                        <MuscleGroups muscle_groups={[...new Set(props.exercise.primary_muscles.map(m => m.muscle_group))]} />
-                    </div>
-                </ViewExerciseSection>
-                <ViewExerciseSection  name="Primary Muscles">
-                {!!props.exercise.primary_muscles && props.exercise.primary_muscles.length > 0 && (
+                <ViewExerciseSection name="Muscles">
+                {!!props.exercise.muscles && props.exercise.muscles.length > 0 && (
                     <div className={classes.exerciseSectionList}>
-                    {props.exercise.primary_muscles.map(m => titleCase(m.name)).join(', ')}
+                    {props.exercise.muscles.map(m => titleCase(m.name)).join(', ')}
                     </div>
                 )}
                 </ViewExerciseSection>
-                <ViewExerciseSection name="Secondary Muscles">
-                {!!props.exercise.secondary_muscles && props.exercise.secondary_muscles.length > 0 && (
-                    <div className={classes.exerciseSectionList}>
-                    {props.exercise.secondary_muscles.map(m => titleCase(m.name)).join(', ')}
-                    </div>
-                )}
-                </ViewExerciseSection>
-                <ViewExerciseSection name="Categories">
-                {!!props.exercise.categories && props.exercise.categories.length > 0 && (
+                <ViewExerciseSection name="Category">
+                {!!props.exercise.category && (
                     <div className={classes.exerciseSectionList}>
                         {props.exercise.categories.join(', ')}
                     </div>

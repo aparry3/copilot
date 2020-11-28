@@ -22,6 +22,7 @@ export const styles = theme => ({
     messageContainer: {
         background: theme.palette.background.light,
         height: '30%',
+        maxHeight: '300px',
         zIndex: 1,
         borderRadius: '5px',
         boxShadow: `${theme.palette.background.dark} 0px 0px 5px -3px`,
