@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-import { getExercises } from './actions/exercises'
 import { fetchUser } from './actions/auth'
 
 import { createMuiTheme } from '@material-ui/core/styles';

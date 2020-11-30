@@ -3,12 +3,15 @@ export const EXERCISE = {
     description: '',
     tags: [],
     muscle_groups: [],
-    primary_muscles: [],
-    secondary_muscles: [],
+    muscles: [],
     id: '',
     images: [],
     videos: [],
-    categories: [],
+    category: null,
+    alternatives: '',
+    equipment: [],
+    movement: null,
+    compound: false,
     new: true
 }
 export const CATEGORIES = [

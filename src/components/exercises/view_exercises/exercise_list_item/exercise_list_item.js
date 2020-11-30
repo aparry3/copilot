@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import React from 'react'
 
-import {Categories} from '../../utils'
+import { Categories } from '../../utils'
 import ClearIcon from '@material-ui/icons/Clear';
 import CreateIcon from '@material-ui/icons/Create';
 import { MuscleGroups } from '../../../utils';
@@ -27,8 +27,8 @@ export const ExerciseListItem = (props) => {
     return (
         <div className={clsx(classes.exerciseListRow, classes.exerciseListItem)} onClick={handleSelect}>
             <div className={clsx(classes.exerciseRowName, classes.nameColumn)}>{props.exercise.name}</div>
-            <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroups muscle_groups={!!props.exercise.muscles ? [...new Set(props.exercise.muscles.map(m => m.muscle_group))] : []} /></div>
-            <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories categories={props.exercise.category} /></div>
+            <div className={clsx(classes.muscleGroupsColumn, classes.exerciseRowMuscleGroups)}><MuscleGroups muscle_groups={!!props.exercise.muscle_groups ? props.exercise.muscle_groups : []} /></div>
+            <div className={clsx(classes.exerciseRowCategories, classes.categoriesColumn)}><Categories category={props.exercise.category} /></div>
             <div className={clsx(classes.exerciseRowAction, classes.actionColumn)}>
                 { props.action_selected  ? (
                     <div className={classes.rowActionIconContainer}>

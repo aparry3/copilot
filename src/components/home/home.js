@@ -27,7 +27,7 @@ export const Home = (props) => {
                     <main className={classes.content}>
                         <ConfirmMessage />
                         <ViewEditWorkoutElement />
-                        <ExerciseDetails />
+                        { !!props.form_open && <ExerciseDetails /> }
                         <Switch>
                             <Route path={`/exercises`} component={ViewExercises} />
                             <Route path={`/programs`} component={ProgramPage} />

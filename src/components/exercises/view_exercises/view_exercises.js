@@ -6,7 +6,6 @@ import AddIcon from '@material-ui/icons/Add'
 import {ExerciseListItem} from './exercise_list_item'
 import {PageHeader} from '../../utils'
 import {SearchBar} from '../utils';
-import {ViewExercise} from './view_exercise'
 
 import {makeStyles} from '@material-ui/core/styles';
 import {styles} from './view_exercises.styles'

@@ -20,12 +20,15 @@ const useStyles = makeStyles(styles)
 
 export const ExerciseDetails = props => {
     let [exercise, setExercise] = useState(props.exercise)
+    console.log(props.exercise)
+    console.log(exercise)
     let classes = useStyles()
     useEffect(() => {
         setExercise(props.exercise)
     }, [props.exercise])
 
     function handleChange(property, value) {
+        console.log(value)
         setExercise(update(exercise, {
             [property]: {$set: value}
         }))
@@ -41,7 +44,6 @@ export const ExerciseDetails = props => {
         e.preventDefault()
         props.close()
     }
-
     return (
         <Modal
             close={props.close}
@@ -53,19 +55,13 @@ export const ExerciseDetails = props => {
             >
                 <ExerciseName edit={!!props.exercise.edit} value={exercise.name} onChange={(value) => handleChange('name', value)}/>
                 <Description edit={!!props.exercise.edit} value={exercise.description} onChange={(value) => handleChange('description', value)}/>
-                <Categories edit={!!props.exercise.edit} value={exercise.categories} onChange={(value) => handleChange('categories', value)}/>
-                <Muscles
-                    edit={!!props.exercise.edit}
-                    title='primary muscles'
-                    name='primary_muscles'
-                    value={exercise.primary_muscles}
-                    onChange={(value) => handleChange('primary_muscles', value)}/>
-                <Muscles
-                    edit={!!props.exercise.edit}
-                    title='secondary muscles'
-                    name='secondary_muscles'
-                    value={exercise.secondary_muscles}
-                    onChange={(value) => handleChange('secondary_muscles', value)}/>
+                <Categories edit={!!props.exercise.edit} value={exercise.category} onChange={(value) => handleChange('category', value)}/>
         </Modal>
     )
 }
+// <Muscles
+//     edit={!!props.exercise.muscles}
+//     title='muscles'
+//     name='muscles'
+//     value={exercise.muscles}
+//     onChange={(value) => handleChange('muscles', value)}/>
