@@ -82,11 +82,9 @@ export const Program = (props) => {
                             <GetAppIcon />
                         </div>
                     )}/>
-                <DndProvider backend={HTML5Backend} >
-                    <div className={classes.programContent}>
-                        {renderPageConent(props.page, props.current_week)}
-                    </div>
-                </DndProvider>
+                <div className={classes.programContent}>
+                    {renderPageConent(props.page, props.current_week)}
+                </div>
             </div>
         </div>
     );

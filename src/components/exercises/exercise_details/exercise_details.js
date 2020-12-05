@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 import {normalize, titleCase} from '../../utils';
 
 import CreateIcon from '@material-ui/icons/Create';
-import {Categories, Description, ExerciseName, Muscles} from './form_fields'
+import {Categories, Description, ExerciseName, Images, Muscles} from './form_fields'
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -56,12 +56,17 @@ export const ExerciseDetails = props => {
                 <ExerciseName edit={!!props.exercise.edit} value={exercise.name} onChange={(value) => handleChange('name', value)}/>
                 <Description edit={!!props.exercise.edit} value={exercise.description} onChange={(value) => handleChange('description', value)}/>
                 <Categories edit={!!props.exercise.edit} value={exercise.category} onChange={(value) => handleChange('category', value)}/>
+                <Muscles
+                    edit={!!props.exercise.edit}
+                    title='muscles'
+                    name='muscles'
+                    value={!!exercise.muscles ? exercise.muscles : []}
+                    onChange={(value) => handleChange('muscles', value)}/>
+                <Images
+                    edit={!!props.exercise.edit}
+                    value={!!exercise.images ? exercise.images : []}
+                    onChange={(value) => handleChange('images', value)}/>
+
         </Modal>
     )
 }
-// <Muscles
-//     edit={!!props.exercise.muscles}
-//     title='muscles'
-//     name='muscles'
-//     value={exercise.muscles}
-//     onChange={(value) => handleChange('muscles', value)}/>

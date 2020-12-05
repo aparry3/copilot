@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-router-dom";
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import {ConfirmMessage, Loading, Logo} from '../utils';
 import {Dashboard} from '../dashboard'
@@ -17,33 +19,35 @@ const useStyles = makeStyles(styles)
 export const Home = (props) => {
     let {match} = props;
     let classes = useStyles()
-    return(
-        <div className={classes.home}>
-            {props.loading ? ( <Loading />) : (
-            <>
-            {!!props.user ? (
-                <div className={classes.app}>
-                    <Sidebar path={match.path}/>
-                    <main className={classes.content}>
-                        <ConfirmMessage />
-                        <ViewEditWorkoutElement />
-                        { !!props.form_open && <ExerciseDetails /> }
-                        <Switch>
-                            <Route path={`/exercises`} component={ViewExercises} />
-                            <Route path={`/programs`} component={ProgramPage} />
-                            <Route path={`/dashboard`} component={Dashboard} />
-                            <Redirect to={`/programs`}/>
-                        </Switch>
-                    </main>
-                </div>
-            ) : (
-                <Redirect to={{
-                  pathname: "/signup",
-                  state: { targetUrl: props.location }
-              }}/>
-          )}
-          </>)}
-        </div>
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <div className={classes.home}>
+                {props.loading ? ( <Loading />) : (
+                <>
+                {!!props.user ? (
+                    <div className={classes.app}>
+                        <Sidebar path={match.path}/>
+                        <main className={classes.content}>
+                            <ConfirmMessage />
+                            <ViewEditWorkoutElement />
+                            { !!props.form_open && <ExerciseDetails /> }
+                            <Switch>
+                                <Route path={`/exercises`} component={ViewExercises} />
+                                <Route path={`/programs`} component={ProgramPage} />
+                                <Route path={`/dashboard`} component={Dashboard} />
+                                <Redirect to={`/programs`}/>
+                            </Switch>
+                        </main>
+                    </div>
+                ) : (
+                    <Redirect to={{
+                      pathname: "/signup",
+                      state: { targetUrl: props.location }
+                  }}/>
+              )}
+              </>)}
+            </div>
+        </DndProvider>
 
     )
 }

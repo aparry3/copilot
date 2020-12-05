@@ -1,30 +1,27 @@
 import clsx from 'clsx'
 import React, {useState} from 'react'
 
-import { allMuscles } from '../../../../constants/exercises';
-import { titleCase } from '../../../utils';
+import { titleCase } from '../../../../utils';
 
-import { CustomSelect, FormField, MultiSelectView } from '../../../utils';
+import { CustomSelect, FormField, MultiSelectView } from '../../../../utils';
 
 import {makeStyles} from '@material-ui/core/styles';
-import {styles} from './form_fields.styles'
+import {styles} from '../form_fields.styles'
 const useStyles = makeStyles(styles)
 
 
 export const Muscles = props => {
     let classes = useStyles()
     let [editing, setEditing] = useState(false)
-    let all_muscles = allMuscles()
 
     function transform(value) {
-        return value.map(y => all_muscles.find(m => m.name == y))
+        return value.map(y => props.muscles_map.find(m => m.name == y).id)
     }
 
     function handleChange(e) {
         setEditing(false)
         props.onChange(transform(e.target.value))
     }
-
 
     return (
         <FormField
@@ -34,8 +31,14 @@ export const Muscles = props => {
             edit={props.edit}
             value={props.value}
             >
-            <CustomSelect multiple placeholder={`Add ${props.title}...`} name={props.name} onChange={handleChange} value={props.value.map(m => m.name)} elements={all_muscles.map(m => m.name)} />
-            <MultiSelectView values={props.value.map(m => m.name)} />
+            <CustomSelect
+                multiple
+                placeholder={`Add ${props.title}...`}
+                name={props.name}
+                onChange={handleChange}
+                value={props.value.map(m => props.muscles_map[m].name)}
+                elements={props.muscles_map.map(m => m.name)} />
+            <MultiSelectView values={props.value.map(m => props.muscles_map[m].name)} />
         </FormField>
     )
 }

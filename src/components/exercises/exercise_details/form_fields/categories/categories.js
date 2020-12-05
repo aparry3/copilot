@@ -15,7 +15,7 @@ export const Categories = props => {
     return (
         <FormField
             title='categories'
-            condition={!!props.value.length || editing}
+            condition={!!props.value || editing}
             onClick={!!props.edit ? () => setEditing(true) : null}
             value={props.value}
             edit={props.edit}
@@ -24,7 +24,7 @@ export const Categories = props => {
                     placeholder="Category..."
                     name="category"
                     onChange={handleChange}
-                    value={props.categories[props.value].value}
+                    value={!!props.categories[props.value] ? props.categories[props.value].value : null}
                     elements={props.categories.map(c => c.value)}/>
         </FormField>
     )
