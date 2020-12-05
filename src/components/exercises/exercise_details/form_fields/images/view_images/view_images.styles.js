@@ -14,7 +14,8 @@ export const styles = theme => ({
     image: {
         height: '100%',
         border: 'none',
-        boxShadow: `0 0 10px -7px ${theme.palette.background.dark}`
+        boxShadow: `0 0 10px -7px ${theme.palette.background.dark}`,
+        position: 'relative'
     },
     delete: {
         borderRadius: '50%'
