@@ -1,10 +1,11 @@
 export const styles = theme => ({
-    viewImagesContainer: {
+    viewImages: {
         display: 'flex',
         flexGrow: 1,
         padding: '10px',
         alignItems: 'stretch',
         maxHeight: '80%',
+        height: '80%',
         overflow: 'auto'
     },
     viewImage: {

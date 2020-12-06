@@ -5,9 +5,16 @@ import ImagesUpload from './images_upload'
 import { FormField } from '../../../../utils';
 
 
+import {styles} from './images.styles'
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles(styles)
+
+
 export const Images = (props) => {
     let [editing, setEditing] = useState(false)
-
+    let [hover, setHover] = useState(false)
+    const classes = useStyles()
     return (
         <FormField
             title='images'
@@ -16,11 +23,17 @@ export const Images = (props) => {
             edit={props.edit}
             value={props.value}
             >
-            {!!props.edit ? (
-                <ImagesUpload images={!!props.value && props.value.length ? prop.value : []}/>
-            ) : (
-                <ViewImages images={!!props.value && props.value.length ? props.value : []}/>
-            )}
+            <div className={classes.imagesContainer}>
+                {!!props.edit || editing ? (
+                    <ImagesUpload images={!!props.value && props.value.length ? props.value : []}/>
+                ) : (
+                    <div className={classes.viewImagesContainer} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                        <ViewImages images={!!props.value && props.value.length ? props.value : []}/>
+                        { !!hover && <div onClick={() => setEditing(true)} className={classes.addImages} /> }
+                    </div>
+                )}
+            </div>
+
         </FormField>
 
     )

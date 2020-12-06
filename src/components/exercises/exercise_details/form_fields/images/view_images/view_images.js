@@ -11,7 +11,7 @@ export const ViewImages = (props) => {
     const classes = useStyles()
 
     return (
-        <div className={classes.viewImagesContainer}>
+        <div className={classes.viewImages}>
             {props.images.map((image, i) => {
                 return (
                     <ViewImage handleDelete={() => props.handleDelete(i)} image={image}/>
