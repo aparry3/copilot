@@ -1,7 +1,6 @@
-import {copyState} from './utils'
-
+import update from 'immutability-helper'
 import {actions as image_actions} from '../actions/images'
-
+import {actions as exercise_actions} from '../actions/exercises'
 
 const initial_state = {images: []}
 
@@ -14,6 +13,23 @@ const images = (state = initial_state, action) => {
             return {
                 ...state,
                 images
+            }
+        }
+        case image_actions.REMOVE_IMAGE: {
+            console.log(state.images)
+            let images = update(state.images, {
+                $splice: [[action.index, 1]]
+            })
+            console.log(images)
+            return {
+                ...state,
+                images
+            }
+        }
+        case exercise_actions.CLOSE_EXERCISE_FORM: {
+            return {
+                ...state,
+                images: [],
             }
         }
         default:

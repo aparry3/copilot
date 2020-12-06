@@ -12,11 +12,28 @@ function HttpExceptioon(status, body) {
     this.body = body;
 }
 
-function _getUrl(exercise_id) {
-    return `${API_URI}/exercises/${exercise_id}/images`
+function _getUrl() {
+    return `${API_URI}/images`
+}
+
+function readDataToUri(image) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            resolve([image[0], reader.result])
+        }
+        reader.readAsDataURL(image[1])
+    })
 }
 
 export function addImages(images) {
+    return async dispatch => {
+        let data_uris = await Promise.all([...images].map(readDataToUri))
+        dispatch(_addImages(data_uris))
+    }
+}
+
+function _addImages(images) {
     return {
         type: actions.ADD_IMAGES,
         images
@@ -24,6 +41,7 @@ export function addImages(images) {
 }
 
 export function removeImage(index) {
+    console.log(index)
     return {
         type: actions.REMOVE_IMAGE,
         index
@@ -37,6 +55,12 @@ export function _recieveImageUrls(res) {
     }
 }
 
-const exercises = {
-    save: (exercise, images) => dispatched(_recieveExercises, makeRequest(_getUrl(exercise._id), 'POST', images)),
+function previewImage(img) {
 }
+
+
+const images = {
+    save: (imgs) => dispatched(_recieveImageUrls, makeRequest(_getUrl(), 'POST', imgs)),
+}
+
+export const saveImages  = images.save

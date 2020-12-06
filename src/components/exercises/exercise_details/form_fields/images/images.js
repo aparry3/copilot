@@ -17,9 +17,9 @@ export const Images = (props) => {
             value={props.value}
             >
             {!!props.edit ? (
-                <ImagesUpload />
+                <ImagesUpload images={!!props.value && props.value.length ? prop.value : []}/>
             ) : (
-                <ViewImages />
+                <ViewImages images={!!props.value && props.value.length ? props.value : []}/>
             )}
         </FormField>
 

@@ -66,7 +66,6 @@ export function setFilter(filter) {
     }
 }
 
-
 const exercises = {
     add: (exercise) => dispatched(_saveExercise, makeRequest(_getUrl(), 'POST', exercise)),
     delete: (exercise_id) => dispatched(_deleteExercise, makeRequest(_getUrl(exercise_id), 'DELETE')),

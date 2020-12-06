@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 
 import {addExercise, saveExercise, closeExerciseDetails, openExerciseDetails} from '../../../actions/exercises'
+import {saveImages} from '../../../actions/images'
 
 import { EXERCISE } from '../../../constants/exercises';
 
@@ -17,12 +18,14 @@ const ExerciseDetailsContainer = connect(
         }
         return {
             open: state.exercises.show_exercise_form,
+            images: state.images.images,
             exercise: initializeExercise(state.exercises.current_exercise, state.exercises.options),
             callback: state.exercises.callback
         }
     },
     (dispatch, own_props) => ({
         save: (exercise) => dispatch(!!exercise.new ? addExercise(exercise) : saveExercise(exercise)),
+        saveImages: (images) => dispatch(saveImages(images)),
         onEditExercise: (exercise) => dispatch(openExerciseDetails(exercise, {edit: true})),
         close: () => dispatch(closeExerciseDetails())
     })

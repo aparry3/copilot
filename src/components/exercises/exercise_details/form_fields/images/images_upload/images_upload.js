@@ -16,20 +16,20 @@ const useStyles = makeStyles(styles)
 export const ImagesUpload = (props) => {
     const classes = useStyles()
     const input_ref = useRef(null)
+    const name_prefix = props.exercise_name.toLowerCase().replace(' ', '_')
     const [images, setImages] = useState([])
+
     useEffect(() => {
         async function preview() {
-            let imgs = await previewAll(props.images)
-            console.log(imgs)
-            setImages(imgs)
+            setImages(props.images.concat(props.new_images))
         }
         preview()
-    }, [props.images])
+    }, [props.new_images, props.images])
+
     const [{isOver, canDrop}, drop] = useDrop({
         accept: [NativeTypes.FILE],
         drop: async (item, monitor) => {
-            let file = await fetch(item.files[0])
-            props.addImages(item.files)
+            addImages(item.files)
         },
         hover: (item, monitor) => {
             // console.log(monitor.getItem())
@@ -40,28 +40,25 @@ export const ImagesUpload = (props) => {
         })
     })
 
-    function handleChange(e) {
-        props.addImages(e.target.files)
-    }
-
-    function previewImage(img) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                resolve(reader.result)
-            }
-            reader.readAsDataURL(img)
+    function addImages(files) {
+        console.log([...files])
+        const images = [...files].map((f, i) => {
+            const name = `${name_prefix}_${Date.now()}_${i}`
+            return [name, f]
         })
+
+        props.addImages(images)
+
     }
 
-    async function previewAll(imgs) {
-        return Promise.all(imgs.map(i => previewImage(i)))
+    function handleChange(e) {
+        addImages(e.target.files)
     }
 
     return (
         <div ref={drop} className={classes.imagesUploadContainer} onClick={() => input_ref.current.click()}>
             <input ref={input_ref} className={classes.input} type="file" multiple onChange={handleChange}/>
-            {!!props.images && props.images.length ? <ViewImages images={images}/> : (
+            {!!images && images.length ? <ViewImages handleDelete={props.removeImage} images={images}/> : (
                 <div className={classes.emptyImages}>
                     <PhotoLibraryIcon className={classes.imageUploadIcon}/>
                 </div>

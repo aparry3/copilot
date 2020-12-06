@@ -9,15 +9,29 @@ export const styles = theme => ({
     },
     viewImage: {
         height:'100%',
-        padding: '10px'
+        padding: '10px',
+        position: 'relative'
     },
     image: {
         height: '100%',
         border: 'none',
         boxShadow: `0 0 10px -7px ${theme.palette.background.dark}`,
-        position: 'relative'
     },
-    delete: {
-        borderRadius: '50%'
+    deleteBubble: {
+        borderRadius: '50%',
+        position: 'absolute',
+        height: '30px',
+        width: '30px',
+        top: 0,
+        left: 0,
+        background: theme.palette.background.light,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxShadow: `0 0 10px -5px ${theme.palette.background.dark}`
+    },
+    deleteIcon: {
+        height: '15px',
+        width: '15px'
     }
 })

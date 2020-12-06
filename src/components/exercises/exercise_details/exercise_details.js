@@ -20,15 +20,13 @@ const useStyles = makeStyles(styles)
 
 export const ExerciseDetails = props => {
     let [exercise, setExercise] = useState(props.exercise)
-    console.log(props.exercise)
-    console.log(exercise)
     let classes = useStyles()
+
     useEffect(() => {
         setExercise(props.exercise)
     }, [props.exercise])
 
     function handleChange(property, value) {
-        console.log(value)
         setExercise(update(exercise, {
             [property]: {$set: value}
         }))
@@ -44,10 +42,21 @@ export const ExerciseDetails = props => {
         e.preventDefault()
         props.close()
     }
+
+    async function save() {
+        let images = []
+        if (!!props.images && !!props.images.length) {
+            const res = await props.saveImages(props.images)
+            images = res.images
+        }
+        console.log(images)
+        exercise.images = exercise.images.concat(images)
+        props.save(exercise)
+    }
     return (
         <Modal
             close={props.close}
-            save={async () => props.save(exercise)}
+            save={save}
             open={props.open}
             title={`${!!exercise.new ? 'New' : 'Edit'} Exercise`}
             interactive={!!props.exercise && !!props.exercise.edit}

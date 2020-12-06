@@ -12,9 +12,9 @@ export const ViewImages = (props) => {
 
     return (
         <div className={classes.viewImagesContainer}>
-            {props.images.map(image => {
+            {props.images.map((image, i) => {
                 return (
-                    <ViewImage image={image}/>
+                    <ViewImage handleDelete={() => props.handleDelete(i)} image={image}/>
                 )
             })}
         </div>
