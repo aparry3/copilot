@@ -24,12 +24,12 @@ export const Images = (props) => {
             value={props.value}
             >
             <div className={classes.imagesContainer}>
-                {!!props.edit || editing ? (
-                    <ImagesUpload images={!!props.value && props.value.length ? props.value : []}/>
+                {!!props.edit && editing ? (
+                    <ImagesUpload onChange={props.onChange} images={!!props.value && props.value.length ? props.value : []}/>
                 ) : (
                     <div className={classes.viewImagesContainer} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                        <ViewImages images={!!props.value && props.value.length ? props.value : []}/>
-                        { !!hover && <div onClick={() => setEditing(true)} className={classes.addImages} /> }
+                        <ViewImages images={!!props.value && props.value.length ? props.value.map(i => [i, () => null]) : []}/>
+                        { !!hover && !!props.edit && <div onClick={() => setEditing(true)} className={classes.addImages} /> }
                     </div>
                 )}
             </div>

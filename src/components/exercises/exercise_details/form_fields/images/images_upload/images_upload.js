@@ -19,9 +19,16 @@ export const ImagesUpload = (props) => {
     const name_prefix = props.exercise_name.toLowerCase().replace(' ', '_')
     const [images, setImages] = useState([])
 
+    function removeImage(index) {
+        let new_images = [...props.images]
+        new_images.splice(index, 1)
+        props.onChange(new_images)
+    }
     useEffect(() => {
         async function preview() {
-            setImages(props.images.concat(props.new_images))
+            let old_imgs = props.images.map((im, i) => [im, () => removeImage(i)])
+            let new_imgs = props.new_images.map((im, i) => [im, () => props.removeImage(i)])
+            setImages(old_imgs.concat(new_imgs))
         }
         preview()
     }, [props.new_images, props.images])
@@ -55,10 +62,12 @@ export const ImagesUpload = (props) => {
         addImages(e.target.files)
     }
 
+    console.log(images)
+
     return (
         <div ref={drop} className={classes.imagesUploadContainer} onClick={() => input_ref.current.click()}>
             <input ref={input_ref} className={classes.input} type="file" multiple onChange={handleChange}/>
-            {!!images && images.length ? <ViewImages handleDelete={props.removeImage} images={images}/> : (
+            {!!images && images.length ? <ViewImages delete images={images}/> : (
                 <div className={classes.emptyImages}>
                     <PhotoLibraryIcon className={classes.imageUploadIcon}/>
                 </div>

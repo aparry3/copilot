@@ -19,9 +19,11 @@ export const ViewImage = (props) => {
     }
     return (
         <div className={classes.viewImage}>
-            <div onClick={handleDelete} className={classes.deleteBubble} >
-                <ClearIcon className={classes.deleteIcon}/>
-            </div>
+            {!!props.delete && (
+                <div onClick={handleDelete} className={classes.deleteBubble} >
+                    <ClearIcon className={classes.deleteIcon}/>
+                </div>
+            )}
             <img className={classes.image} src={props.image} />
         </div>
     )

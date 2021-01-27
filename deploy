@@ -5,11 +5,16 @@ echo $1
 if [[ "$1" != "" ]]; then
     build_cmd="npm run build-${1}"
     deploy_dest="s3://${1}-app.copilotfitness.com"
+    distribution_id="E3BBU7HML11KZN"
 else
     build_cmd="npm run build"
     deploy_dest="s3://app.copilotfitness.com"
+    distribution_id="E3CJOYQFIVERAS"
 fi
 eval $build_cmd
 
 echo "Deploying './dist' to '${deploy_dest}'"
 aws s3 cp dist $deploy_dest --recursive
+
+echo "Invalidating old '/bundle.js' in '${distribution_id}'"
+aws cloudfront create-invalidation --distribution-id ${distribution_id} --paths "/bundle.js"
